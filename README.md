@@ -1,2 +1,2 @@
 # Knocking's personal notebook
-Notebook.
+Notebook: https://cydknocking.github.io/notes/
