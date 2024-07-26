@@ -2,8 +2,9 @@
 
 Everytime when you write a new note...
 ```
-mkdocs build
-mkdocs gh-deploy
+# The following two lines are integrated into Github workflows...
+# mkdocs build
+# mkdocs gh-deploy
 git add --all
 git commit -m "blablabla"
 git push   # add "-u origin main" for the first push
@@ -11,6 +12,7 @@ git push   # add "-u origin main" for the first push
 
 To preview the notebook locally...
 ```
+mkdocs build
 mkdocs serve
 ```
 
