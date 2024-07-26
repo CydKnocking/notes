@@ -1,13 +1,18 @@
 # About this notebook
 
-Everytime when you write a new note...
+\[**Deprecated**\] Everytime when you write a new note...
+The following two lines are integrated into Github workflows and sync.sh...
 ```
-# The following two lines are integrated into Github workflows...
-# mkdocs build
-# mkdocs gh-deploy
+mkdocs build
+mkdocs gh-deploy
 git add --all
 git commit -m "blablabla"
 git push   # add "-u origin main" for the first push
+```
+
+\[**Up to date**\] Just run:
+```
+./sync.sh
 ```
 
 To preview the notebook locally...
