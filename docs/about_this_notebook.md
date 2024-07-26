@@ -6,7 +6,7 @@ mkdocs build
 mkdocs gh-deploy
 git add --all
 git commit -m "blablabla"
-git push -u origin main
+git push   # add "-u origin main" for the first push
 ```
 
 To preview the notebook locally...
