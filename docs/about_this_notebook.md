@@ -3,6 +3,7 @@
 Everytime when you write a new note...
 ```
 mkdocs build
+mkdocs gh-deploy
 git add --all
 git commit -m "blablabla"
 ```
