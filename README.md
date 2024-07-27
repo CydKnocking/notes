@@ -4,11 +4,11 @@
     <img alt="note_logo" src="docs/_assets/icon.png" width="20%">
     </picture>
     </br>
-    <b><a href="https://cydknocking.github.io/notes/">Knocking's notebook</a></b>
+    <b><a href="https://note.knocking.moe/">Knocking's notebook</a></b>
 </p>
 
 
-Notebook: https://cydknocking.github.io/notes/
+Notebook: https://note.knocking.moe
 
 This is Knockning's personal notebook.
 
