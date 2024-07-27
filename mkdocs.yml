@@ -1,13 +1,19 @@
 site_name: Knocking's notebook # web page name
 theme:
+  logo: _assets/icon.png
+  favicon: _assets/icon.png
   name: material
   palette:
-    primary: grey
-    accent: amber
+    primary: brown
+    accent: light-blue
   features:
     - navigation.instant
     - navigation.tracking
     - navigation.top # back-to-top button
+    - header.autohide
+    - search.suggest
+    - search.highlight
+    - search.share
 repo_url: https://github.com/CydKnocking/Notebooks
 plugins:
   - search
