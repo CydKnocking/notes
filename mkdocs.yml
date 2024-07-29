@@ -17,6 +17,7 @@ theme:
 repo_url: https://github.com/CydKnocking/notes
 plugins:
   - search
+  - encryptcontent
 markdown_extensions:
   - tables  
   - pymdownx.betterem

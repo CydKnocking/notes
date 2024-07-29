@@ -1,3 +1,7 @@
+---
+password: password
+---
+
 # 2024
 
 ## 0704
