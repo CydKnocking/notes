@@ -35,7 +35,14 @@ password: password
 - dust3r：能否做到online，能否做到sparse
 
 
+## 0729
 
+- rotation-invariant PPF (RIGA sec3.2).
+
+
+## 0731
+
+- SuperPoint + Co-Tracker + COTR ?
 
 
 
