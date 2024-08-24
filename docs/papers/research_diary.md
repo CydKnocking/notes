@@ -46,7 +46,14 @@ password: password
 
 - COTR takes too much time... Consider using LoFTR/LightGlue?
 
+## 0824
 
+ECCV24 相关的论文
+
+- Grounding Image Matching in 3D with MASt3R (NAVER LABS Europe)
+- **Learning to Make Keypoints Sub-Pixel Accurate** (Marc Pollefeys Group)
+- X-Pose: Detecting Any Keypoints
+- SRPose: Two-view Relative Pose Estimation with Sparse Keypoints
 
 
 
