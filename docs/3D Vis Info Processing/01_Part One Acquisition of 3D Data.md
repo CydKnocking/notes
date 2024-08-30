@@ -1,4 +1,4 @@
-# Part One: Acquisition of 3D Data
+<!-- # Part One: Acquisition of 3D Data -->
 
 2D -> 3D: ill-posed problem
 

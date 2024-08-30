@@ -1,4 +1,3 @@
-# 三维视觉信息处理
 
 ## Part One: Acquisition of 3D Data
 

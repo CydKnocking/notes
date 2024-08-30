@@ -1,4 +1,4 @@
-# Part Three: Descriptions of 3D Objects and Scenes
+<!-- # Part Three: Descriptions of 3D Objects and Scenes -->
 
 3D 点云的问题：
 
