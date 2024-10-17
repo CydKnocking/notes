@@ -17,13 +17,17 @@ chsh -s $(which zsh)
 
 And restart your computer.
 
-## [Oh My Zsh](https://ohmyz.sh/)
+## Oh My Zsh
+
+[https://ohmyz.sh/](https://ohmyz.sh/)
 
 ```
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 
-## [PowerLevel10k](https://github.com/romkatv/powerlevel10k)
+## PowerLevel10k
+
+[https://github.com/romkatv/powerlevel10k](https://github.com/romkatv/powerlevel10k)
 
 ### Prepare font
 
