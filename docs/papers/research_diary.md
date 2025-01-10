@@ -2,19 +2,21 @@
 password: password
 ---
 
-# 2024
+# Research diary
 
-## 0704
+## 2024
+
+### 0704
 
 - 用stable diffusion做finetune，可以用低开销和不多的数据集做finetune。
 
 - 做depth的：Repurposing Diffusion-Based Image Generators for Monocular Depth Estimation (CVPR 2024)，可以从里面借鉴conditional的用法，以及如何把depth image转换到适合diffusion的框架；做dense matching的：DIFFUSION MODEL FOR DENSE MATCHING (ICLR 2024)，他用两张图的global cost作为condition，但是框架设计上还是有点暴力。
 
-## 0705
+### 0705
 
 - DOT（Matching 2D Images in 3D: Metric Relative Pose from Metric Correspondences）为啥比RAFT和CoTracker效果还好？DOT的实验设计和故事是怎么讲的，值得看一看。
 
-## 0706
+### 0706
 
 - 用covariance建模point tracks之间的关联性？
   
@@ -30,23 +32,23 @@ password: password
 
 - 如果做covariance function+optical flow，那难点就在于：depth covariance function是用的UNet cnn网络，RAFT用的是GRU，这个怎么调通。
 
-## 0708
+### 0708
 
 - dust3r：能否做到online，能否做到sparse
 
-## 0729
+### 0729
 
 - rotation-invariant PPF (RIGA: Rotation-Invariant and Globally-Aware Descriptors for Point Cloud Registration sec3.2).
 
-## 0731
+### 0731
 
 - SuperPoint + Co-Tracker + COTR ?
 
-## 0810
+### 0810
 
 - COTR takes too much time... Consider using LoFTR/LightGlue?
 
-## 0824
+### 0824
 
 ECCV24 相关的论文
 
@@ -54,6 +56,9 @@ ECCV24 相关的论文
 - **Learning to Make Keypoints Sub-Pixel Accurate** (Marc Pollefeys Group)
 - X-Pose: Detecting Any Keypoints
 - SRPose: Two-view Relative Pose Estimation with Sparse Keypoints
+
+
+## 2025
 
 
 
