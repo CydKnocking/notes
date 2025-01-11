@@ -97,7 +97,8 @@ ECCV24 相关的论文
   普林斯顿Jia Deng组的，multi-session slam。可以考虑把已有的框架给扩成multi-session的。可以了解一下multi-session的设定。相关文章[Asynchronous Multi-View SLAM](https://arxiv.org/pdf/2101.06562) ICRA2021
 - [**Matching 2D Images in 3D: Metric Relative Pose from Metric Correspondences**](https://openaccess.thecvf.com//content/CVPR2024/papers/Barroso-Laguna_Matching_2D_Images_in_3D_Metric_Relative_Pose_from_Metric_CVPR_2024_paper.pdf)
   把2d-2d的匹配给拓展到了加入3d metric，可以出带metric的相对位姿。
-  
+- [Salient Sparse Visual Odometry with Pose-only Supervision](https://arxiv.org/pdf/2404.04677)
+  RAL的文章，
 
 
 
