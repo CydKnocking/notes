@@ -8,7 +8,7 @@ This is Knocking's personal notebook.
 Please "Ctrl+F5" to update newest notes.
 
 ## Recent updates
-- [research_diary.md](papers/research_diary/) <div style="text-align: right">2025-01-11 22:52:14.642332</div>
+- [research_diary.md](papers/research_diary/) <div style="text-align: right">2025-01-12 20:51:26.911218</div>
 - [tqdm.md](python/tqdm/) <div style="text-align: right">2024-12-19 15:31:43.303392</div>
 - [great_links.md](ML/great_links/) <div style="text-align: right">2024-11-25 17:05:58.200966</div>
 - [ssh.md](linux_and_ubuntu/ssh/) <div style="text-align: right">2024-11-04 21:09:06.083313</div>
