@@ -121,4 +121,11 @@ ECCV24 相关的论文
 - [Robust Monocular Visual Odometry using Curriculum Learning](https://arxiv.org/pdf/2411.13438)
 
 
+### 0203
+
+- [Dense-SfM: Structure from Motion with Dense Consistent Matching](https://arxiv.org/pdf/2501.14277)\
+  2025/1挂在arxiv，看上去像是投cvpr的。稠密、多帧SfM，用了3DGS帮助做多帧的匹配。先初始化一个SfM和一个高斯，然后优化高斯+进行稠密化，从高斯中将SfM的3D点给投影到新的帧，建立新的match关系，最后再用网络对点的tracks进行refinement，用BA得到refined SfM。\
+  可以学学：怎么结合GS做的track extension；可以参考track refinement的网络设计。\
+  没开源。\
+  可以从这篇了解一下sfm的几类方法：detector-based(colmap, pixsfm etc.), semi-dense matching(detector-free)(LoFTR/AspanTrans/MatchFormer + PixSfM/DFSfM), dense matching(RoMa/DKM + DFSfM/ours)，同时顺便可以了解匹配的方法。
 
