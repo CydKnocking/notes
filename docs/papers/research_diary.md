@@ -129,3 +129,11 @@ ECCV24 相关的论文
   没开源。\
   可以从这篇了解一下sfm的几类方法：detector-based(colmap, pixsfm etc.), semi-dense matching(detector-free)(LoFTR/AspanTrans/MatchFormer + PixSfM/DFSfM), dense matching(RoMa/DKM + DFSfM/ours)，同时顺便可以了解匹配的方法。
 
+###
+
+- [MambaGlue: Fast and Robust Local Feature Matching With Mamba](https://arxiv.org/pdf/2502.00462)\
+  核心设计了MambaAttention，一种基于mamba的self-attention层。提高了运行效率。
+
+
+
+
