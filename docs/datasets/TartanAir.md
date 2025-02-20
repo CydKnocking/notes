@@ -25,11 +25,16 @@ height = 480
 - In each line: `tx ty tz qx qy qz qw`
 - **Important:** the motion is in NED frame, with x-axis pointing to the cam's forward, the y-axis to the right, and the z-axis to the downward.
 
-**Read the camera pose and depth, convert the coordinate system, and generate the point cloud in the world coordinate system**\
+**Read the camera pose and depth, convert the coordinate system, and generate the point cloud in the world coordinate system**
+
 注意:
+
 1. 读取pose后需要从NED坐标系转换到一般的相机右手坐标系(x右，y下，z前)
+   
 2. 转换成4x4后的pose矩阵就是从相机坐标系到世界坐标系矩阵，不用取逆inv
+   
 3. 转换成4x4后的pose矩阵左乘point。
+   
 ```
 import os, sys
 import cv2
@@ -105,11 +110,6 @@ def project_to_world(depth_map, K, pose):
     # 将相机坐标系中的点（x_camera, y_camera, z_camera）转换为世界坐标系
     # 需要将其从相机坐标系转换为世界坐标系
     camera_points = np.vstack((x_camera.flatten(), y_camera.flatten(), z_camera.flatten(), np.ones_like(x_camera.flatten())))
-
-    # # 将像素坐标转换为相机坐标系
-    # camera_points = np.array([u, v, np.ones_like(u)])
-    # camera_points = np.linalg.inv(K) @ camera_points
-    # camera_points = camera_points.T * depth.reshape(-1, 1)
     
     ##############################
     # 位姿矩阵为 4x4，根据定义直接左乘来将相机坐标系转换到世界坐标系
