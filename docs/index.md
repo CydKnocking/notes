@@ -3,13 +3,13 @@
 
 This is Knocking's personal notebook.
 
-杩欓噷鏄疜nocking鐨勪釜浜虹瑪璁版湰.
+这里是Knocking的个人笔记本.
 
 Please "Ctrl+F5" to update newest notes.
 
 ## Recent updates
-- [tqdm.md](python/tqdm/) <div style="text-align: right">2025-02-26 21:19:39.051436</div>
-- [TartanAir.md](datasets/TartanAir/) <div style="text-align: right">2025-02-20 17:30:22.275167</div>
-- [research_diary.md](papers/research_diary/) <div style="text-align: right">2025-02-04 20:33:30.478852</div>
-- [rosbag.md](python/rosbag/) <div style="text-align: right">2025-01-28 00:17:07.504749</div>
-- [great_links.md](ML/great_links/) <div style="text-align: right">2024-11-25 17:05:58.200966</div>
+- [rosbag.md](python\rosbag/) <div style="text-align: right">2025-03-11 19:13:53.487401</div>
+- [send_email.md](python\send_email/) <div style="text-align: right">2025-03-11 19:13:53.487401</div>
+- [torch_tips.md](python\torch_tips/) <div style="text-align: right">2025-03-11 19:13:53.487401</div>
+- [tqdm.md](python\tqdm/) <div style="text-align: right">2025-03-11 19:13:53.487401</div>
+- [research_diary.md](papers\research_diary/) <div style="text-align: right">2025-03-11 19:13:53.487119</div>
