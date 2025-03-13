@@ -103,35 +103,41 @@ ECCV24 相关的论文
   NeRF slam，video的增量式构建nerf。
 
 以下的需整理：
-- [InCrowd-VI: A Realistic Visual-Inertial Dataset for Evaluating SLAM in Indoor Pedestrian-Rich Spaces for Human Navigation](https://arxiv.org/pdf/2411.14358)\
-- [**MPVO: Motion-Prior based Visual Odometry for PointGoal Navigation**](https://arxiv.org/pdf/2411.04796)\
-- [Enhanced Monocular Visual Odometry with AR Poses and Integrated INS-GPS for Robust Localization in Urban Environments](https://arxiv.org/pdf/2411.08231)\
-- [BEV-ODOM: Reducing Scale Drift in Monocular Visual Odometry with BEV Representation](https://arxiv.org/pdf/2411.10195)\
-- [MAC-VO: Metrics-aware Covariance for Learning-based Stereo Visual Odometry](https://arxiv.org/pdf/2409.09479)\
-- [ORB-SfMLearner: ORB-Guided Self-supervised Visual Odometry with Selective Online Adaptation](https://arxiv.org/pdf/2409.11692)\
-- [GEVO: Memory-Efficient Monocular Visual Odometry Using Gaussians](https://arxiv.org/pdf/2409.09295)\
-- [Panoramic Direct LiDAR-assisted Visual Odometry](https://arxiv.org/pdf/2409.09287)\
-- [Deep Patch Visual SLAM](https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/00272.pdf)\
-- [Str-L Pose: Integrating Point and Structured Line for Relative Pose Estimation in Dual-Graph](https://arxiv.org/pdf/2408.15750)\
-- [Towards Real-Time Gaussian Splatting: Accelerating 3DGS through Photometric SLAM](https://arxiv.org/pdf/2408.03825)\
-- [Correspondence-Free SE(3) Point Cloud Registration in RKHS via Unsupervised Equivariant Learning](https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/12030.pdf)\
-- [GLIM: 3D Range-Inertial Localization and Mapping with GPU-Accelerated Scan Matching Factors](https://arxiv.org/pdf/2407.10344)\
-- [Semi-Supervised Pipe Video Temporal Defect Interval Localization](https://arxiv.org/pdf/2407.15170)\
-- [Attenuation-Aware Weighted Optical Flow with Medium Transmission Map for Learning-based Visual Odometry in Underwater terrain](https://arxiv.org/pdf/2407.13159)\
-- [Robust Monocular Visual Odometry using Curriculum Learning](https://arxiv.org/pdf/2411.13438)\
+
+- [InCrowd-VI: A Realistic Visual-Inertial Dataset for Evaluating SLAM in Indoor Pedestrian-Rich Spaces for Human Navigation](https://arxiv.org/pdf/2411.14358)
+- [**MPVO: Motion-Prior based Visual Odometry for PointGoal Navigation**](https://arxiv.org/pdf/2411.04796)
+- [Enhanced Monocular Visual Odometry with AR Poses and Integrated INS-GPS for Robust Localization in Urban Environments](https://arxiv.org/pdf/2411.08231)
+- [BEV-ODOM: Reducing Scale Drift in Monocular Visual Odometry with BEV Representation](https://arxiv.org/pdf/2411.10195)
+- [MAC-VO: Metrics-aware Covariance for Learning-based Stereo Visual Odometry](https://arxiv.org/pdf/2409.09479)
+- [ORB-SfMLearner: ORB-Guided Self-supervised Visual Odometry with Selective Online Adaptation](https://arxiv.org/pdf/2409.11692)
+- [GEVO: Memory-Efficient Monocular Visual Odometry Using Gaussians](https://arxiv.org/pdf/2409.09295)
+- [Panoramic Direct LiDAR-assisted Visual Odometry](https://arxiv.org/pdf/2409.09287)
+- [Deep Patch Visual SLAM](https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/00272.pdf)
+- [Str-L Pose: Integrating Point and Structured Line for Relative Pose Estimation in Dual-Graph](https://arxiv.org/pdf/2408.15750)
+- [Towards Real-Time Gaussian Splatting: Accelerating 3DGS through Photometric SLAM](https://arxiv.org/pdf/2408.03825)
+- [Correspondence-Free SE(3) Point Cloud Registration in RKHS via Unsupervised Equivariant Learning](https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/12030.pdf)
+- [GLIM: 3D Range-Inertial Localization and Mapping with GPU-Accelerated Scan Matching Factors](https://arxiv.org/pdf/2407.10344)
+- [Semi-Supervised Pipe Video Temporal Defect Interval Localization](https://arxiv.org/pdf/2407.15170)
+- [Attenuation-Aware Weighted Optical Flow with Medium Transmission Map for Learning-based Visual Odometry in Underwater terrain](https://arxiv.org/pdf/2407.13159)
+- [Robust Monocular Visual Odometry using Curriculum Learning](https://arxiv.org/pdf/2411.13438)
 
 
 ### 0203
 
-- [Dense-SfM: Structure from Motion with Dense Consistent Matching](https://arxiv.org/pdf/2501.14277)\
-  2025/1挂在arxiv，看上去像是投cvpr的。稠密、多帧SfM，用了3DGS帮助做多帧的匹配。先初始化一个SfM和一个高斯，然后优化高斯+进行稠密化，从高斯中将SfM的3D点给投影到新的帧，建立新的match关系，最后再用网络对点的tracks进行refinement，用BA得到refined SfM。\
-  可以学学：怎么结合GS做的track extension；可以参考track refinement的网络设计。\
-  没开源。\
+- [Dense-SfM: Structure from Motion with Dense Consistent Matching](https://arxiv.org/pdf/2501.14277)
+  
+  2025/1挂在arxiv，看上去像是投cvpr的。稠密、多帧SfM，用了3DGS帮助做多帧的匹配。先初始化一个SfM和一个高斯，然后优化高斯+进行稠密化，从高斯中将SfM的3D点给投影到新的帧，建立新的match关系，最后再用网络对点的tracks进行refinement，用BA得到refined SfM。
+  
+  可以学学：怎么结合GS做的track extension；可以参考track refinement的网络设计。
+  
+  没开源。
+  
   可以从这篇了解一下sfm的几类方法：detector-based(colmap, pixsfm etc.), semi-dense matching(detector-free)(LoFTR/AspanTrans/MatchFormer + PixSfM/DFSfM), dense matching(RoMa/DKM + DFSfM/ours)，同时顺便可以了解匹配的方法。
 
 ###
 
-- [MambaGlue: Fast and Robust Local Feature Matching With Mamba](https://arxiv.org/pdf/2502.00462)\
+- [MambaGlue: Fast and Robust Local Feature Matching With Mamba](https://arxiv.org/pdf/2502.00462)
+  
   核心设计了MambaAttention，一种基于mamba的self-attention层。提高了运行效率。
 
 
