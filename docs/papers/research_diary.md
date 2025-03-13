@@ -64,13 +64,13 @@ ECCV24 相关的论文
 
 从Scholar Inbox上找了2024的和VO相关的文章。简单做个笔记。
 
-- [MambaVO: Deep Visual Odometry Based on Sequential Matching Refinement and Training Smoothing](https://arxiv.org/pdf/2412.20082)  
+- [MambaVO: Deep Visual Odometry Based on Sequential Matching Refinement and Training Smoothing](https://arxiv.org/pdf/2412.20082)<br>
   用manba做VO，有纯VO版和加了回环的两个版本。用Mamba加强matching，做更好的初始化。
-- [RoMeO: Robust Metric Visual Odometry](https://arxiv.org/pdf/2412.11530)  
+- [RoMeO: Robust Metric Visual Odometry](https://arxiv.org/pdf/2412.11530)<br>
   DPVO加了metric，主要是用了带metric的预训练网络来估计depth。
-- [**Leveraging Consistent Spatio-Temporal Correspondence for Robust Visual Odometry**](https://arxiv.org/pdf/2412.16923)  
+- [**Leveraging Consistent Spatio-Temporal Correspondence for Robust Visual Odometry**](https://arxiv.org/pdf/2412.16923)<br>
   在droid-vo上加了时序连续性，用depthanything v2加入了空间约束。
-- [KeyGS: A Keyframe-Centric Gaussian Splatting Method for Monocular Image Sequences](https://arxiv.org/pdf/2412.20767)  
+- [KeyGS: A Keyframe-Centric Gaussian Splatting Method for Monocular Image Sequences](https://arxiv.org/pdf/2412.20767)<br>
   在video上做，SfM+3dgs，并同时优化相机位姿和地图。
 - [SCENES: Subpixel Correspondence Estimation With Epipolar Supervision](https://arxiv.org/pdf/2401.10886)  
   matching的模型在新的数据集上做finetune，只需要pose提供epipolar line，loss指导匹配的点朝epipolar line靠近就行。
