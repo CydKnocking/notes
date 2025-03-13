@@ -103,22 +103,22 @@ ECCV24 相关的论文
   NeRF slam，video的增量式构建nerf。
 
 以下的需整理：
-- [InCrowd-VI: A Realistic Visual-Inertial Dataset for Evaluating SLAM in Indoor Pedestrian-Rich Spaces for Human Navigation](https://arxiv.org/pdf/2411.14358)
-- [**MPVO: Motion-Prior based Visual Odometry for PointGoal Navigation**](https://arxiv.org/pdf/2411.04796)
-- [Enhanced Monocular Visual Odometry with AR Poses and Integrated INS-GPS for Robust Localization in Urban Environments](https://arxiv.org/pdf/2411.08231)
-- [BEV-ODOM: Reducing Scale Drift in Monocular Visual Odometry with BEV Representation](https://arxiv.org/pdf/2411.10195)
-- [MAC-VO: Metrics-aware Covariance for Learning-based Stereo Visual Odometry](https://arxiv.org/pdf/2409.09479)
-- [ORB-SfMLearner: ORB-Guided Self-supervised Visual Odometry with Selective Online Adaptation](https://arxiv.org/pdf/2409.11692)
-- [GEVO: Memory-Efficient Monocular Visual Odometry Using Gaussians](https://arxiv.org/pdf/2409.09295)
-- [Panoramic Direct LiDAR-assisted Visual Odometry](https://arxiv.org/pdf/2409.09287)
-- [Deep Patch Visual SLAM](https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/00272.pdf)
-- [Str-L Pose: Integrating Point and Structured Line for Relative Pose Estimation in Dual-Graph](https://arxiv.org/pdf/2408.15750)
-- [Towards Real-Time Gaussian Splatting: Accelerating 3DGS through Photometric SLAM](https://arxiv.org/pdf/2408.03825)
-- [Correspondence-Free SE(3) Point Cloud Registration in RKHS via Unsupervised Equivariant Learning](https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/12030.pdf)
-- [GLIM: 3D Range-Inertial Localization and Mapping with GPU-Accelerated Scan Matching Factors](https://arxiv.org/pdf/2407.10344)
-- [Semi-Supervised Pipe Video Temporal Defect Interval Localization](https://arxiv.org/pdf/2407.15170)
-- [Attenuation-Aware Weighted Optical Flow with Medium Transmission Map for Learning-based Visual Odometry in Underwater terrain](https://arxiv.org/pdf/2407.13159)
-- [Robust Monocular Visual Odometry using Curriculum Learning](https://arxiv.org/pdf/2411.13438)
+- [InCrowd-VI: A Realistic Visual-Inertial Dataset for Evaluating SLAM in Indoor Pedestrian-Rich Spaces for Human Navigation](https://arxiv.org/pdf/2411.14358)\
+- [**MPVO: Motion-Prior based Visual Odometry for PointGoal Navigation**](https://arxiv.org/pdf/2411.04796)\
+- [Enhanced Monocular Visual Odometry with AR Poses and Integrated INS-GPS for Robust Localization in Urban Environments](https://arxiv.org/pdf/2411.08231)\
+- [BEV-ODOM: Reducing Scale Drift in Monocular Visual Odometry with BEV Representation](https://arxiv.org/pdf/2411.10195)\
+- [MAC-VO: Metrics-aware Covariance for Learning-based Stereo Visual Odometry](https://arxiv.org/pdf/2409.09479)\
+- [ORB-SfMLearner: ORB-Guided Self-supervised Visual Odometry with Selective Online Adaptation](https://arxiv.org/pdf/2409.11692)\
+- [GEVO: Memory-Efficient Monocular Visual Odometry Using Gaussians](https://arxiv.org/pdf/2409.09295)\
+- [Panoramic Direct LiDAR-assisted Visual Odometry](https://arxiv.org/pdf/2409.09287)\
+- [Deep Patch Visual SLAM](https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/00272.pdf)\
+- [Str-L Pose: Integrating Point and Structured Line for Relative Pose Estimation in Dual-Graph](https://arxiv.org/pdf/2408.15750)\
+- [Towards Real-Time Gaussian Splatting: Accelerating 3DGS through Photometric SLAM](https://arxiv.org/pdf/2408.03825)\
+- [Correspondence-Free SE(3) Point Cloud Registration in RKHS via Unsupervised Equivariant Learning](https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/12030.pdf)\
+- [GLIM: 3D Range-Inertial Localization and Mapping with GPU-Accelerated Scan Matching Factors](https://arxiv.org/pdf/2407.10344)\
+- [Semi-Supervised Pipe Video Temporal Defect Interval Localization](https://arxiv.org/pdf/2407.15170)\
+- [Attenuation-Aware Weighted Optical Flow with Medium Transmission Map for Learning-based Visual Odometry in Underwater terrain](https://arxiv.org/pdf/2407.13159)\
+- [Robust Monocular Visual Odometry using Curriculum Learning](https://arxiv.org/pdf/2411.13438)\
 
 
 ### 0203
