@@ -8,8 +8,8 @@ This is Knocking's personal notebook.
 Please "Ctrl+F5" to update newest notes.
 
 ## Recent updates
+- [research_diary.md](papers/research_diary/) <div style="text-align: right">2025-03-13 20:23:50.355955</div>
 - [tqdm.md](python/tqdm/) <div style="text-align: right">2025-02-26 21:19:39.051436</div>
 - [TartanAir.md](datasets/TartanAir/) <div style="text-align: right">2025-02-20 17:30:22.275167</div>
-- [research_diary.md](papers/research_diary/) <div style="text-align: right">2025-02-04 20:33:30.478852</div>
 - [rosbag.md](python/rosbag/) <div style="text-align: right">2025-01-28 00:17:07.504749</div>
 - [great_links.md](ML/great_links/) <div style="text-align: right">2024-11-25 17:05:58.200966</div>
