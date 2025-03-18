@@ -137,6 +137,20 @@ ECCV24 相关的论文
 
 ### 0313 CVPR'25
 
+#### SLAM相关
 
+- [MAGiC-SLAM: Multi-Agent Gaussian Globally Consistent SLAM](https://arxiv.org/pdf/2411.16785)<br>
+  多智能体3dgs SLAM。
+- [MNE-SLAM: Multi-Agent Neural SLAM for Mobile Robots]()<br>
+- [SLAM3R: Real-Time Dense Scene Reconstruction from Monocular RGB Videos](https://www.arxiv.org/pdf/2412.09401)<br>
+  陈宝权老师组的工作。把DUSt3R扩展成了SLAM。主要用sliding window构建submap，然后做对齐。
+- [MASt3R-SLAM: Real-Time Dense SLAM with 3D Reconstruction Priors]()
 
+#### 其他
 
+- [**VGGT: Visual Geometry Grounded Transformer**](https://www.arxiv.org/pdf/2503.11651)<br>
+  feed-forward network，同时对任意数量的图像输入，输出相机参数、点云、深度图、3D点跟踪。在64张A100上训练9天。<br>
+  代码回头跑一下测试。
+- [**MATCHA: Towards Matching Anything**](https://arxiv.org/pdf/2501.14945)<br>
+  提出了一种统一的“融合了几何特征、语义特征、对象特征”的视觉特征，在几何匹配、语义匹配、点的时序tracking任务上表较好。主要基于了DIFT和DINOv2这两个工作。<br>
+  回头读一下：当前视觉特征的相关工作，matching相关的（几何、语义）、point tracking、以及视觉基础模型。
