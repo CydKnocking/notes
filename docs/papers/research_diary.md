@@ -154,3 +154,10 @@ ECCV24 相关的论文
 - [**MATCHA: Towards Matching Anything**](https://arxiv.org/pdf/2501.14945)<br>
   提出了一种统一的“融合了几何特征、语义特征、对象特征”的视觉特征，在几何匹配、语义匹配、点的时序tracking任务上表较好。主要基于了DIFT和DINOv2这两个工作。<br>
   回头读一下：当前视觉特征的相关工作，matching相关的（几何、语义）、point tracking、以及视觉基础模型。
+
+
+### 0422
+
+- [**TAPIP3D: Tracking Any Point in Persistent 3D Geometry**](https://www.arxiv.org/abs/2504.14717v1)<br>
+  把图像的2d特征unproject成3d特征云，在特征云上用knn做attention。用了Moge做depth estimator，MegaSaM估计相机内外参。point tracks的iterative更新参考了CoTracker3。<br>
+  在3d点云上取knn比较慢，可以优化(比如参考MASt3R-SLAM的优化方法？)
