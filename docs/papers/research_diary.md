@@ -160,4 +160,12 @@ ECCV24 相关的论文
 
 - [**TAPIP3D: Tracking Any Point in Persistent 3D Geometry**](https://www.arxiv.org/abs/2504.14717v1)<br>
   把图像的2d特征unproject成3d特征云，在特征云上用knn做attention。用了Moge做depth estimator，MegaSaM估计相机内外参。point tracks的iterative更新参考了CoTracker3。<br>
-  在3d点云上取knn比较慢，可以优化(比如参考MASt3R-SLAM的优化方法？)
+  在3d点云上取knn比较慢，可以优化(比如参考MASt3R-SLAM的优化方法？)<br>
+
+### 0423
+
+- [**Back on Track: Bundle Adjustment for Dynamic Scene Reconstruction**](https://arxiv.org/pdf/2504.14516)<br>
+  LEAP-VO作者的新作，继续用TAP做动态VO。用了depth估计网络(ZoeDepth)，对于动态物体上的point在估计track时，多估计了一个dynamic motion，把动态物体的track给解耦/恢复成静态场景的track。，再结合深度做BA。<br>
+- [**Relative Pose Estimation through Affine Corrections of Monocular Depth Priors**](https://www.arxiv.org/pdf/2501.05446)<br>
+  当前深度估计模型，在使用的时候仅仅考虑了scale factor，没考虑shift factor。所以这篇文章提出在求解/匹配的时候，同时要考虑scale和shift factor。<br>
+  （这篇文章说）这个问题应该是由训练时的损失函数设计问题引入的。<br>
