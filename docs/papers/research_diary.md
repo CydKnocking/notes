@@ -167,5 +167,7 @@ ECCV24 相关的论文
 - [**Back on Track: Bundle Adjustment for Dynamic Scene Reconstruction**](https://arxiv.org/pdf/2504.14516)<br>
   LEAP-VO作者的新作，继续用TAP做动态VO。用了depth估计网络(ZoeDepth)，对于动态物体上的point在估计track时，多估计了一个dynamic motion，把动态物体的track给解耦/恢复成静态场景的track。，再结合深度做BA。<br>
 - [**Relative Pose Estimation through Affine Corrections of Monocular Depth Priors**](https://www.arxiv.org/pdf/2501.05446)<br>
-  当前深度估计模型，在使用的时候仅仅考虑了scale factor，没考虑shift factor。所以这篇文章提出在求解/匹配的时候，同时要考虑scale和shift factor。<br>
+  CVPR2025 highlight<br>
+  当前深度估计模型，在使用的时候仅仅考虑了scale factor，没考虑shift factor。所以这篇文章提出在求解/匹配的时候，同时要考虑scale和shift factor。这个想法或许不是它第一个提出的，但是它用这个想法设计了几种情况下的求解器（calibrated和uncalibrated等）<br>
   （这篇文章说）这个问题应该是由训练时的损失函数设计问题引入的。<br>
+  之前的工作，比如MonoSDF中，设计的depth估计网络其实就是affine invariant的。<br>
