@@ -177,3 +177,15 @@ ECCV24 相关的论文
   当前深度估计模型，在使用的时候仅仅考虑了scale factor，没考虑shift factor。所以这篇文章提出在求解/匹配的时候，同时要考虑scale和shift factor。这个想法或许不是它第一个提出的，但是它用这个想法设计了几种情况下的求解器（calibrated和uncalibrated等）<br>
   （这篇文章说）这个问题应该是由训练时的损失函数设计问题引入的。<br>
   之前的工作，比如MonoSDF中，设计的depth估计网络其实就是affine invariant的。<br>
+
+### 0503
+
+单目动态场景4d重建相关:
+
+- [**MegaSaM: Accurate, Fast and Robust Structure and Motion from Casual Dynamic Videos**](https://mega-sam.github.io/)<br>
+  在大量数据上训练，对任意动态视频进行重建+相机位姿估计。<br>
+  cvpr2025 best paper。<br>
+- [**TAPIP3D: Tracking Any Point in Persistent 3D Geometry**](https://www.arxiv.org/abs/2504.14717v1)<br>
+  把图像的2d特征unproject成3d特征云，在特征云上用knn做attention。用了Moge做depth estimator，MegaSaM估计相机内外参。point tracks的iterative更新参考了CoTracker3。<br>
+  在3d点云上取knn比较慢，可以优化(比如参考MASt3R-SLAM的优化方法？)<br>
+  效果看上去还行，
