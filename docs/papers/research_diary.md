@@ -150,11 +150,11 @@ ECCV24 相关的论文
 
 - [**VGGT: Visual Geometry Grounded Transformer**](https://www.arxiv.org/pdf/2503.11651)<br>
   feed-forward network，同时对任意数量的图像输入，输出相机参数、点云、深度图、3D点跟踪。在64张A100上训练9天。<br>
-  用tapvid_davis的一些序列测了下，failure case有soapbox, scooter-black, pigs, parkour, motocross-jump, mbike-trick等
-  还行的序列loading, libby等
+  用tapvid_davis的一些序列测了下，failure case有soapbox, scooter-black, pigs, parkour, motocross-jump, mbike-trick等<br>
+  还行的序列loading, libby等<br>
 
-  不能有效的去除动态物体的影响，对于一些非结构化场景（野外等）重建不好，对于像parkour这样还算有结构的，但无纹理较大，视角转动较大的重建得也不好。
-  感觉对于视角转动过大的，重建效果都不太好。
+  不能有效的去除动态物体的影响，对于一些非结构化场景（野外等）重建不好，对于像parkour这样还算有结构的，但无纹理较大，视角转动较大的重建得也不好。<br>
+  感觉对于视角转动过大的，重建效果都不太好。<br>
   对于室外场景，当包含一些深度较远的部分，效果不好。
 
 - [**MATCHA: Towards Matching Anything**](https://arxiv.org/pdf/2501.14945)<br>
