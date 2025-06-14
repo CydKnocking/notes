@@ -189,3 +189,13 @@ ECCV24 相关的论文
   把图像的2d特征unproject成3d特征云，在特征云上用knn做attention。用了Moge做depth estimator，MegaSaM估计相机内外参。point tracks的iterative更新参考了CoTracker3。<br>
   在3d点云上取knn比较慢，可以优化(比如参考MASt3R-SLAM的优化方法？)<br>
   效果看上去还行，
+
+### 0614
+
+Point tracking in CVPR2025
+
+- [GS-DiT: Advancing Video Generation with Dynamic 3D Gaussian Fields through Efficient Dense 3D Point Tracking](https://arxiv.org/pdf/2501.02690)
+- [Exploring Temporally-Aware Features for Point Tracking](https://arxiv.org/pdf/2501.12218)<br>
+  一个针对point tracking问题改进的DIVOv2网络，可以聚合时序的feature，得到的feature可以直接拿来算correlation map。<br>
+- [Tracktention: Leveraging Point Tracking to Attend Videos Faster and Better](https://arxiv.org/pdf/2503.19904)
+- [TimeTracker: Event-based Continuous Point Tracking for Video Frame Interpolation with Non-linear Motion](https://arxiv.org/pdf/2505.03116)
