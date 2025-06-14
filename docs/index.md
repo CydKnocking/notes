@@ -8,7 +8,7 @@ This is Knocking's personal notebook.
 Please "Ctrl+F5" to update newest notes.
 
 ## Recent updates
-- [research_diary.md](papers/research_diary/) <div style="text-align: right">2025-05-21 22:41:26.934882</div>
+- [research_diary.md](papers/research_diary/) <div style="text-align: right">2025-06-14 15:00:35.287080</div>
 - [tools.md](papers/tools/) <div style="text-align: right">2025-03-18 17:16:57.812350</div>
 - [tqdm.md](python/tqdm/) <div style="text-align: right">2025-02-26 21:19:39.051436</div>
 - [TartanAir.md](datasets/TartanAir/) <div style="text-align: right">2025-02-20 17:30:22.275167</div>
