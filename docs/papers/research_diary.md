@@ -199,3 +199,10 @@ Point tracking in CVPR2025
   一个针对point tracking问题改进的DIVOv2网络，可以聚合时序的feature，得到的feature可以直接拿来算correlation map。<br>
 - [Tracktention: Leveraging Point Tracking to Attend Videos Faster and Better](https://arxiv.org/pdf/2503.19904)
 - [TimeTracker: Event-based Continuous Point Tracking for Video Frame Interpolation with Non-linear Motion](https://arxiv.org/pdf/2505.03116)
+
+
+### 0628
+
+- [LiVOS: Light Video Object Segmentation with Gated Linear Matching](https://www.alphaxiv.org/abs/2411.02818v1)<br>
+  视频物体分割。改进了空间-时间记忆网络（STM），其中用linear matching替代了传统stm中的softmax；同时引入了gated linear matching机制。<br>
+  网络结构和改动思路可以参考一下。
