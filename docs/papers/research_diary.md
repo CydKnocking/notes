@@ -206,3 +206,6 @@ Point tracking in CVPR2025
 - [LiVOS: Light Video Object Segmentation with Gated Linear Matching](https://www.alphaxiv.org/abs/2411.02818v1)<br>
   视频物体分割。改进了空间-时间记忆网络（STM），其中用linear matching替代了传统stm中的softmax；同时引入了gated linear matching机制。<br>
   网络结构和改动思路可以参考一下。
+- [MINIMA: Modality Invariant Image Matching](https://arxiv.org/abs/2412.19412)<br>
+  多模态图像匹配。用了一个生成模型去生成多模态图像，提出了一套框架可以微调loftr/lightglue等稀疏/半稀疏/稠密方法。开源的。<br>
+  和薛飞的matcha考虑的任务类似，但是思路不同。<br>
