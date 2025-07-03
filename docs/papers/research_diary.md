@@ -209,3 +209,14 @@ Point tracking in CVPR2025
 - [MINIMA: Modality Invariant Image Matching](https://arxiv.org/abs/2412.19412)<br>
   多模态图像匹配。用了一个生成模型去生成多模态图像，提出了一套框架可以微调loftr/lightglue等稀疏/半稀疏/稠密方法。开源的。<br>
   和薛飞的matcha考虑的任务类似，但是思路不同。<br>
+
+
+### 0703
+
+要不要试试track-on做vo，解决纯旋转问题？场景是头戴式设备，数据集是egopoints。
+
+纯旋转相关的文章：
+- [Equivalent Constraints for Two-View Geometry: Pose Solution/Pure Rotation Identification and 3D Reconstruction](https://arxiv.org/pdf/1810.05863v1)<br>
+  2019年的文章<br>
+- [RD-VIO: Robust Visual-Inertial Odometry for Mobile Augmented Reality in Dynamic Environments](https://www.alphaxiv.org/html/2310.15072v3)<br>
+  24年的文章，章国峰老师组的。对于视觉有纯旋转判定+延迟三角化的操作，可以参考一下。
