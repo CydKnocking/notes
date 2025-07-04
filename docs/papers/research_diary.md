@@ -213,7 +213,11 @@ Point tracking in CVPR2025
 
 ### 0703
 
-要不要试试track-on做vo，解决纯旋转问题？场景是头戴式设备，数据集是egopoints。
+要不要试试track-on做vo，解决纯旋转问题？场景是头戴式设备，数据集是egopoints或者epic-fields。
+
+https://data.bris.ac.uk/data/dataset/3l8eci2oqgst92n14w2yqi5ytu<br>
+https://data.bris.ac.uk/data/dataset/3h91syskeag572hl6tvuovwv4d<br>
+https://epic-kitchens.github.io/2025<br>
 
 纯旋转相关的文章：
 - [Equivalent Constraints for Two-View Geometry: Pose Solution/Pure Rotation Identification and 3D Reconstruction](https://arxiv.org/pdf/1810.05863v1)<br>
