@@ -224,3 +224,16 @@ https://epic-kitchens.github.io/2025<br>
   2019年的文章<br>
 - [RD-VIO: Robust Visual-Inertial Odometry for Mobile Augmented Reality in Dynamic Environments](https://www.alphaxiv.org/html/2310.15072v3)<br>
   24年的文章，章国峰老师组的。对于视觉有纯旋转判定+延迟三角化的操作，可以参考一下。
+
+
+### 0705
+
+找一下头戴相机/vr/ar之类的数据集
+
+- epic-fields
+- [WHU-Helmet Dataset](https://github.com/kafeiyin00/WHU-HelmetDataset?tab=readme-ov-file)
+- [Aria系列](https://www.projectaria.com/datasets/aea/)
+- [Roller Coaster SLAM Dataset](https://github.com/Factor-Robotics/Roller-Coaster-SLAM-Dataset)
+- [SimXR](https://arxiv.org/pdf/2403.06862v1)
+- [ADVIO](https://github.com/AaltoVision/ADVIO)
+- 
