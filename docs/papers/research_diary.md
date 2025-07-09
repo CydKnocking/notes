@@ -235,5 +235,9 @@ https://epic-kitchens.github.io/2025<br>
 - [Aria系列](https://www.projectaria.com/datasets/aea/)
 - [Roller Coaster SLAM Dataset](https://github.com/Factor-Robotics/Roller-Coaster-SLAM-Dataset)
 - [SimXR](https://arxiv.org/pdf/2403.06862v1)
-- [ADVIO](https://github.com/AaltoVision/ADVIO)
-- 
+- [ADVIO](https://github.com/AaltoVision/ADVIO)<br>
+  DPVO在advio_01序列上很差，这个序列中间有一段坐电梯，画面中只有扶梯台阶，dpvo以为相机没有移动，实际上在上升。<br>
+  python demo.py --imagedir="/media/knocking/Expansion/datasets/advio/advio-01/iphone/frames.mov" --calib="/media/knocking/Expansion/datasets/advio/ADVIO/calibration/iphone-02.txt" --name advio_01 --viz --save_trajectory <br>
+- [TUM-VIE](https://cvg.cit.tum.de/data/datasets/visual-inertial-event-dataset)<br>
+  DPVO在running-hard序列上很差，这个序列运动模糊很多，人拿着相机跑得很快。<br>
+  python demo.py --imagedir /media/knocking/Expansion/datasets/TUM_VIE/running-hard-vi_gt_data/left_images --calib /media/knocking/Expansion/datasets/TUM_VIE/calibB_left_1024x1024.txt --name "running-hard" --viz --save_trajectory <br>
