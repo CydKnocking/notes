@@ -242,3 +242,9 @@ https://epic-kitchens.github.io/2025<br>
   DPVO在running-hard序列上很差，这个序列运动模糊很多，人拿着相机跑得很快。<br>
   python demo.py --imagedir /media/knocking/Expansion/datasets/TUM_VIE/running-hard-vi_gt_data/left_images --calib /media/knocking/Expansion/datasets/TUM_VIE/calibB_left_1024x1024.txt --name "running-hard" --viz --save_trajectory <br>
   track-on在运动极度模糊的情况下也很差，以及在这种场景下如何选择query需要好好选一下。
+
+
+### 0716
+
+[ICCV'25 paperlist](https://iccv.thecvf.com/Conferences/2025/AcceptedPapers)
+
