@@ -248,3 +248,44 @@ https://epic-kitchens.github.io/2025<br>
 
 [ICCV'25 paperlist](https://iccv.thecvf.com/Conferences/2025/AcceptedPapers)
 
+- [BlinkTrack: Feature Tracking over 80 FPS via Events and Images](https://arxiv.org/pdf/2409.17981)
+- A Linear N-Point Solver for Structure and Motion from Asynchronous Tracks
+- [SpatialTrackerV2: Advancing 3D Point Tracking with Explicit Camera Motion](https://arxiv.org/pdf/2507.12462)
+- [Tracking Tiny Drones against Clutter: Large-Scale Infrared Benchmark with Motion-Centric Adaptive Algorithm]
+- [Language Decoupling with Fine-grained Knowledge Guidance for Referring Multi-object Tracking]
+- [GSOT3D: Towards Generic 3D Single Object Tracking in the Wild](https://arxiv.org/pdf/2412.02129)
+- [Is Tracking really more challenging in First Person Egocentric Vision?]
+- [XTrack: Multimodal Training Boosts RGB-X Video Object Trackers](https://arxiv.org/pdf/2405.17773)
+- LA-MOTR: End-to-End Multi-Object Tracking by Learnable Association
+- MVTrajecter: Multi-View Pedestrian Tracking with Trajectory Motion Cost and Trajectory Appearance Cost
+- [**Online Dense Point Tracking with Streaming Memory**](https://arxiv.org/pdf/2503.06471)<br>
+  [github](https://github.com/DQiaole/SPOT)
+- [**TrackAny3D: Transferring Pretrained 3D Models for Category-unified 3D Point Cloud Tracking**](http://www.cssclab.cn/downloadfile/2025/TrackAny3D_Transferring%20Pretrained%203D%20Models%20for%20Category-unified%203D%20Point%20Cloud%20Tracking.pdf)
+- Inter Inertial Poser: Multi-Human Motion Tracking from Sparse Inertial Sensors and Pairwise Inter-Sensor Distances 
+- SMSTracker: Tri-path Score Mask Sigma Fusion for Multi-Modal Tracking
+- [St4RTrack: Simultaneous 4D Reconstruction and Tracking in the World](https://arxiv.org/pdf/2504.13152)
+- [General Compression Framework for Efficient Transformer Object Tracking](https://arxiv.org/pdf/2409.17564)
+- [Street Gaussians without 3D Object Tracker](https://arxiv.org/pdf/2412.05548)
+- [Event-aided Dense and Continuous Point Tracking: Everywhere and Anytime](https://openreview.net/pdf?id=1GIVx7COef)
+- [CoTracker3: Simpler and Better Point Tracking by Pseudo-Labelling Real Videos](https://arxiv.org/pdf/2410.11831)
+- COVTrack: Continuous Open-Vocabulary Multi-Object Tracking via Adaptive Multi-Cue Fusion
+- [UMDATrack: Unified Multi-Domain Adaptive Tracking Under Adverse Weather Conditions](https://arxiv.org/pdf/2507.00648)
+- CAT: A Unified Click-and-Track Framework for Realistic Tracking
+- [Attention to Trajectory: Trajectory-Aware Open-Vocabulary Tracking](https://arxiv.org/pdf/2503.08145)
+- [What You Have is What You Track: Adaptive and Robust Multimodal Tracking]
+- Multi-View 3D Point Tracking
+- MATE: Motion-Augmented Temporal Consistency for Event-based Point Tracking
+- M$^2$EIT:Multi-Domain Mixture of Experts for Robust Neural Inertial Tracking
+- [Efficient Track Anything](https://arxiv.org/pdf/2411.18933)<br>
+  [github](https://github.com/yformer/EfficientTAM)<br>
+- [AllTracker: Efficient Dense Point Tracking at High Resolution](https://arxiv.org/pdf/2506.07310)<br>
+  [github.io](https://alltracker.github.io/)<br>
+- ASCENT: Annotation-free Self-supervised Contrastive Embeddings for 3D Neuron Tracking in Fluorescence Microscopy
+- [Temporal Unlearnable Examples: Preventing Personal Video Data from Unauthorized Exploitation by Object Tracking](https://arxiv.org/pdf/2507.07483)
+- [VOVTrack: Exploring the Potentiality in Raw Videos for Open-Vocabulary Multi-Object Tracking](https://arxiv.org/pdf/2410.08529)
+- [**Back on Track: Bundle Adjustment for Dynamic Scene Reconstruction**](https://arxiv.org/pdf/2504.14516)
+- ReTracker: Exploring Image Matching for Robust Online Any Point Tracking
+- [Decouple and Track: Benchmarking and Improving Video Diffusion Transformers For Motion Transfer](https://arxiv.org/pdf/2503.17350)
+- [TrackVerse: A Large-scale Dataset of Object Tracks for Visual Representation Learning](https://github.com/MMPLab/TrackVerse)
+- [TAPNext: Tracking Any Point (TAP) as Next Token Prediction](https://arxiv.org/pdf/2504.05579)
+- [CoopTrack: Exploring End-to-End Learning for Efficient Cooperative Sequential Perception](https://github.com/zhongjiaru/CoopTrack)
