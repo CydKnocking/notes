@@ -291,3 +291,18 @@ https://epic-kitchens.github.io/2025<br>
 - [TrackVerse: A Large-scale Dataset of Object Tracks for Visual Representation Learning](https://github.com/MMPLab/TrackVerse)
 - [TAPNext: Tracking Any Point (TAP) as Next Token Prediction](https://arxiv.org/pdf/2504.05579)
 - [CoopTrack: Exploring End-to-End Learning for Efficient Cooperative Sequential Perception](https://github.com/zhongjiaru/CoopTrack)
+
+**Odometry相关:**
+
+- [Splat-LOAM: Gaussian Splatting LiDAR Odometry and Mapping](https://arxiv.org/pdf/2503.17491)
+
+**SLAM相关：**
+
+- [SuperEvent: Cross-Modal Learning of Event-based Keypoint Detection for SLAM](https://arxiv.org/pdf/2504.00139)
+- [Outdoor Monocular SLAM with Global Scale-Consistent 3D Gaussian Pointmaps](https://arxiv.org/pdf/2507.03737)
+- [SEGS-SLAM: Structure-enhanced 3D Gaussian Splatting SLAM with Appearance Embedding](https://segs-slam.github.io/)
+- [DyGS-SLAM: Real-Time Accurate Localization and Gaussian Reconstruction for Dynamic Scenes]()
+- [ToF-Splatting: Dense SLAM using Sparse Time-of-Flight Depth and Multi-Frame Integration](https://arxiv.org/pdf/2504.16545)
+- [Benchmarking Egocentric Visual-Inertial SLAM at City Scale]()
+- [4D Gaussian Splatting SLAM](https://arxiv.org/pdf/2503.16710)
+- [Underwater Visual SLAM with Depth Uncertainty and Medium Modeling]()
