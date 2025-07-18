@@ -344,3 +344,10 @@ https://epic-kitchens.github.io/2025<br>
 - [**Mind the Gap: Aligning Vision Foundation Models to Image Feature Matching**](https://www.arxiv.org/pdf/2507.10318v1)
 - [Fast Globally Optimal and Geometrically Consistent 3D Shape Matching](https://arxiv.org/pdf/2504.06385)
 - ReTracker: Exploring Image Matching for Robust Online Any Point Tracking
+
+### 0719
+
+得看看IROS和ICRA的list
+- [Self-supervised Pretraining and Finetuning for Monocular Depth and Visual Odometry](https://arxiv.org/pdf/2406.11019)
+- [Self-Supervised Learning of Monocular Visual Odometry and Depth with Uncertainty-Aware Scale Consisten](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10610075)
+- 
