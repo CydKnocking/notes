@@ -306,3 +306,41 @@ https://epic-kitchens.github.io/2025<br>
 - [Benchmarking Egocentric Visual-Inertial SLAM at City Scale]()
 - [4D Gaussian Splatting SLAM](https://arxiv.org/pdf/2503.16710)
 - [Underwater Visual SLAM with Depth Uncertainty and Medium Modeling]()
+
+**keypoint相关：**
+
+- [RIPE: Reinforcement Learning on Unlabeled Image Pairs for Robust Keypoint Extraction](https://arxiv.org/pdf/2507.04839)
+- SuperEvent: Cross-Modal Learning of Event-based Keypoint Detection for SLAM
+- Towards Annotation-Free Evaluation: KPAScore for Human Keypoint Detection
+- VoxelKP: A Voxel-based Network Architecture for Human Keypoint Estimation in LiDAR Data
+- [ZeroKey: Point-Level Reasoning and Zero-Shot 3D Keypoint Detection from Large Language Models](https://arxiv.org/pdf/2412.06292)
+- [ReassembleNet: Learnable Keypoints and Diffusion for 2D Fresco Reconstruction](https://arxiv.org/pdf/2505.21117)
+- [Sequential keypoint density estimator: an overlooked baseline of skeleton-based video anomaly detection](https://arxiv.org/pdf/2506.18368)
+- [Doodle Your Keypoints: Sketch-Based Few-Shot Keypoint Detection](https://arxiv.org/pdf/2507.07994)
+
+**matching相关：**
+
+- [Towards Open-World Generation of Stereo Images and Unsupervised Matching](https://arxiv.org/pdf/2503.12720)
+- Focal Plane Visual Feature Generation and Matching on a Pixel Processor Array
+- [Diving into the Fusion of Monocular Priors for Generalized Stereo Matching](https://arxiv.org/pdf/2505.14414)
+- Partially Matching Submap Helps: Uncetainty Modeling and Propagation for Text to Point Cloud Localization
+- [Learning Few-Step Diffusion Models by Trajectory Distribution Matching](https://arxiv.org/pdf/2503.06674)
+- [MAVFlow: Preserving Paralinguistic Elements with Conditional Flow Matching for Zero-Shot AV2AV Multilingual Translation](https://arxiv.org/pdf/2503.11026)
+- [RobuSTereo: Robust Zero-Shot Stereo Matching under Adverse Weather](https://arxiv.org/pdf/2507.01653v1)
+- [EMatch: A Unified Framework for Event-based Optical Flow and Stereo Matching](https://arxiv.org/pdf/2407.21735)
+- MDP-Omni: Parameter-free Multimodal Depth Prior-based Sampling for Omnidirectional Stereo Matching
+- SGAD: Semantic and Geometric-aware Descriptor for Local Feature Matching
+- [Learning Dense Feature Matching via Lifting Single 2D Image to 3D Space]()
+- [BANet: Bilateral Aggregation Network for Mobile Stereo Matching](https://arxiv.org/pdf/2503.03259)
+- [Learning Robust Stereo Matching in the Wild with Selective Mixture-of-Experts](https://arxiv.org/pdf/2507.04631)
+- [**Stereo Any Video: Temporally Consistent Stereo Matching**](https://arxiv.org/pdf/2503.05549)
+- [Global Regulation and Excitation via Attention Tuning for Stereo Matching]()
+- [ZeroStereo: Zero-shot Stereo Matching from Single Images](https://github.com/Windsrain/ZeroStereo?tab=readme-ov-file)
+- CasP: Improving Semi-Dense Feature Matching Pipeline Leveraging Cascaded Correspondence Priors for Guidance
+- [POMATO: Marrying Pointmap Matching with Temporal Motions for Dynamic 3D Reconstruction](https://arxiv.org/pdf/2504.05692)
+- [ArgMatch: Adaptive Refinement Gathering for Efficient Dense Matching]()
+- [**CoMatch: Dynamic Covisibility-Aware Transformer for Bilateral Subpixel-Level Semi-Dense Image Matching**](https://arxiv.org/pdf/2503.23925)
+- [**EDM: Efficient Deep Feature Matching**](https://arxiv.org/pdf/2503.05122)
+- [**Mind the Gap: Aligning Vision Foundation Models to Image Feature Matching**](https://www.arxiv.org/pdf/2507.10318v1)
+- [Fast Globally Optimal and Geometrically Consistent 3D Shape Matching](https://arxiv.org/pdf/2504.06385)
+- ReTracker: Exploring Image Matching for Robust Online Any Point Tracking
