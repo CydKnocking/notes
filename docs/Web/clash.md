@@ -5,7 +5,7 @@
 1. 服务器上，clash的config.yaml文件中找到
    `external-controller: '127.0.0.1:9090'`这一行，如果没有则需要设置。如果是`0.0.0.0:9090`则有可能需要修改ip。
 2. 服务器上，启动clash。
-3. 本地，去`https://github.com/haishanh/yacd`下载release的tar.xz，解压。
+3. 本地，去`https://github.com/haishanh/yacd`下载release的`yacd.tar.xz`，解压。
 4. 在本地，用ssh端口转发访问服务器
    `ssh -L 19090:localhost:9090 user@your-server`，
    此时，可以通过本地`19090`端口访问服务器的`9090`端口。
