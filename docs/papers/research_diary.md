@@ -350,4 +350,9 @@ https://epic-kitchens.github.io/2025<br>
 得看看IROS和ICRA的list
 - [Self-supervised Pretraining and Finetuning for Monocular Depth and Visual Odometry](https://arxiv.org/pdf/2406.11019)
 - [Self-Supervised Learning of Monocular Visual Odometry and Depth with Uncertainty-Aware Scale Consisten](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10610075)
-- 
+
+
+### 0721
+
+这个得看一下
+- [$\pi^3$: Scalable Permutation-Equivariant Visual Geometry Learnin](https://arxiv.org/pdf/2507.13347)<br>
