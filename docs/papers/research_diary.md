@@ -356,3 +356,11 @@ https://epic-kitchens.github.io/2025<br>
 
 这个得看一下
 - [$\pi^3$: Scalable Permutation-Equivariant Visual Geometry Learnin](https://arxiv.org/pdf/2507.13347)<br>
+
+
+### 0722
+
+清华最近出了个StreamVGGT，好像是video输入范式/增量式的，可以看一下
+- [Streaming 4D Visual Geometry Transformer](https://arxiv.org/pdf/2507.11539), [主页](https://wzzheng.net/StreamVGGT/)
+
+这个组好像比较多online memory的文章，一作[Wenzhao Zheng的主页](https://wzzheng.net/)
