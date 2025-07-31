@@ -348,7 +348,7 @@ https://epic-kitchens.github.io/2025<br>
 
 ### 0719
 
-得看看IROS和ICRA的list<br>
+得看看IROS和ICRA的list
 
 - [Self-supervised Pretraining and Finetuning for Monocular Depth and Visual Odometry](https://arxiv.org/pdf/2406.11019)
 - [Self-Supervised Learning of Monocular Visual Odometry and Depth with Uncertainty-Aware Scale Consisten](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10610075)
@@ -366,4 +366,5 @@ https://epic-kitchens.github.io/2025<br>
 清华最近出了个StreamVGGT，好像是video输入范式/增量式的，可以看一下<br>
 
 - [Streaming 4D Visual Geometry Transformer](https://arxiv.org/pdf/2507.11539), [主页](https://wzzheng.net/StreamVGGT/)<br>
+
 这个组好像比较多online memory的文章，一作[Wenzhao Zheng的主页](https://wzzheng.net/)
