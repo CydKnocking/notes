@@ -368,3 +368,10 @@ https://epic-kitchens.github.io/2025<br>
 - [Streaming 4D Visual Geometry Transformer](https://arxiv.org/pdf/2507.11539), [主页](https://wzzheng.net/StreamVGGT/)<br>
 
 这个组好像比较多online memory的文章，一作[Wenzhao Zheng的主页](https://wzzheng.net/)
+
+
+### 0807
+
+VLA的一个综述<br>
+
+- [A Survey on Vision-Language-Action Models: An Action Tokenization Perspective](https://www.arxiv.org/pdf/2507.01925)
