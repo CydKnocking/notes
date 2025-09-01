@@ -276,7 +276,7 @@ https://epic-kitchens.github.io/2025<br>
 - CAT: A Unified Click-and-Track Framework for Realistic Tracking
 - [Attention to Trajectory: Trajectory-Aware Open-Vocabulary Tracking](https://arxiv.org/pdf/2503.08145)
 - [What You Have is What You Track: Adaptive and Robust Multimodal Tracking]
-- Multi-View 3D Point Tracking
+- [Multi-View 3D Point Tracking](https://arxiv.org/pdf/2508.21060)
 - MATE: Motion-Augmented Temporal Consistency for Event-based Point Tracking
 - M$^2$EIT:Multi-Domain Mixture of Experts for Robust Neural Inertial Tracking
 - [Efficient Track Anything](https://arxiv.org/pdf/2411.18933)<br>
@@ -375,3 +375,9 @@ https://epic-kitchens.github.io/2025<br>
 VLA的一个综述<br>
 
 - [A Survey on Vision-Language-Action Models: An Action Tokenization Perspective](https://www.arxiv.org/pdf/2507.01925)
+
+
+### 0901
+
+- [Efficient Motion Prompt Learning for Robust Visual Tracking](https://www.arxiv.org/pdf/2505.16321v1)<br>
+  里面关于空间位置编码和时间位置编码的小trick回头可以试试（Eq.(3)）。<br>
