@@ -381,3 +381,41 @@ VLA的一个综述<br>
 
 - [Efficient Motion Prompt Learning for Robust Visual Tracking](https://www.arxiv.org/pdf/2505.16321v1)<br>
   里面关于空间位置编码和时间位置编码的小trick回头可以试试（Eq.(3)）。<br>
+
+
+### 0904
+
+#### [SpatialTrackerV2: 3D Point Tracking Made Easy](https://github.com/henry123-boy/SpaTrackerV2)
+
+tag: `ICCV'25`, `3D`, `multi-view`
+
+详细读一下SpatialTrackerv2的论文。
+
+3. 估计查询点的3D轨迹$\mathcal{T}$时，将其分解成了相机运动$\mathcal{T}_{ego}$和物体运动$\mathcal{T}_{object}$两部分。<br>
+   
+   1. $\mathcal{T}_{ego}$
+      
+      初始的深度估计和相机运动：基于VGGT。
+  
+   2. 联合位姿优化
+      
+      提出**SyncFormer**，迭代地同时优化：UV空间的轨迹$\mathcal{T}^{2d}$；相机坐标系的轨迹$\mathcal{T}^{3d}$；可见度权重$p^{vis}$；动态权重$p^{dyn}$。相机的位姿$\mathcal{P}$用BA得到。
+
+      2D embeddings和Cotracker3一样，3D embeddings包含3d相关性特征等。其中，3d相关性特征是在归一化point map中当前的点与邻居点的相对位移进行harmonic positional encoding得到的，并且在多分辨率上都进行了特征编码。
+
+      SyncFormer调整完一轮$\mathcal{T}_{k+1}^{2d}, \mathcal{T}_{k+1}^{3d}, p_{k+1}^{dyn}, p_{k+1}^{vis}$后，通过Procrustes analysis对齐3d轨迹到世界坐标系，构建BA优化得到相机位姿$\mathcal{P}_{k+1}$。
+    
+   3. 训练
+
+      在17个数据集上训练。（啊……好多😍好喜欢）分为三大类：带track gt, pose gt的RGB-D数据；带pose gt的RGB-D数据；仅有pose gt或无标注的。
+
+      
+
+
+
+#### Related works about point tracking
+
+整理一下tracking any point最近的related works
+
+- [Multi-View 3D Point Tracking](https://www.arxiv.org/pdf/2508.21060)<br>
+  tag: `ICCV'25`, `3D`, `multi-view`<br>
