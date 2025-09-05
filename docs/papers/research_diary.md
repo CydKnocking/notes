@@ -409,7 +409,18 @@ tag: `ICCV'25`, `3D`, `multi-view`
 
       在17个数据集上训练。（啊……好多😍好喜欢）分为三大类：带track gt, pose gt的RGB-D数据；带pose gt的RGB-D数据；仅有pose gt或无标注的。
 
-      
+      训练分三个阶段。一阶段，训练前端的网络（VGGT改的估计视频深度和初始相机位姿），64张H20。二阶段，训练SyncFormer，8张H20训3天。三阶段，固定前端网络中的交替注意力层，训整个框架。
+
+4. 实验结果
+   
+   主要结果是在TAPIP-3D上对比3d tracking的精度。在3d point tracking上是sota。
+
+   深度估计，在室内(tum dyn, bonn, sintel)和室外(kitti, sintel)含动态物体的数据集，比VGGT和MegaSam好（各有优劣）。
+
+   相机位姿估计，在室内外（tum dyn, lightspeed, sintel），和MegaSam差不多。
+
+   2D tracking也是SOTA。
+
 
 
 
