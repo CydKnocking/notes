@@ -67,7 +67,13 @@ tag: `ICCV'25`, `3D`, `multi-view`
   - 用了多个teacher models，包括Cotracker3(online+offline), Cotracker, TAPIR。学生模型就是一个在合成数据集上进行了预训练的CoTracker3。
   - 在真实数据上，先用sift等选出“更容易track”的点，然后随机选一个教师模型生成伪标签。
   
-  实验：baseline是2d point tracking。在tapvid，RoboTAP（一个真实序列，涉及机器人操作），DynamicReplica（合成数据集）上测试。
+  实验：
+  - baseline是2d point tracking。
+  - 在tapvid，RoboTAP（一个真实序列，涉及机器人操作），DynamicReplica（合成数据集）上测试。
+  - 两种测试模式，first query和strided query。
+    - first模式，以物体上的点第一次出现的时间为query，后面一直追踪。
+    - strided模式，追踪点每隔5帧被查询一次。
+    - 所以一般first的结果要比strided要稍差。
 
   局限
   - offline模型受计算资源限制，online模型又无法从更全局的视角更好处理遮挡和长时间track
@@ -77,10 +83,35 @@ tag: `ICCV'25`, `3D`, `multi-view`
 
 - [Local All-Pair Correspondence for Point Tracking (LocoTrack)](https://arxiv.org/pdf/2407.15420v1)<br>
   `ECCV'24`, `2d`, **`阶段性代表作`**<br>
+  
+  方法上：
+  - 提出4d correlation，即把查询点周围小区域与目标帧的周围小区域计算匹配关系。
+  - 针对4d correlation设计了一个轻量的编码器。
+  - 代码用JAX实现。
+  
+  实验上：
+  - 主要测的是2d point tracking。
+  - 4天8张3090训练。在Kubric上训。在kinetics, davis, rgb-stacking上测。
+  - 速度比cotracker快。1w个点花一两秒，10w个点花十几二十秒。
 
+- [Tracking Everything Everywhere All at Once](https://arxiv.org/pdf/2306.05422)<br>
+  `ICCV'23 Best student paper`, `2d`, **`阶段性代表作`**<br>
+
+  方法上：
+  - 引入了quasi-3d canontical volume。
+  - 有点迷没看懂，回头仔细看看。
 
 - [SpatialTracker: Tracking Any 2D Pixels in 3D Space](https://arxiv.org/pdf/2404.04319)<br>
   `CVPR'24 highlight`, `3d`, **`阶段性代表作`**<br>
+
+  方法上：
+  - 将2d的图像特征，通过predicted depth (ZoeDepth)给lift到3d，并将它们投影到triplane进行高效表示。
+  - 用了ARAP(as-rigid-as-possible)约束，约束各个运动部分尽可能保持刚性。具体来说，给每个轨迹估计了一个rigidity embedding，然后两个embedding之间来算刚性相似度，进而进行带权的约束。
+  
+  实验上：
+  - 2d tracking结果和3d tracking结果。
+  - 2d tracking中，用gt depth比ZoeDepth要好一点。
+  - 是3d tracking的baseline。不过也可以把2d的方法lift。
 
 - [Multi-View 3D Point Tracking](https://www.arxiv.org/pdf/2508.21060)<br>
   `ICCV'25`, `3D`, `multi-view`<br>
