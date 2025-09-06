@@ -426,7 +426,4 @@ tag: `ICCV'25`, `3D`, `multi-view`
 
 #### Related works about point tracking
 
-整理一下tracking any point最近的related works
-
-- [Multi-View 3D Point Tracking](https://www.arxiv.org/pdf/2508.21060)<br>
-  tag: `ICCV'25`, `3D`, `multi-view`<br>
+Refer to `papers/point_tracking`
