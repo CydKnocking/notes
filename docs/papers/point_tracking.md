@@ -156,7 +156,15 @@ tag: `ICCV'25`, `3D`, `multi-view`
   在multiview-kubric上进行训练。3d tracking实验结果似乎比spatialtrackerv2要好（PStudio这个序列）。但是其用了多个视角进行融合，设定更偏向MVS，所以感觉合理。<br>
   但是2d tracking的结果没CoTracker3好。
 
-数据集
+## 其他领域的相关工作
+
+### vggt
+
+- [FastVGGT: Training-Free Acceleration of Visual Geometry Transformer](https://www.arxiv.org/abs/2509.02560v1)<br>
+  在vggt中选择token，只在这些token中做attention，加快速度，节省开销，并且不用重新训练。有可能可以抑制误差累积。<br>
+
+## 数据集
 
 - [TAPVid-3d](https://github.com/google-deepmind/tapnet/tree/main/tapnet/tapvid3d)<br>
   有adt, panoptic studio(pstudio), drivetrack三个子集。<br>
+
