@@ -20,13 +20,13 @@ tag: `ICCV'25`, `3D`, `multi-view`
     
    3. 训练
 
-      在17个数据集上训练。（啊……好多😍好喜欢）分为三大类：带track gt, pose gt的RGB-D数据；带pose gt的RGB-D数据；仅有pose gt或无标注的。
+      在17个数据集上训练。分为三大类：带track gt, pose gt的RGB-D数据；带pose gt的RGB-D数据；仅有pose gt或无标注的。
 
       训练分三个阶段。一阶段，训练前端的网络（VGGT改的估计视频深度和初始相机位姿），64张H20。二阶段，训练SyncFormer，8张H20训3天。三阶段，固定前端网络中的交替注意力层，训整个框架。
 
 4. 实验结果
    
-   主要结果是在TAPIP-3D上对比3d tracking的精度。在3d point tracking上是sota。
+   主要结果是在TAPVid-3D上对比3d tracking的精度。在3d point tracking上是sota。
 
    深度估计，在室内(tum dyn, bonn, sintel)和室外(kitti, sintel)含动态物体的数据集，比VGGT和MegaSam好（各有优劣）。
 
@@ -38,6 +38,8 @@ tag: `ICCV'25`, `3D`, `multi-view`
 ## Related works about point tracking
 
 整理一下tracking any point最近的related works
+
+### 2D point tracking
 
 - [CoTracker: It is Better to Track Together](https://www.arxiv.org/pdf/2307.07635)<br>
   `ECCV'24`, `2d`, **`阶段性代表作`**<br>
@@ -131,6 +133,13 @@ tag: `ICCV'25`, `3D`, `multi-view`
   
   - 有点迷没看懂，回头仔细看看。
 
+- [PointOdyssey: A Large-Scale Synthetic Dataset for Long-Term Point Tracking](https://www.arxiv.org/pdf/2307.15055)<br>
+  `ICCV'23`, `2d`, `dataset`, `PIPs++`<br>
+  提出了个更长序列的2d合成数据集。<br>
+  提出了个方法叫PIPs++，用1d卷积代替了mlp-mixer，能处理任意长序列的特征。
+
+### 3D point tracking
+
 - [SpatialTracker: Tracking Any 2D Pixels in 3D Space](https://arxiv.org/pdf/2404.04319)<br>
   `CVPR'24 highlight`, `3d`, **`阶段性代表作`**<br>
 
@@ -156,6 +165,12 @@ tag: `ICCV'25`, `3D`, `multi-view`
   在multiview-kubric上进行训练。3d tracking实验结果似乎比spatialtrackerv2要好（PStudio这个序列）。但是其用了多个视角进行融合，设定更偏向MVS，所以感觉合理。<br>
   但是2d tracking的结果没CoTracker3好。
 
+- [TAPIP3D: Tracking Any Point in Persistent 3D Geometry](https://arxiv.org/pdf/2504.14717)<br>
+  `3D`, **`阶段性代表作`**<br>
+  用MegaSAM对RGB序列给出depth和camera pose，将2d feature map给lift到3d，并且变换到统一的世界坐标系下（一般是第一帧），再在3d中以kNN作为query point的邻域，与其他帧的邻域进行融合。<br>
+  在spatialtrackerv2的分类属于type III。
+
+
 ## 其他领域的相关工作
 
 ### vggt
@@ -165,6 +180,16 @@ tag: `ICCV'25`, `3D`, `multi-view`
 
 ## 数据集
 
-- [TAPVid-3d](https://github.com/google-deepmind/tapnet/tree/main/tapnet/tapvid3d)<br>
-  有adt, panoptic studio(pstudio), drivetrack三个子集。<br>
+### Point tracking 类
 
+- [TAPVid-3d](https://tapvid3d.github.io/)<br>
+  [github](https://github.com/google-deepmind/tapnet/tree/main/tapnet/tapvid3d), [paper](https://arxiv.org/pdf/2407.05921)<br>
+  3dtracking的。有adt, panoptic studio(pstudio), drivetrack三个子集。时长从几秒到十秒不等，4569个clip，25-300帧/clip<br>
+
+- [DexYCB-Pt](https://dex-ycb.github.io/)<br>
+  [paper](https://www.arxiv.org/abs/2104.04631v1)<br>
+  手部-物体互动场景，3d。有8个视角，但序列不长，有手部+物体的位姿真值。<br>
+
+- [PointOdyssey](https://pointodyssey.com/)<br>
+  [paper](https://www.arxiv.org/pdf/2307.15055)<br>
+  合成数据集，是长序列，但是是2d。30fps，平均2k+帧一个序列。<br>
