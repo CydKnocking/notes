@@ -191,5 +191,48 @@ tag: `ICCV'25`, `3D`, `multi-view`
   手部-物体互动场景，3d。有8个视角，但序列不长，有手部+物体的位姿真值。<br>
 
 - [PointOdyssey](https://pointodyssey.com/)<br>
-  [paper](https://www.arxiv.org/pdf/2307.15055)<br>
+  [paper](https://www.arxiv.org/pdf/2307.15055), [dataset](https://github.com/google-deepmind/tapnet/blob/main/tapnet/tapvid/README.md#downloading-robotap)<br>
   合成数据集，是长序列，但是是2d。30fps，平均2k+帧一个序列。<br>
+
+- [TAPVid-DAVIS]
+
+- [RoboTAP](https://robotap.github.io/)<br>
+  [paper](https://www.arxiv.org/pdf/2308.15975)<br>
+  机械臂操作物体，相机在机械臂上。TAP-Vid系列数据集之一。2d。
+
+### Video depth类
+
+- [KITTI]
+  
+- [TUM-dynamic]
+  
+- [Bonn](https://www.ipb.uni-bonn.de/data/rgbd-dynamic-dataset/index.html)
+  
+- [Sintel]
+
+### Camera pose
+
+- [TUM-dynamic]
+
+- [Lightspeed]
+
+- [Sintel]
+
+## 评价指标
+
+- OA, Occlusion Accuracy.
+  
+  预测的遮挡与否的标签的准确率，$OA=\#_{correct_label}/\#_{points}$
+
+- APD, APD3d.
+  
+  对所有可见点的轨迹，计算在设定的距离误差阈值(1, 2, 5, 10cm...)内的点的比例。对所有距离阈值下的APD取平均。
+
+- AJ, Average Jaccard.
+  
+  设置距离阈值$\delta$，统计以下三类点的数量：
+  1. True Positive: 点的gt是可见，模型预测是可见，并且误差小于等于$\delta$。
+  2. False Positive: 点的gt是遮挡，模型预测可见；或者，点的gt是可见，模型预测可见，但误差大于$\delta$。
+  3. False Negative: 点的gt是可见，模型预测被遮挡。
+  
+  计算$AJ=TP/(TP+FP+FN)$，并对所有设定阈值下的AJ取平均。
