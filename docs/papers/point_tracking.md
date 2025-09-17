@@ -185,6 +185,14 @@ tag: `ICCV'25`, `3D`, `multi-view`
 - [TAPVid-3d](https://tapvid3d.github.io/)<br>
   [github](https://github.com/google-deepmind/tapnet/tree/main/tapnet/tapvid3d), [paper](https://arxiv.org/pdf/2407.05921)<br>
   3dtracking的。有adt, panoptic studio(pstudio), drivetrack三个子集。时长从几秒到十秒不等，4569个clip，25-300帧/clip<br>
+  
+  drivetrack数据集，应该是waymo数据集转换后的名字，waymo数据集的motion数据集至少要4.3T或更多。
+
+  妈的操了下载这个数据集预处理怎么要这么大空间。
+
+  https://huggingface.co/datasets/ZhengGuangze/TAPVid-3D/tree/main，这个好像是预处理后的，一共480G。
+
+  但是根据[issue](https://github.com/google-deepmind/tapnet/issues/110)，tapvid3d作者说它的电脑上只占了138GB。
 
 - [DexYCB-Pt](https://dex-ycb.github.io/)<br>
   [paper](https://www.arxiv.org/abs/2104.04631v1)<br>
@@ -193,6 +201,8 @@ tag: `ICCV'25`, `3D`, `multi-view`
 - [PointOdyssey](https://pointodyssey.com/)<br>
   [paper](https://www.arxiv.org/pdf/2307.15055), [dataset](https://github.com/google-deepmind/tapnet/blob/main/tapnet/tapvid/README.md#downloading-robotap)<br>
   合成数据集，是长序列，但是是2d。30fps，平均2k+帧一个序列。<br>
+
+  数据集[在这](https://drive.google.com/drive/folders/1W6wxsbKbTdtV8-2TwToqa_QgLqRY3ft0)下载。
 
 - [TAPVid-DAVIS]
 
