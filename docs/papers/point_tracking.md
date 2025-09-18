@@ -147,6 +147,8 @@ tag: `ICCV'25`, `3D`, `multi-view`
   
   - 将2d的图像特征，通过predicted depth (ZoeDepth)给lift到3d，并将它们投影到triplane进行高效表示。
   
+  - 是在相机坐标系下进行的表示，没有考虑相机位姿，也没有把所有帧都warp到统一的世界坐标系。（在spatialtrackerv2的分类属于type II。）
+  
   - 用了ARAP(as-rigid-as-possible)约束，约束各个运动部分尽可能保持刚性。具体来说，给每个轨迹估计了一个rigidity embedding，然后两个embedding之间来算刚性相似度，进而进行带权的约束。
   
   实验上：
