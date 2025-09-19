@@ -206,11 +206,17 @@ tag: `ICCV'25`, `3D`, `multi-view`
 
   数据集[在这](https://drive.google.com/drive/folders/1W6wxsbKbTdtV8-2TwToqa_QgLqRY3ft0)下载。
 
-- [TAPVid-DAVIS]
+- [TAPVid-DAVIS](https://github.com/google-deepmind/tapnet/tree/main/tapnet/tapvid)
+
+  2d point tracking主要的benchmark。测试集和训练集不一样。
 
 - [RoboTAP](https://robotap.github.io/)<br>
   [paper](https://www.arxiv.org/pdf/2308.15975)<br>
   机械臂操作物体，相机在机械臂上。TAP-Vid系列数据集之一。2d。
+
+- [Dynamic Replica](https://dynamic-stereo.github.io/)
+
+  2d point tracking的benchmark。
 
 ### Video depth类
 
