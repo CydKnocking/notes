@@ -190,7 +190,7 @@ tag: `ICCV'25`, `3D`, `multi-view`
   
   drivetrack数据集，应该是waymo数据集转换后的名字，waymo数据集的motion数据集至少要4.3T或更多。
 
-  妈的操了下载这个数据集预处理怎么要这么大空间。
+  mdwc了下载这个数据集预处理怎么要这么大空间。
 
   https://huggingface.co/datasets/ZhengGuangze/TAPVid-3D/tree/main，这个好像是预处理后的，一共480G。
 
