@@ -201,14 +201,20 @@ tag: `ICCV'25`, `3D`, `multi-view`
   手部-物体互动场景，3d。有8个视角，但序列不长，有手部+物体的位姿真值。<br>
 
 - [PointOdyssey](https://pointodyssey.com/)<br>
+  
   [paper](https://www.arxiv.org/pdf/2307.15055), [dataset](https://github.com/google-deepmind/tapnet/blob/main/tapnet/tapvid/README.md#downloading-robotap)<br>
+
   合成数据集，是长序列，但是是2d。30fps，平均2k+帧一个序列。<br>
 
   数据集[在这](https://drive.google.com/drive/folders/1W6wxsbKbTdtV8-2TwToqa_QgLqRY3ft0)下载。
 
+  **下好了。**
+
 - [TAPVid-DAVIS](https://github.com/google-deepmind/tapnet/tree/main/tapnet/tapvid)
 
   2d point tracking主要的benchmark。测试集和训练集不一样。
+
+  **本地已经有可供cotracker3的测试集。已在cotracker3上成功evaluate.**
 
 - [RoboTAP](https://robotap.github.io/)<br>
   [paper](https://www.arxiv.org/pdf/2308.15975)<br>
