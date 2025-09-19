@@ -8,7 +8,7 @@ This is Knocking's personal notebook.
 Please "Ctrl+F5" to update newest notes.
 
 ## Recent updates
-- [point_tracking.md](papers/point_tracking/) <div style="text-align: right">2025-09-19 21:38:29.397834</div>
+- [point_tracking.md](papers/point_tracking/) <div style="text-align: right">2025-09-19 23:12:46.324961</div>
 - [discussions.md](papers/discussions/) <div style="text-align: right">2025-09-19 21:38:29.385834</div>
 - [research_diary.md](papers/research_diary/) <div style="text-align: right">2025-09-06 17:42:45.264717</div>
 - [proxy.md](docker/proxy/) <div style="text-align: right">2025-08-26 13:59:03.613333</div>
