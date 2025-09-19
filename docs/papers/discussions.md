@@ -25,3 +25,22 @@ Related work以下几个方向
 - sliding window方式做长序列window内的BA，sliding window的size是否可以flexible和adaptive等可以挖掘的小点。
   
 - training / testing dataset，主要的benchmark，与各个方法的接口。
+
+
+## 20250919 with 飞哥
+
+TODO：
+
+1. cotracker3 spatialtrackerv2的evaluation，evaluation dataset都准备好，跑出现有工作论文里的指标。
+
+2. 测一测long sequence，有没有performance drop
+
+3. 加自己的
+
+Brain storming：
+
+1. 对track做grouping，对motion pattern做分类
+
+2. 多少个track的选择，怎么选择，有没有elegent的设计
+
+3. 有没有较极端场景（动态物体多，运动速度过快）（所有的query point基本都在动态物体上，spatialtrackerv2会完全垮掉 => 如何用local/global context解决long-term error accumulate的问题），可以和第二点辅助query的选择结合起来做了
