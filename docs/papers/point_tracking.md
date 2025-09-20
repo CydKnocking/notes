@@ -184,6 +184,8 @@ tag: `ICCV'25`, `3D`, `multi-view`
 
 ### Point tracking 类
 
+#### 3d
+
 - [TAPVid-3d](https://tapvid3d.github.io/)<br>
   [github](https://github.com/google-deepmind/tapnet/tree/main/tapnet/tapvid3d), [paper](https://arxiv.org/pdf/2407.05921)<br>
   3dtracking的。有adt, panoptic studio(pstudio), drivetrack三个子集。时长从几秒到十秒不等，4569个clip，25-300帧/clip<br>
@@ -199,6 +201,8 @@ tag: `ICCV'25`, `3D`, `multi-view`
 - [DexYCB-Pt](https://dex-ycb.github.io/)<br>
   [paper](https://www.arxiv.org/abs/2104.04631v1)<br>
   手部-物体互动场景，3d。有8个视角，但序列不长，有手部+物体的位姿真值。<br>
+
+#### 2d
 
 - [PointOdyssey](https://pointodyssey.com/)<br>
   
@@ -223,6 +227,16 @@ tag: `ICCV'25`, `3D`, `multi-view`
 - [Dynamic Replica](https://dynamic-stereo.github.io/)
 
   2d point tracking的benchmark。
+
+- [EgoPoints & K-Epic](https://ahmaddarkhalil.github.io/EgoPoints/)
+  
+  EgoPoints是验证集，K-epic是训练集。
+  
+  2d point tracking的新benchmark，WACV'25。
+
+  egocentric的视频，存在剧烈晃动，物体/点频繁进出画面/遮挡。有大量追踪点消失后又重现。
+
+  提出了K-EPIC数据集做训练，semi-real，结合静态场景（epic-fields）和合成的动态3d物体（kubric）。
 
 ### Video depth类
 
