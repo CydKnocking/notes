@@ -427,3 +427,16 @@ tag: `ICCV'25`, `3D`, `multi-view`
 #### Related works about point tracking
 
 Refer to `papers/point_tracking`
+
+
+### 1005
+
+- [TTT3R: 3D RECONSTRUCTION AS TEST-TIME TRAINING](https://www.arxiv.org/pdf/2509.26645v1)
+  
+  解决长序列的动态重建问题。在transformer的权重更新里，给memory做更新时，加了个weight，使得每一步更新的量减少。
+  
+  栋爷说很trick，Cut3r是这篇文章主要对比的工作之一，cut3r是rnn式的，如果update次数过多，会忘记之前的东西（比如训练的时候是30次，但测试更长序列就不行），但是可以用关键帧的更新策略，对于长序列而言不用每步都更新，这种情况下cut3r也能跑下来。这篇文章里，它可以给更新量加很小的weight，也能达到“不忘记历史信息”的效果。
+
+今日完成：
+
+- [x] 用SpaTrackerV2原本的可视化，把tapvid-3d benchmark gt给可视化了。adt和pstudio基本是对的，drivetrack的外参处理不太对，回头再看看。以及tapvid-3d的depth感觉不太好啊，scale在飘，而且和tracked point的tracks有一点点合不上，可能是visualization的问题（里面对depth做了rescale）。
