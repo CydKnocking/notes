@@ -44,3 +44,12 @@ Brain storming：
 2. 多少个track的选择，怎么选择，有没有elegent的设计
 
 3. 有没有较极端场景（动态物体多，运动速度过快）（所有的query point基本都在动态物体上，spatialtrackerv2会完全垮掉 => 如何用local/global context解决long-term error accumulate的问题），可以和第二点辅助query的选择结合起来做了
+
+
+## 20251006
+
+Brain storming:
+
+1. 自适应的query策略能不能从高斯/nerf里搞一搞？
+
+2. DOT, dense optical tracking: connecting the dots里，有比较初步的query点选择策略（从光流中提取运动边界）。

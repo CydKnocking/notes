@@ -236,7 +236,26 @@ tag: `ICCV'25`, `3D`, `multi-view`
 
   egocentric的视频，存在剧烈晃动，物体/点频繁进出画面/遮挡。有大量追踪点消失后又重现。
 
+  - 序列长度不一，从24帧到2361帧，普遍在几百帧。共有517个序列。
+  - gt npz:
+    - trajs_2d: (221, 7, 2)  #T, N, 2
+    - valids: (221, 7)
+    - visibs: (221, 7)
+    - vis_valids: (221, 7)
+    - out_of_view: (221, 7)
+    - occluded: (221, 7)
+    - dynamic_obj_tracks: (7,)
+
+
   提出了K-EPIC数据集做训练，semi-real，结合静态场景（epic-fields）和合成的动态3d物体（kubric）。
+
+  - 序列长度32帧，共有11500个序列
+  - gt npz:
+    - trajs_2d: (24, 2628, 2)  #T, N, 2
+    - visibs: (24, 2628)
+    - valids: (24, 2628)
+    - is_synthetic: (24, 2628)
+
 
 ### Video depth类
 

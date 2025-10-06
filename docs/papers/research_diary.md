@@ -440,3 +440,37 @@ Refer to `papers/point_tracking`
 今日完成：
 
 - [x] 用SpaTrackerV2原本的可视化，把tapvid-3d benchmark gt给可视化了。adt和pstudio基本是对的，drivetrack的外参处理不太对，回头再看看。以及tapvid-3d的depth感觉不太好啊，scale在飘，而且和tracked point的tracks有一点点合不上，可能是visualization的问题（里面对depth做了rescale）。
+
+
+### 1006
+
+**paper reading:**
+
+- [Dense Optical Tracking: Connecting the Dots](https://www.alphaxiv.org/pdf/2312.00786)
+  
+  CVPR'24
+
+  用tracker做稀疏追踪，然后做最邻近插值插出密集光流，然后再做光流优化。
+
+  在CVO光流的benchmark，和TAP point tracking两个benchmark上对比。在TAP上，first模式的tracking和cotracker相当，strided模式下是sota。（*这个感觉可以理解，因为直观上光流对于构建长时tracking不如point tracking的方法*）
+
+  选点策略：
+  - 用一个预训练的光流模型先估计两帧的运动场，用Sobel filter监测运动边界
+  - 50\%的点随机采样在运动边界附近5个px内，另一半在整个图像中随机采样。
+
+
+**今日：**
+
+- SpaTrackerV2的代码只给了demo，没有给training和evaluation，而这两部分有特别多的细节，不太好弄
+- 3d tracker还没在EgoPoints这种长时（虽然2d）的benchmark上测过。
+
+- TAPIP3D可以load npz进行inference:
+  - video: (72, 480, 640, 3), uint8, 0, 255
+  - intrinsics: (72, 3, 3), float32, 0.0, 615.357421875
+  - extrinsics: (72, 4, 4), float32, 0.0, 1.0
+  - depths: (72, 480, 640), float32, 0.0, 65.53500366210938
+
+**明天TODO：**
+
+- [ ] TAPIP3D感觉比较好follow，看看能不能在这上面搞定训练？
+- [ ] 在EgoPoints这个benchmark上测一下？
