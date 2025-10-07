@@ -53,3 +53,10 @@ Brain storming:
 1. 自适应的query策略能不能从高斯/nerf里搞一搞？
 
 2. DOT, dense optical tracking: connecting the dots里，有比较初步的query点选择策略（从光流中提取运动边界）。
+
+
+## 20251007 with 老颜
+
+1. $pi^3$作前端的重建，能保证视角变化引起的scale问题。
+2. query point出画面的过程中，能不能选一些支撑点，保证之前的点不要乱飘（能不能利用上之前的tracker里能够在track之间share信息的inductive bias，使得看得见的点的track能引导被遮挡/出画面的点的track）
+

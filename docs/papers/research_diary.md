@@ -474,3 +474,10 @@ Refer to `papers/point_tracking`
 
 - [ ] TAPIP3D感觉比较好follow，看看能不能在这上面搞定训练？
 - [ ] 在EgoPoints这个benchmark上测一下？
+
+
+### 1007
+
+**今日：**
+
+- EgoPoints没有相机位姿、内外参标注。
