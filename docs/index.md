@@ -8,8 +8,8 @@ This is Knocking's personal notebook.
 Please "Ctrl+F5" to update newest notes.
 
 ## Recent updates
-- [research_diary.md](papers/research_diary/) <div style="text-align: right">2025-10-05 23:39:11.216650</div>
-- [point_tracking.md](papers/point_tracking/) <div style="text-align: right">2025-09-20 16:24:58.256614</div>
-- [discussions.md](papers/discussions/) <div style="text-align: right">2025-09-19 23:15:18.854067</div>
+- [tmux.md](linux_and_ubuntu/tmux/) <div style="text-align: right">2025-10-08 17:16:03.353113</div>
+- [discussions.md](papers/discussions/) <div style="text-align: right">2025-10-08 16:45:06.181117</div>
+- [research_diary.md](papers/research_diary/) <div style="text-align: right">2025-10-08 16:44:22.087794</div>
+- [point_tracking.md](papers/point_tracking/) <div style="text-align: right">2025-10-06 23:29:24.415057</div>
 - [proxy.md](docker/proxy/) <div style="text-align: right">2025-08-26 13:59:03.613333</div>
-- [clash.md](Web/clash/) <div style="text-align: right">2025-07-21 18:22:23.221595</div>
