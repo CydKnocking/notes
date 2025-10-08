@@ -59,4 +59,5 @@ Brain storming:
 
 1. $pi^3$作前端的重建，能保证视角变化引起的scale问题。
 2. query point出画面的过程中，能不能选一些支撑点，保证之前的点不要乱飘（能不能利用上之前的tracker里能够在track之间share信息的inductive bias，使得看得见的点的track能引导被遮挡/出画面的点的track）
+3. feature extractor换成dinov3这种invariant的
 
