@@ -488,5 +488,16 @@ Refer to `papers/point_tracking`
 **今日：**
 
 SpaTrackerV2的对比实验，对于query点出画面又进画面的情况：
-- 将视频中间的帧给删掉，只保留了开头和末尾query点都在画面里的片段。依然track不上
+- 将视频中间的帧给删掉，只保留了开头和末尾query点都在画面里的片段。依然track不上。
 - 不管是否删除中间的帧，前端VGGT给出的结果都是好的。位姿是后面track网络里优化过程中出错了。
+
+- 把Pi3加到SpatialTrackerV2里了，正在测✌
+
+
+### 1009
+
+**今日：**
+
+Track-On2出了，用了DINOv3做特征。
+- track-on2代码搞定✌
+- track-on2的训练集是cotracker3的kubric_movi_f (120 frames/seq)，和cotracker之前的kubric_movi_f不一样，以前是24帧的序列。在下载了。
