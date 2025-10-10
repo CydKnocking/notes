@@ -65,7 +65,12 @@ Brain storming:
 ## 20251010 with 飞哥
 
 梳理故事：
-3d online tracking
+3d online point tracking
+
+对于头戴式/机械臂头的相机在一个房间内进行活动的场景：
+1. 需要一个在线/增量式的3d处理系统（3d online point tracking）
+2. 针对场景中特征点不断出入画面，需要有adaptively memory的维护
+3. 为了提高在这种场景中的表现鲁棒性，需要有特殊的/结合memory的辅助query选择策略
 
 方法(todo)：
 1. memory的设计
