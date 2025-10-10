@@ -61,3 +61,16 @@ Brain storming:
 2. query point出画面的过程中，能不能选一些支撑点，保证之前的点不要乱飘（能不能利用上之前的tracker里能够在track之间share信息的inductive bias，使得看得见的点的track能引导被遮挡/出画面的点的track）
 3. feature extractor换成dinov3这种invariant的
 
+
+## 20251010 with 飞哥
+
+梳理故事：
+3d online tracking
+
+方法(todo)：
+1. memory的设计
+   1. track-on做基本的参考。
+2. query的选择，adaptively的filter out。（brain storming：online的filter out，motion prediction+reprojection loss...）
+3. query selection with memory
+
+
