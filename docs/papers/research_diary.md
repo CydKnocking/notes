@@ -501,3 +501,10 @@ SpaTrackerV2的对比实验，对于query点出画面又进画面的情况：
 Track-On2出了，用了DINOv3做特征。
 - track-on2代码搞定✌
 - track-on2的训练集是cotracker3的kubric_movi_f (120 frames/seq)，和cotracker之前的kubric_movi_f不一样，以前是24帧的序列。在下载了。
+
+
+### 1013
+
+用到了memory的方法：
+Spann3R, CUT3R, TTT3R,
+
