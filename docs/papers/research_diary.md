@@ -506,5 +506,11 @@ Track-On2出了，用了DINOv3做特征。
 ### 1013
 
 用到了memory的方法：
-Spann3R, CUT3R, TTT3R,
+Spann3R, CUT3R, TTT3R, PreF3R
 
+
+### 1014
+
+1. St4RTrack的代码跑通了，但我的故事是否要用这个code base修改，还得再看看。
+2. 如果只是为了target online 3d point tracking in ego-motion sequences，感觉可以用RGBD的输入（加一个zoedepth之类的），固定相机坐标系，不用那么纠结位姿的问题，只需要show online 3d tracking并且能处理ego-motion中点消失又出现的问题
+   1. 要么也可以用3r来估计两帧的correspondences，利用这个结果来做re-identifying，同时也能得到depth和相对位姿。
