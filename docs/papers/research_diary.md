@@ -521,3 +521,14 @@ Depth现在用了ZoeDepth，也可以用moge？
 ### 1015
 
 飞哥严选：[WorldMirror: Universal 3D World Reconstruction with Any-Prior Prompting](https://www.arxiv.org/pdf/2510.10726)
+
+
+### 1016
+
+在往track-on2网络里的feature map里加一个3d的positional encoding。
+
+其他工作的做法：
+- [MBPTrack: Improving 3D Point Cloud Tracking with Memory Networks and Box Priors](https://openaccess.thecvf.com/content/ICCV2023/papers/Xu_MBPTrack_Improving_3D_Point_Cloud_Tracking_with_Memory_Networks_and_ICCV_2023_paper.pdf)<br>
+  纯3d点云tracking的。只在attention层的query和key上，给coordinates加了positional embeddings.<br>
+  它的前作是[CXTrack: Improving 3D Point Cloud Tracking with Contextual Information](https://www.arxiv.org/pdf/2211.08542)，也是这么做的。<br>
+  不过这两篇文章本身的输入是3d点云，用的是DGCNN对点云进行的encoding。
