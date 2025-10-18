@@ -204,6 +204,10 @@ tag: `ICCV'25`, `3D`, `multi-view`
 
 #### 2d
 
+- [TAPVid-kubric(movi_f)](https://huggingface.co/datasets/facebook/CoTracker3_Kubric)
+  
+  
+
 - [PointOdyssey](https://pointodyssey.com/)<br>
   
   [paper](https://www.arxiv.org/pdf/2307.15055), [dataset](https://github.com/google-deepmind/tapnet/blob/main/tapnet/tapvid/README.md#downloading-robotap)<br>
