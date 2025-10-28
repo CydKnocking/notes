@@ -532,3 +532,10 @@ Depth现在用了ZoeDepth，也可以用moge？
   纯3d点云tracking的。只在attention层的query和key上，给coordinates加了positional embeddings.<br>
   它的前作是[CXTrack: Improving 3D Point Cloud Tracking with Contextual Information](https://www.arxiv.org/pdf/2211.08542)，也是这么做的。<br>
   不过这两篇文章本身的输入是3d点云，用的是DGCNN对点云进行的encoding。
+
+
+### 1028
+
+读读论文：
+- [POMATO: Marrying Pointmap Matching with Temporal Motions for Dynamic 3D Reconstruction](https://www.alphaxiv.org/abs/2504.05692v2)
+  ICCV'25，Dust3r网络改的。
