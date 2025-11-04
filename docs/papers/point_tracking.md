@@ -197,7 +197,7 @@ tag: `ICCV'25`, `3D`, `multi-view`
   - adt:
     - 'images_jpeg_bytes': (T,)
     - 'queries_xyt': (N, 3), 最后一维(x, y, t)是2d坐标+query的帧
-    - 'tracks_XYZ': (T, N, 3), 最后一维(x, y, z)是3d坐标，单位是m
+    - 'tracks_XYZ': (T, N, 3), 最后一维(x, y, z)是3d坐标，在每帧的相机坐标系下，单位是m
     - 'visibility': (T, N)
     - 'fx_fy_cx_cy': (4,)
     - 'depth_preds': (T, H, W)
@@ -206,6 +206,7 @@ tag: `ICCV'25`, `3D`, `multi-view`
     - 其他的和adt一样
   - 'pstudio':
     - 和adt一样
+- 
 
 - [DexYCB-Pt](https://dex-ycb.github.io/)<br>
   [paper](https://www.arxiv.org/abs/2104.04631v1)<br>
