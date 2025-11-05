@@ -206,7 +206,6 @@ tag: `ICCV'25`, `3D`, `multi-view`
     - 其他的和adt一样
   - 'pstudio':
     - 和adt一样
-- 
 
 - [DexYCB-Pt](https://dex-ycb.github.io/)<br>
   [paper](https://www.arxiv.org/abs/2104.04631v1)<br>
