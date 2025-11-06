@@ -539,3 +539,8 @@ Depth现在用了ZoeDepth，也可以用moge？
 读读论文：
 - [POMATO: Marrying Pointmap Matching with Temporal Motions for Dynamic 3D Reconstruction](https://www.alphaxiv.org/abs/2504.05692v2)
   ICCV'25，Dust3r网络改的。
+
+
+### 1106
+
+MapAnything在本地测试，512*512图像，6帧0.88秒重建，20帧1.79秒重建。
