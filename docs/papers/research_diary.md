@@ -544,3 +544,10 @@ Depth现在用了ZoeDepth，也可以用moge？
 ### 1106
 
 MapAnything在本地测试，512*512图像，6帧0.88秒重建，20帧1.79秒重建。
+
+
+### 1109
+
+在offset head上动动手脚，多加一些trajectory的/3d的信息作为输入：
+- 考虑把2d/3d trajectory(的offset)给encode
+- 要不要把camera pose / ray也给encode，或者把MapAnything的相应token给用起来
