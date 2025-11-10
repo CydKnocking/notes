@@ -551,3 +551,12 @@ MapAnything在本地测试，512*512图像，6帧0.88秒重建，20帧1.79秒重
 在offset head上动动手脚，多加一些trajectory的/3d的信息作为输入：
 - 考虑把2d/3d trajectory(的offset)给encode
 - 要不要把camera pose / ray也给encode，或者把MapAnything的相应token给用起来
+
+想起了eccv2022 SimpleRecon加metadata……
+- feature dot product: 图像特征的相似度
+- ray directions (normalized): 相机坐标系下的3d信息
+- reference plane depth: 单目的3d信息
+- reference frame reprojected depths
+- relative ray angles: ray directions之间的角度
+- relative pose distance: 目标帧和源帧之间的相机坐标距离
+- depth validity masks

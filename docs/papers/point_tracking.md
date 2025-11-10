@@ -220,6 +220,28 @@ tag: `ICCV'25`, `3D`, `multi-view`
 
 - [TAPVid-kubric(movi_f)](https://huggingface.co/datasets/facebook/CoTracker3_Kubric)
   
+  - "0000.npy": np.load()后用.item()提取其中数据，dict_keys(['coords', 'coords_depth', 'visibility', 'depth', 'metadata', 'segmentations', 'camera'])
+    - 'coords': (N, T, 2)
+    - 'coords_depth': (N, T)
+    - 'visibility': (N, T)
+    - 'depth': (T, H, W, 1)
+    - 'metadata': dict_keys(['backward_flow_range', 'depth_range', 'forward_flow_range', 'height', 'num_frames', 'num_instances', 'video_name', 'width'])
+    - 'segmentations': (T, H, W, 1)
+    - 'camera': dict_keys(['field_of_view', 'focal_length', 'positions', 'quaternions', 'sensor_width'])
+  
+  - "0000_trajs_2d.npy": (N, T, 2)
+  
+  - "0000_visibility.npy": (N, T)
+  
+  - "0000_with_rank.npz": ['names', 'extrinsics', 'shared_intrinsics', 'ranking']
+    - 'names': (T,), list of frame names
+    - 'extrinsics': (T, 3, 4)
+    - 'shared_intrinsics': (3, 3)
+    - 'ranking': (T, T)
+  
+  - depths/ : N个.npy，每个shape(H, W)
+  
+  - frames/ : N个.png
   
 
 - [PointOdyssey](https://pointodyssey.com/)<br>
