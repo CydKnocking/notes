@@ -223,7 +223,7 @@ tag: `ICCV'25`, `3D`, `multi-view`
   - "0000.npy": np.load()后用.item()提取其中数据，dict_keys(['coords', 'coords_depth', 'visibility', 'depth', 'metadata', 'segmentations', 'camera'])
     - 'coords': (N, T, 2)
     - 'coords_depth': (N, T)
-    - 'visibility': (N, T)
+    - 'visibility': (N, T), False是未被遮挡，True是被遮挡
     - 'depth': (T, H, W, 1)
     - 'metadata': dict_keys(['backward_flow_range', 'depth_range', 'forward_flow_range', 'height', 'num_frames', 'num_instances', 'video_name', 'width'])
     - 'segmentations': (T, H, W, 1)
@@ -233,13 +233,13 @@ tag: `ICCV'25`, `3D`, `multi-view`
   
   - "0000_visibility.npy": (N, T)
   
-  - "0000_with_rank.npz": ['names', 'extrinsics', 'shared_intrinsics', 'ranking']
+  - "0000_with_rank.npz": ['names', 'extrinsics', 'shared_intrinsics', 'ranking'] **用这个用这个用这个**
     - 'names': (T,), list of frame names
-    - 'extrinsics': (T, 3, 4)
-    - 'shared_intrinsics': (3, 3)
-    - 'ranking': (T, T)
+    - 'extrinsics': (T, 3, 4), np.float64, world to camera, OpenCV坐标系(x朝右，y朝下，z朝前)
+    - 'shared_intrinsics': (3, 3), np.float64，OpenCV坐标系(x朝右，y朝下，z朝前)
+    - 'ranking': (T, T), unknown usage...
   
-  - depths/ : N个.npy，每个shape(H, W)
+  - depths/ : N个.npy，每个shape(H, W)，和"0000_with_rank.npz"里的shared_intrinsics、extrinsics是配套的。
   
   - frames/ : N个.png
   

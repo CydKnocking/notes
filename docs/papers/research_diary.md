@@ -565,12 +565,13 @@ MapAnything在本地测试，512*512图像，6帧0.88秒重建，20帧1.79秒重
 ### 1111
 
 Goal: 把tapvid-3d benchmark写进evaluation里
-- 加载tapvid-3d数据集
-- 用mapanything给tapvid-3d生成depth等3d信息
-- 把2d结果给lift到3d
-- 测试
+- [x] 加载tapvid-3d数据集
+- [ ] 用mapanything给tapvid-3d生成depth等3d信息
+- [x] 把2d结果给lift到3d
+- [x] 测试
 
 Goal: 在训练中加入3d的记忆和约束
-- 加载movi_f时，加载depth和extrinsics等信息
-- 把2d track正确投影到3d world coordinate
-- 添加新的网络，处理3d的记忆
+- [ ] 加载movi_f时，加载depth和extrinsics等信息
+- [ ] data augmentation on depth ...
+- [ ] 把2d track正确投影到3d world coordinate
+- [ ] 添加新的网络，处理3d的记忆
