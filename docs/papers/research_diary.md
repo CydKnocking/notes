@@ -571,7 +571,7 @@ Goal: 把tapvid-3d benchmark写进evaluation里
 - [x] 测试
 
 Goal: 在训练中加入3d的记忆和约束
-- [ ] 加载movi_f时，加载depth和extrinsics等信息
-- [ ] data augmentation on depth ...
+- [x] 加载movi_f时，加载depth和extrinsics等信息
+- [x] data augmentation on depth ...
 - [ ] 把2d track正确投影到3d world coordinate
 - [ ] 添加新的网络，处理3d的记忆

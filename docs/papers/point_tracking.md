@@ -228,6 +228,7 @@ tag: `ICCV'25`, `3D`, `multi-view`
     - 'metadata': dict_keys(['backward_flow_range', 'depth_range', 'forward_flow_range', 'height', 'num_frames', 'num_instances', 'video_name', 'width'])
     - 'segmentations': (T, H, W, 1)
     - 'camera': dict_keys(['field_of_view', 'focal_length', 'positions', 'quaternions', 'sensor_width'])
+      - OpenGL坐标系(x朝右，y朝上，z朝后)。
   
   - "0000_trajs_2d.npy": (N, T, 2)
   
