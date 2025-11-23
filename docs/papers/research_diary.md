@@ -575,3 +575,19 @@ Goal: 在训练中加入3d的记忆和约束
 - [x] data augmentation on depth ...
 - [ ] 把2d track正确投影到3d world coordinate
 - [ ] 添加新的网络，处理3d的记忆
+
+
+### 1117
+
+Brain Storming
+
+要学到point在3d空间中的运动和时空连续性，在方法/任务建模上尝试两个改动
+1. 目前的3d point tracker网络输出是(x_t, y_t, z_t)，要预测运动，应该学到的是(dx, dy, dz)的信息。更进一步，可以从动力学的角度，学point运动的(direction, distance)。在此基础上，可以基于历史的(direction, distance)来修正当前帧的估计。
+2. 可不可以把点在3d的运动给建模成分类+回归问题，比如用**存有若干个稀疏运动方向的codebook+refiner**这种框架来做。
+
+
+### 1121
+
+Brain Storming
+
+预测confidence/uncertainty 改成 预测图像二维空间中的不确定性(2x2协方差矩阵)/世界三维空间中的不确定性(3x3协方差矩阵)。RoMa v2用了这个，在有运动模糊的情况下，误差在模糊的方向上可能更大。
