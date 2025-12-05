@@ -236,7 +236,7 @@ tag: `ICCV'25`, `3D`, `multi-view`
   
   - "0000_with_rank.npz": ['names', 'extrinsics', 'shared_intrinsics', 'ranking'] **用这个用这个用这个**
     - 'names': (T,), list of frame names
-    - 'extrinsics': (T, 3, 4), np.float64, world to camera, OpenCV坐标系(x朝右，y朝下，z朝前)
+    - 'extrinsics': (T, 3, 4), np.float64, world to camera, OpenCV坐标系(x朝右，y朝下，z朝前)，世界坐标系中的三维点Pw可由 Pc = T_i @ Pw 变换到相机坐标系中。
     - 'shared_intrinsics': (3, 3), np.float64，OpenCV坐标系(x朝右，y朝下，z朝前)
     - 'ranking': (T, T), unknown usage...
   
