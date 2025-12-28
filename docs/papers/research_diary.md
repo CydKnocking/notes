@@ -591,3 +591,39 @@ Brain Storming
 Brain Storming
 
 预测confidence/uncertainty 改成 预测图像二维空间中的不确定性(2x2协方差矩阵)/世界三维空间中的不确定性(3x3协方差矩阵)。RoMa v2用了这个，在有运动模糊的情况下，误差在模糊的方向上可能更大。
+
+
+### 1222
+
+**3D fundamental models, tracking**
+
+- [**DePT3R: Joint Dense Point Tracking and 3D Reconstruction of Dynamic Scenes in a Single Forward Pass**](https://arxiv.org/pdf/2512.13122)
+  输入rgb视频，输出相机位姿、深度、点云、稠密3d点跟踪。<br>
+  有链接，但未开源。<br>
+  数值结果，稠密3d点跟踪和重建都很好。
+  
+- [SyncTrack4D: Cross-Video Motion Alignment and Video Synchronization with Multi-Video 4D Gaussian Splatting](https://arxiv.org/pdf/2512.04315)
+  输入：多视角的rgb视频(unsynchronized)，dinov3特征，2dtrack，2d光流，估计的/真值的pose+depth<br>
+  输出：4DGS。<br>
+  方法概述：一个多阶段的处理方法，1. 给每段视频单独搞出4d track，2. cross-video 4d track matching，3. 做synchronization，4. 优化一个统一的4dgs。<br>
+  这是有了3d+track结果的后续工作。<br>
+  
+- [MV-TAP: Tracking Any Point in Multi-View Videos](https://arxiv.org/pdf/2512.02006)
+  输入：多视角的rgb视频(synchronized)，query point<br>
+  输出：2d的多视角tracks（没有深度没有3d）<br>
+  方法：经典的co-tracker一样的iterative方法，不过有不同视角之间的cross-attention。中间有对不同camera视角的encoding（Plucker coordinates）。<br>
+  结果还行，在主要的数据集上是sota，在附录里是comparable，比了2d和3d的方法。
+
+- [K-Track: Kalman-Enhanced Tracking for Accelerating Deep Point Trackers on Edge Devices](https://arxiv.org/pdf/2512.10628)
+  目的：2d point tracking的加速。<br>
+  方法：对关键帧用网络估计，对非关键帧用匀速模型+卡尔曼滤波。对点的位置+速度+不确定性（协方差矩阵）进行了建模，可能可以看看。
+
+- [Generative Video Motion Editing with 3D Point Tracks](https://arxiv.org/pdf/2512.02015)
+  用源视频 + pose + 估计好的3d tracks做视频编辑，用的diffusion，3d track做的condition。
+
+- [Tracking-Guided 4D Generation: Foundation-Tracker Motion Priors for 3D Model Animation](https://arxiv.org/pdf/2512.06158)
+  在diffusion的特征空间中做track（基于correspondence tracking loss），保持生成的一致性；改进了4dgs。
+
+- [Joint 3D Geometry Reconstruction and Motion Generation for 4D Synthesis from a Single Image](https://www.arxiv.org/pdf/2512.05044)
+  
+
