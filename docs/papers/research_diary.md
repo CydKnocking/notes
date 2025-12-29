@@ -600,7 +600,12 @@ Brain Storming
 - [**DePT3R: Joint Dense Point Tracking and 3D Reconstruction of Dynamic Scenes in a Single Forward Pass**](https://arxiv.org/pdf/2512.13122)
   输入rgb视频，输出相机位姿、深度、点云、稠密3d点跟踪。<br>
   有链接，但未开源。<br>
-  数值结果，稠密3d点跟踪和重建都很好。
+  数值结果，稠密3d点跟踪和重建都很好。<br>
+
+- [**Any4D: Unified Feed-Forward Metric 4D Reconstruction**](https://arxiv.org/pdf/2512.10935)
+  CMU的工作。<br>
+  输入：和MapAnything一样，RGB + 一堆可选输入（rays, pose, depth, doppler）<br>
+  输出：metric + 相机位姿 + 几何（ray directions / predicted depth） + 场景流<br>
   
 - [SyncTrack4D: Cross-Video Motion Alignment and Video Synchronization with Multi-Video 4D Gaussian Splatting](https://arxiv.org/pdf/2512.04315)
   输入：多视角的rgb视频(unsynchronized)，dinov3特征，2dtrack，2d光流，估计的/真值的pose+depth<br>
@@ -612,18 +617,26 @@ Brain Storming
   输入：多视角的rgb视频(synchronized)，query point<br>
   输出：2d的多视角tracks（没有深度没有3d）<br>
   方法：经典的co-tracker一样的iterative方法，不过有不同视角之间的cross-attention。中间有对不同camera视角的encoding（Plucker coordinates）。<br>
-  结果还行，在主要的数据集上是sota，在附录里是comparable，比了2d和3d的方法。
+  结果还行，在主要的数据集上是sota，在附录里是comparable，比了2d和3d的方法。<br>
 
 - [K-Track: Kalman-Enhanced Tracking for Accelerating Deep Point Trackers on Edge Devices](https://arxiv.org/pdf/2512.10628)
   目的：2d point tracking的加速。<br>
-  方法：对关键帧用网络估计，对非关键帧用匀速模型+卡尔曼滤波。对点的位置+速度+不确定性（协方差矩阵）进行了建模，可能可以看看。
+  方法：对关键帧用网络估计，对非关键帧用匀速模型+卡尔曼滤波。对点的位置+速度+不确定性（协方差矩阵）进行了建模，可能可以看看。<br>
 
 - [Generative Video Motion Editing with 3D Point Tracks](https://arxiv.org/pdf/2512.02015)
-  用源视频 + pose + 估计好的3d tracks做视频编辑，用的diffusion，3d track做的condition。
+  用源视频 + pose + 估计好的3d tracks做视频编辑，用的diffusion，3d track做的condition。<br>
 
 - [Tracking-Guided 4D Generation: Foundation-Tracker Motion Priors for 3D Model Animation](https://arxiv.org/pdf/2512.06158)
-  在diffusion的特征空间中做track（基于correspondence tracking loss），保持生成的一致性；改进了4dgs。
+  在diffusion的特征空间中做track（基于correspondence tracking loss），保持生成的一致性；改进了4dgs。<br>
 
 - [Joint 3D Geometry Reconstruction and Motion Generation for 4D Synthesis from a Single Image](https://www.arxiv.org/pdf/2512.05044)
-  
+  生成的工作，从single image直接生成4d点云轨迹，来实现视频生成。<br>
+
+- [Tracking Everything Everywhere across Multiple Cameras](https://ojs.aaai.org/index.php/AAAI/article/view/32839)
+  **把Omnimotion给扩展到了多视角**，学习一个双射，把不同视角不同时间戳的像素点映射到一个统一的3d canonical space。这个双射可以自监督学习。<br>
+
+- [DiTracker: Repurposing Video Diffusion Transformers for Robust Point Tracking](https://arxiv.org/pdf/2512.20606)
+
+- [Look Around and Pay Attention: Multi-camera Point Tracking Reimagined with Transformers](https://arxiv.org/pdf/2512.04213)
+  多视角point tracking（synchronized）。39fps。<br>
 
