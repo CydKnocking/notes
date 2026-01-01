@@ -640,3 +640,19 @@ Brain Storming
 - [Look Around and Pay Attention: Multi-camera Point Tracking Reimagined with Transformers](https://arxiv.org/pdf/2512.04213)
   多视角point tracking（synchronized）。39fps。<br>
 
+
+## 2026
+
+### 0101
+
+之前老颜说的[KV-Tracker: Real-Time Pose Tracking with Transformers](https://arxiv.org/pdf/2512.22581)是把pi^3改成stream模式的工作，核心是用了kv-cache。
+
+读了Any4D，一些想法：
+- 从测试效果看，动态区域的tracking不够平滑。是否考虑加入平滑项约束作为正则项进行微调？
+- 静态区域理论上的scene flow应该是0，然而结果并不是。是否考虑加入静态区域的静止约束作为正则项？
+- 作为以上两点的替代方案，如果暂时不能微调网络的话，是否给输出的结果加个后处理？
+
+看了Any4D代码，TODO：
+- [ ] 改成stream的、基于window的输入，并且把前面已经处理过的帧的结果给再次扔进下一次处理(已经得到的ray_directions, depth_along_ray, cam_trans, cam_quats都可以复用)
+- [ ] 把每个window的结果在世界坐标系下对齐
+- [ ] 试试把前面已经得到的scale token给继续复用？
