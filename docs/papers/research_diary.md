@@ -653,6 +653,17 @@ Brain Storming
 - 作为以上两点的替代方案，如果暂时不能微调网络的话，是否给输出的结果加个后处理？
 
 看了Any4D代码，TODO：
-- [ ] 改成stream的、基于window的输入，并且把前面已经处理过的帧的结果给再次扔进下一次处理(已经得到的ray_directions, depth_along_ray, cam_trans, cam_quats都可以复用)
-- [ ] 把每个window的结果在世界坐标系下对齐
-- [ ] 试试把前面已经得到的scale token给继续复用？
+- [x] 改成stream的、基于window的输入，并且把前面已经处理过的帧的结果给再次扔进下一次处理(已经得到的ray_directions, depth_along_ray, cam_trans, cam_quats都可以复用)
+- [ ] 把每个window的结果在世界坐标系下对齐（但是如果前面已经复制了cam_trans和cam_quats，那就已经是世界坐标系了？行吧，不太对。）
+- [x] 试试把前面已经得到的scale token给继续复用？（其实scale token是训练阶段训好的，测试阶段不变了）
+
+### 0102
+
+跑了下Any4D代码：
+- 在本地3090上
+  - 显存原因最多只能跑42帧，且已经做了精度量化，花了2秒左右；
+  - 25帧化1.1秒。
+  - 欸但是改称window_based的处理方式后，windowsize=24，第一个window花了1.1s，后面都只花了0.
+- 在服务器的A100-80G上
+  - 92帧花52GB显存（应该是没做量化的，因为在40G卡上也能跑但是慢一些），花了3秒多。
+  - 
