@@ -666,4 +666,23 @@ Brain Storming
   - 欸但是改称window_based的处理方式后，windowsize=24，第一个window花了1.1s，后面都只花了0.
 - 在服务器的A100-80G上
   - 92帧花52GB显存（应该是没做量化的，因为在40G卡上也能跑但是慢一些），花了3秒多。
-  - 
+
+发现的一些问题：
+- 同一个batch的输出，每一帧的内参不一样，这个是否可以做约束
+
+
+### 0103
+
+需要被转换坐标的输出：
+- pts3d
+- cam_trans
+- cam_quats
+- scene_flow
+- *camera_poses*
+
+几个可以用的函数：
+- transform_pts3d(pts3d, transformation)
+- transform_pose_using_quats_and_trans_2_to_1(quats1, trans1, quats2, trans2)
+- relative_pose_transformation(trans_01, trans_02)
+
+Any4D输出的相机位姿T是cam2world，可以把世界坐标系的三维点给转换到相机坐标系中：P_cam = T @ P_world
