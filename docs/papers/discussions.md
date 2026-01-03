@@ -84,3 +84,11 @@ Brain storming:
 1. 4d fundation models整理，看看他们的结果是否好（可以反应latent是否好）
 2. dense prediction是更基础的问题，query这种形式只能局限于tracking，比较narrow；要搞清楚query相比于dense/forward的方式有明显优势吗？query只是dense的子问题，如果在当下没有明确优势那就果断放弃query。看一下fundation的dense predictor现在是什么水平
 3. 整理好fundation models后，i. 如果位姿/跟踪/重建不够好，加入inductive bias改善结果（离线优化可能不是最优选），ii. 如果结果还不错，看看latent feature是否可以做解码，做下游任务（motion segmentation之类的），iii. 改成online形式（参考davison组的做法）
+
+## 20260103 with 老颜
+
+目标：做一个streaming的4d recon+dense correspondence的系统
+1. 给Any4D的输入用真值，再一个一个去掉，看看效果（尤其是长序列）
+2. 寻思给Any4D增强scale consistency和correspondence表现的思路
+3. 寻思TTT3R是怎么在它的codebase上做长序列的，看看它的代码和它基于的codebase的代码
+4. 寻思是否可以从TTT3R这种长序列4d recon已经比较好的模型基础之上，加入dense correspondence
