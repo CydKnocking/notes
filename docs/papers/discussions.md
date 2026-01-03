@@ -92,3 +92,9 @@ Brain storming:
 2. 寻思给Any4D增强scale consistency和correspondence表现的思路
 3. 寻思TTT3R是怎么在它的codebase上做长序列的，看看它的代码和它基于的codebase的代码
 4. 寻思是否可以从TTT3R这种长序列4d recon已经比较好的模型基础之上，加入dense correspondence
+
+老颜的comments：
+1. 加真值这种io的工作感觉可以交给agent一起搞，给他个路径；
+2. 的话感觉其实就是做window-wise的alignment，只是看显式来做（vggt-slam）还是隐式从stream processing（转成memory/cache）这块来做；
+3. 的话感觉瞄一眼他codebase文章的architecture、loss和dataset就好，原理上反正any4d如你所说就没在长序列训过，那搞清楚ttt3r的codebase怎么拿长序列训就好；
+4. 其实就是参考any4d怎么加flow的output，以及ttt3r是否和mapanything在decode出motion上可以等价就好，也是看看论文概念层面想想就好
