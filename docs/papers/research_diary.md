@@ -686,3 +686,5 @@ Brain Storming
 - relative_pose_transformation(trans_01, trans_02)
 
 Any4D输出的相机位姿T是cam2world，可以把世界坐标系的三维点给转换到相机坐标系中：P_cam = T @ P_world
+
+不对！如果输入的是有intrinsics（ray map）的，输出的raymap依然会变，和输入不一样。
