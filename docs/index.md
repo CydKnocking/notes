@@ -3,13 +3,13 @@
 
 This is Knocking's personal notebook.
 
-杩欓噷鏄疜nocking鐨勪釜浜虹瑪璁版湰.
+这里是Knocking的个人笔记本.
 
 Please "Ctrl+F5" to update newest notes.
 
 ## Recent updates
-- [research_diary.md](papers/research_diary/) <div style="text-align: right">2026-01-03 22:32:44.397454</div>
-- [discussions.md](papers/discussions/) <div style="text-align: right">2026-01-03 21:32:46.789988</div>
-- [point_tracking.md](papers/point_tracking/) <div style="text-align: right">2026-01-01 23:11:06.378602</div>
-- [tmux.md](linux_and_ubuntu/tmux/) <div style="text-align: right">2025-10-08 17:16:03.353113</div>
-- [proxy.md](docker/proxy/) <div style="text-align: right">2025-08-26 13:59:03.613333</div>
+- [point_tracking.md](papers\point_tracking/) <div style="text-align: right">2026-01-26 22:50:31.440852</div>
+- [research_diary.md](papers\research_diary/) <div style="text-align: right">2026-01-26 22:50:31.440852</div>
+- [tools.md](papers\tools/) <div style="text-align: right">2026-01-26 22:50:31.440852</div>
+- [proxy.md](docker\proxy/) <div style="text-align: right">2026-01-26 22:50:31.439852</div>
+- [tmux.md](linux_and_ubuntu\tmux/) <div style="text-align: right">2026-01-26 22:50:31.439852</div>
