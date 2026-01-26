@@ -98,3 +98,10 @@ Brain storming:
 2. 的话感觉其实就是做window-wise的alignment，只是看显式来做（vggt-slam）还是隐式从stream processing（转成memory/cache）这块来做；
 3. 的话感觉瞄一眼他codebase文章的architecture、loss和dataset就好，原理上反正any4d如你所说就没在长序列训过，那搞清楚ttt3r的codebase怎么拿长序列训就好；
 4. 其实就是参考any4d怎么加flow的output，以及ttt3r是否和mapanything在decode出motion上可以等价就好，也是看看论文概念层面想想就好
+
+## 20260126 with 飞哥
+
+TODO：
+1. 找到Any4D的failure case（depth+pose+track）
+2. 试试window+optional inputs
+3. 试试local BA，看看长序列的表现
