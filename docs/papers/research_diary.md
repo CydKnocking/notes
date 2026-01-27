@@ -688,3 +688,8 @@ Brain Storming
 Any4D输出的相机位姿T是cam2world，可以把世界坐标系的三维点给转换到相机坐标系中：P_cam = T @ P_world
 
 不对！如果输入的是有intrinsics（ray map）的，输出的raymap依然会变，和输入不一样。
+
+
+### 0127
+
+V-DPM很慢。在本机（3090）上测，17帧25.78秒。相比之下，Any4D 20帧2秒。
