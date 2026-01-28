@@ -216,6 +216,9 @@ tag: `ICCV'25`, `3D`, `multi-view`
   [paper](https://www.arxiv.org/abs/2104.04631v1)<br>
   手部-物体互动场景，3d。有8个视角，但序列不长，有手部+物体的位姿真值。<br>
 
+- [BlinkVision](https://www.blinkvision.org/index.html)<br>
+  
+
 #### 2d
 
 - [TAPVid-kubric(movi_f)](https://huggingface.co/datasets/facebook/CoTracker3_Kubric)
