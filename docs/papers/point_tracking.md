@@ -217,7 +217,14 @@ tag: `ICCV'25`, `3D`, `multi-view`
   手部-物体互动场景，3d。有8个视角，但序列不长，有手部+物体的位姿真值。<br>
 
 - [BlinkVision](https://www.blinkvision.org/index.html)<br>
+  训练集大概1.5TB，测试集大概135GB。虚拟数据集。有稠密光流和场景流。
   
+
+- [Kubirc-4D](https://arxiv.org/pdf/2405.14868)<br>
+  原文是GCD，为这篇论文众多合成数据集中的一个。有稠密场景流。但是hugging-face上好像没有。
+
+- [Stereo4D](https://stereo4d.github.io/)<br>
+  大概3.6TB。含3d tracks，poses，geometry。视频都来源于Youtube。
 
 #### 2d
 
