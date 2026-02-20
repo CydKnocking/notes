@@ -693,3 +693,10 @@ Any4D输出的相机位姿T是cam2world，可以把世界坐标系的三维点�
 ### 0127
 
 V-DPM很慢。在本机（3090）上测，17帧25.78秒。相比之下，Any4D 20帧2秒。
+
+
+### 0220
+
+Vincent Sitzmann的博客文章：[The flavor of the bitter lesson for computer vision](https://www.vincentsitzmann.com/blog/bitter_lesson_of_cv/)，2026年2月1日。
+
+Rich Sutton的博客文章：[The Bitter Lesson](http://www.incompleteideas.net/IncIdeas/BitterLesson.html)，2019年3月13日。
