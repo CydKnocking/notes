@@ -210,7 +210,33 @@ tag: `ICCV'25`, `3D`, `multi-view`
   序列个数：
   full_eval: 4419 = 1906(adt) + 2407(drivetrack) + 106(pstudio)
   minival: 150 = 50 + 50 + 50
+
+- [PointOdyssey](https://pointodyssey.com/)<br>
   
+  [paper](https://www.arxiv.org/pdf/2307.15055), [dataset](https://github.com/google-deepmind/tapnet/blob/main/tapnet/tapvid/README.md#downloading-robotap)<br>
+
+  合成数据集，是长序列。30fps，平均2k+帧一个序列。<br>
+
+  数据集[在这](https://drive.google.com/drive/folders/1W6wxsbKbTdtV8-2TwToqa_QgLqRY3ft0)下载。
+
+  **下好了。**
+
+  数据格式：
+  - anno.npz: 帧数T，点数N
+    - 'trajs_2d': (T, N, 2), float32
+    - 'trajs_3d': (T, N, 3), float32
+    - 'valids': (T, N), bool
+    - 'visibs': (T, N), bool
+    - 'intrinsics': (T, 3, 3), float32
+    - 'extrinsics': (T, 4, 4), float32
+  - info.npz: keys和anno.npz一样，存了上述所有数据的shape。
+  - 文件夹rgbs, depths, masks, normals： h=540, w=960
+
+
+- [Dynamic Replica](https://dynamic-stereo.github.io/)
+
+  3d point tracking的benchmark。有rgb、depth、相机位姿、2d/3d tracks和visibility等。可以参卡这个链接https://huggingface.co/datasets/ZhengGuangze/DynamicReplica_vlbm。
+
 
 - [DexYCB-Pt](https://dex-ycb.github.io/)<br>
   [paper](https://www.arxiv.org/abs/2104.04631v1)<br>
@@ -255,16 +281,6 @@ tag: `ICCV'25`, `3D`, `multi-view`
   - frames/ : N个.png
   
 
-- [PointOdyssey](https://pointodyssey.com/)<br>
-  
-  [paper](https://www.arxiv.org/pdf/2307.15055), [dataset](https://github.com/google-deepmind/tapnet/blob/main/tapnet/tapvid/README.md#downloading-robotap)<br>
-
-  合成数据集，是长序列，但是是2d。30fps，平均2k+帧一个序列。<br>
-
-  数据集[在这](https://drive.google.com/drive/folders/1W6wxsbKbTdtV8-2TwToqa_QgLqRY3ft0)下载。
-
-  **下好了。**
-
 - [TAPVid-DAVIS](https://github.com/google-deepmind/tapnet/tree/main/tapnet/tapvid)
 
   2d point tracking主要的benchmark。测试集和训练集不一样。
@@ -274,10 +290,6 @@ tag: `ICCV'25`, `3D`, `multi-view`
 - [RoboTAP](https://robotap.github.io/)<br>
   [paper](https://www.arxiv.org/pdf/2308.15975)<br>
   机械臂操作物体，相机在机械臂上。TAP-Vid系列数据集之一。2d。
-
-- [Dynamic Replica](https://dynamic-stereo.github.io/)
-
-  2d point tracking的benchmark。
 
 - [EgoPoints & K-Epic](https://ahmaddarkhalil.github.io/EgoPoints/)
   

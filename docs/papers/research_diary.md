@@ -700,3 +700,30 @@ V-DPM很慢。在本机（3090）上测，17帧25.78秒。相比之下，Any4D 2
 Vincent Sitzmann的博客文章：[The flavor of the bitter lesson for computer vision](https://www.vincentsitzmann.com/blog/bitter_lesson_of_cv/)，2026年2月1日。
 
 Rich Sutton的博客文章：[The Bitter Lesson](http://www.incompleteideas.net/IncIdeas/BitterLesson.html)，2019年3月13日。
+
+
+### 0221
+
+- [VGGT-Motion: Motion-Aware Calibration-Free Monocular SLAM for Long-Range Consistency](https://arxiv.org/pdf/2602.05508)<br>
+  把VGGT改成长序列SLAM，针对自动驾驶场景。用上了关键帧、sliding window、对齐、图优化等技术。<br>
+  在token阶段，对于车的不同运动模式进行了embedding。<br>
+  暂未开源。
+
+- [**TrajVG: 3D Trajectory-Coupled Visual Geometry Learning**](https://www.arxiv.org/abs/2602.04439)<br>
+  在pi^3的网络上多加了个Track head，用来估计3D correspondences。<br>
+  暂未开源。
+
+- [**Flow4R: Unifying 4D Reconstruction and Tracking with Scene Flow**](https://shenhanqian.github.io/flow4r)<br>
+  暂未开源。<br>
+  网络输入图像对，对称处理，估计（相机坐标系下的）场景流和（静态区域）权重。<br>
+  用了8张A100/H100，训练大概4天。
+
+- [LongStream: Long-Sequence Streaming Autoregressive Visual Geometry](https://www.arxiv.org/abs/2602.13172)<br>
+  暂未开源。<br>
+  基于VGGT网络，做Streaming的子回归3D重建。用了关键帧、kvcache等技术。<br>
+  18fps，用了32张A100训至少3天（stage1就花了3天）。
+
+- [TTSA3R: Training-Free Temporal-Spatial Adaptive Persistent State for Streaming 3D Reconstruction](https://www.arxiv.org/abs/2601.22615)<br>
+  暂未开源。<br>
+  解决在长序列3d重建时的灾难性遗忘问题。通过TAUM区分稳定区域和动态区域，从而选择性保留历史信息；通过SCUM识别需要更新的空间区域，避免对稳定几何区域的错误更新。<br>
+  效果一般？
