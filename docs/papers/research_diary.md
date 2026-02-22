@@ -720,10 +720,66 @@ Rich Sutton的博客文章：[The Bitter Lesson](http://www.incompleteideas.net/
 
 - [LongStream: Long-Sequence Streaming Autoregressive Visual Geometry](https://www.arxiv.org/abs/2602.13172)<br>
   暂未开源。<br>
-  基于VGGT网络，做Streaming的子回归3D重建。用了关键帧、kvcache等技术。<br>
+  基于VGGT网络，做Streaming的自回归3D重建。用了关键帧、kvcache等技术。<br>
   18fps，用了32张A100训至少3天（stage1就花了3天）。
 
 - [TTSA3R: Training-Free Temporal-Spatial Adaptive Persistent State for Streaming 3D Reconstruction](https://www.arxiv.org/abs/2601.22615)<br>
   暂未开源。<br>
   解决在长序列3d重建时的灾难性遗忘问题。通过TAUM区分稳定区域和动态区域，从而选择性保留历史信息；通过SCUM识别需要更新的空间区域，避免对稳定几何区域的错误更新。<br>
   效果一般？
+
+
+### 0222
+
+**VDPM**
+
+- 网络结构主要就是aggregator, decoder, point head, camera head。
+
+- 测一下各个部分的耗时:
+
+aggregator time: 1.765446 seconds
+decode time: 4.525165 seconds, avg 0.377097 s/frame
+point head time: 1.645535 seconds, avg 0.137128 s/frame
+camera head time: 0.083022 seconds
+Execution time: 8.021015 seconds for 12 images
+
+aggregator time: 1.841392 seconds
+decode time: 9.641138 seconds, avg 0.567126 s/frame
+point head time: 0.807591 seconds, avg 0.047505 s/frame
+camera head time: 0.119050 seconds
+model inference finished
+Execution time: 12.411482 seconds for 17 images
+
+aggregator time: 2.119548 seconds
+decode time: 22.632245 seconds, avg 0.943010 s/frame
+point head time: 0.952443 seconds, avg 0.039685 s/frame
+camera head time: 0.191697 seconds
+Execution time: 25.898921 seconds for 24 images
+
+aggregator time: 6.110203 seconds
+decode time: 94.476820 seconds, avg 1.968267 s/frame
+point head time: 19.817495 seconds, avg 0.412864 s/frame
+camera head time: 0.114886 seconds
+Execution time: 120.525079 seconds for 48 images
+
+aggregator time: 12.515195 seconds
+decode time: 527.383065 seconds, avg 5.493574 s/frame
+point head time: 142.252627 seconds, avg 1.481798 s/frame
+camera head time: 1.118869 seconds
+Execution time: 683.297737 seconds for 96 images
+
+- aggregator包含了image encoding的backbone，camera token + time token + register token + 图像 patch token的concat，以及帧内self-attention和帧间cross-attention。
+  
+  - 这个耗时吗？如果不耗时，那直接把整个序列给处理了吧。
+  
+  - 如果是处理streaming input，比较trick的做法是，aggregator直接对所有帧提取token（但是cross-attention的时候前帧会从后帧中获得信息）。如果要严谨点，那就只能加个mask。
+
+- decoder中用到了time embedding作为attention层的condition（参考文章3.3）
+
+- 网络的输出是：
+- result: ['pose_enc', 'pose_enc_list', 'pointmaps']
+  - pose_enc: <class 'torch.Tensor'>, torch.Size([1, 17, 9]), torch.float32, -0.03974273428320885, 1.0005029439926147
+  - pose_enc_list: <class 'list'>, 4, torch.Size([1, 17, 9]), torch.float32, -0.040348976850509644, 1.0002468824386597
+  - pointmaps: <class 'list'>, 17, ['pts3d', 'conf']
+    - pointmaps[pts3d]: torch.Size([1, 17, 294, 518, 3]), torch.float32, -0.5402331352233887, 2.065545082092285
+    - pointmaps[conf]: torch.Size([1, 17, 294, 518]), torch.float32, 1.0000206232070923, 25.831775665283203
