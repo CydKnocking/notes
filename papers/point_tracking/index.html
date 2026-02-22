@@ -1,0 +1,2663 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../paper_notes/">
+      
+      
+        <link rel="next" href="../research_diary/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../_assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.2">
+    
+    
+      
+        <title>Point tracking - Knocking's notebook</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="brown" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#spatialtrackerv2-3d-point-tracking-made-easy" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Knocking&#39;s notebook" class="md-header__button md-logo" aria-label="Knocking's notebook" data-md-component="logo">
+      
+  <img src="../../_assets/icon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Knocking's notebook
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Point tracking
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/CydKnocking/notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Knocking&#39;s notebook" class="md-nav__button md-logo" aria-label="Knocking's notebook" data-md-component="logo">
+      
+  <img src="../../_assets/icon.png" alt="logo">
+
+    </a>
+    Knocking's notebook
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/CydKnocking/notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Knocking's personal notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about_this_notebook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About this notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Vis Info Processing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    3D Vis Info Processing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/00_Introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    00 Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/01_Part%20One%20Acquisition%20of%203D%20Data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 Part One Acquisition of 3D Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/02_Part%20Two%20Integration%20of%203D%20data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 Part Two Integration of 3D data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/03_Part%20Three%20Descriptions%20of%203D%20Objects%20and%20Scenes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 Part Three Descriptions of 3D Objects and Scenes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/Full%20notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ML
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ML
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ML/great_links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Great links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Web
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Web/clash/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clash
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Web/domains/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Domains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Datasets
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Datasets
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/TUM_RGBD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TUM RGBD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/TartanAir/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TartanAir
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/proxy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proxy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Github
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Github
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../github/Deploy%20repo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Create a new github repository
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../github/verify%20domain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verify domain
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux and ubuntu
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Linux and ubuntu
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/chmod/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chmod
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/chown/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chown
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/cmatrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cmatrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/crontab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crontab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/dns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/softlink/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Softlink
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/ssh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ssh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/tmux/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/zsh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zsh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Math
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Math
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/great_links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Great links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/quaternion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quaternion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Papers
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Papers
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../discussions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Discussions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paper_notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paper notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Point tracking
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Point tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#spatialtrackerv2-3d-point-tracking-made-easy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SpatialTrackerV2: 3D Point Tracking Made Easy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-works-about-point-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related works about point tracking
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Related works about point tracking">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2d-point-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2D point tracking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3d-point-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3D point tracking
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        其他领域的相关工作
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="其他领域的相关工作">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vggt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        vggt
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        数据集
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="数据集">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#point-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Point tracking 类
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Point tracking 类">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3d
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2d
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#video-depth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Video depth类
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#camera-pose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Camera pose
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        评价指标
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research_diary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research diary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Python
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/rosbag/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rosbag
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/send_email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Send email
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/torch_tips/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Torch tips
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/tqdm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tqdm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#spatialtrackerv2-3d-point-tracking-made-easy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SpatialTrackerV2: 3D Point Tracking Made Easy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-works-about-point-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related works about point tracking
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Related works about point tracking">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2d-point-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2D point tracking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3d-point-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3D point tracking
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        其他领域的相关工作
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="其他领域的相关工作">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vggt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        vggt
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        数据集
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="数据集">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#point-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Point tracking 类
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Point tracking 类">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3d
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2d
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#video-depth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Video depth类
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#camera-pose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Camera pose
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        评价指标
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+  <h1>Point tracking</h1>
+
+<h2 id="spatialtrackerv2-3d-point-tracking-made-easy"><a href="https://github.com/henry123-boy/SpaTrackerV2">SpatialTrackerV2: 3D Point Tracking Made Easy</a></h2>
+<p>tag: <code>ICCV'25</code>, <code>3D</code>, <code>multi-view</code></p>
+<p>详细读一下SpatialTrackerv2的论文。</p>
+<ol>
+<li>
+<p>估计查询点的3D轨迹<span class="arithmatex">\(\mathcal{T}\)</span>时，将其分解成了相机运动<span class="arithmatex">\(\mathcal{T}_{ego}\)</span>和物体运动<span class="arithmatex">\(\mathcal{T}_{object}\)</span>两部分。<br></p>
+<ol>
+<li>
+<p><span class="arithmatex">\(\mathcal{T}_{ego}\)</span></p>
+<p>初始的深度估计和相机运动：基于VGGT。</p>
+</li>
+<li>
+<p>联合位姿优化</p>
+<p>提出<strong>SyncFormer</strong>，迭代地同时优化：UV空间的轨迹<span class="arithmatex">\(\mathcal{T}^{2d}\)</span>；相机坐标系的轨迹<span class="arithmatex">\(\mathcal{T}^{3d}\)</span>；可见度权重<span class="arithmatex">\(p^{vis}\)</span>；动态权重<span class="arithmatex">\(p^{dyn}\)</span>。相机的位姿<span class="arithmatex">\(\mathcal{P}\)</span>用BA得到。</p>
+<p>2D embeddings和Cotracker3一样，3D embeddings包含3d相关性特征等。其中，3d相关性特征是在归一化point map中当前的点与邻居点的相对位移进行harmonic positional encoding得到的，并且在多分辨率上都进行了特征编码。</p>
+<p>SyncFormer调整完一轮<span class="arithmatex">\(\mathcal{T}_{k+1}^{2d}, \mathcal{T}_{k+1}^{3d}, p_{k+1}^{dyn}, p_{k+1}^{vis}\)</span>后，通过Procrustes analysis对齐3d轨迹到世界坐标系，构建BA优化得到相机位姿<span class="arithmatex">\(\mathcal{P}_{k+1}\)</span>。</p>
+</li>
+<li>
+<p>训练</p>
+<p>在17个数据集上训练。分为三大类：带track gt, pose gt的RGB-D数据；带pose gt的RGB-D数据；仅有pose gt或无标注的。</p>
+<p>训练分三个阶段。一阶段，训练前端的网络（VGGT改的估计视频深度和初始相机位姿），64张H20。二阶段，训练SyncFormer，8张H20训3天。三阶段，固定前端网络中的交替注意力层，训整个框架。</p>
+</li>
+</ol>
+</li>
+<li>
+<p>实验结果</p>
+<p>主要结果是在TAPVid-3D上对比3d tracking的精度。在3d point tracking上是sota。</p>
+<p>深度估计，在室内(tum dyn, bonn, sintel)和室外(kitti, sintel)含动态物体的数据集，比VGGT和MegaSam好（各有优劣）。</p>
+<p>相机位姿估计，在室内外（tum dyn, lightspeed, sintel），和MegaSam差不多。</p>
+<p>2D tracking也是SOTA。</p>
+</li>
+</ol>
+<h2 id="related-works-about-point-tracking">Related works about point tracking</h2>
+<p>整理一下tracking any point最近的related works</p>
+<h3 id="2d-point-tracking">2D point tracking</h3>
+<ul>
+<li>
+<p><a href="https://www.arxiv.org/pdf/2307.07635">CoTracker: It is Better to Track Together</a><br>
+  <code>ECCV'24</code>, <code>2d</code>, <strong><code>阶段性代表作</code></strong><br>
+  23年7月cotracker挂arxiv上。24年10月这一版应该是cotracker2。一般都叫cotracker了。meta+牛津<br></p>
+<p>故事核心是，同时跟踪多个点比只关注一个点要好，因为可以通过交换信息理解场景/物体的整体运动。</p>
+<ul>
+<li>用Transformer进行联合跟踪，并对track进行迭代更新。中间用了每个点周围的correlation features进行更新。</li>
+</ul>
+<ul>
+<li>处理长视频用的是sliding window。</li>
+</ul>
+<ul>
+<li>使用了Proxy tokens作为attention的信息中转，提高了计算效率（如果点的个数很多那attention会开销很大）。</li>
+</ul>
+<ul>
+<li>用了Support points，为被追踪点提供信息。</li>
+</ul>
+<p>实验，在TAPVid-Kubric上训练，在tapvid-davis, tapvid-rgb-stacking和pointodyssey上测试。另外也在dynamic replica上测试。主要结果是2d point tracking。<br></p>
+</li>
+</ul>
+<ul>
+<li>
+<p><a href="https://arxiv.org/pdf/2410.11831">CoTracker3: Simpler and Better Point Tracking by Pseudo-Labelling Real Videos</a><br>
+  <code>2d</code>, <strong><code>阶段性代表作</code></strong><br>
+  24年10月挂arxiv上。meta+牛津<br></p>
+<p>有offline和online两个版本：</p>
+<ul>
+<li>offline版本是把整个video一起处理，支持正向+反向两个方向估计track，并且能更好处理遮挡问题和估计长时间的track。但是受计算资源限制。</li>
+</ul>
+<ul>
+<li>online版本以sliding window对video处理，只能对点进行正向track的估计。</li>
+</ul>
+<p>方法上提出了更精简高效的框架：</p>
+<ul>
+<li>借鉴了LocoTrack的4d correlation概念，在此基础上进行了简化，只用一个MLP来处理相关性特征。</li>
+</ul>
+<ul>
+<li>特征提取，迭代更新，proxy token等与cotracker没啥差别。</li>
+</ul>
+<p>提出生成伪标签的方式增大训练数据量：</p>
+<ul>
+<li>之前很多是用的合成数据Kubric，需要给真实数据生成gt。</li>
+</ul>
+<ul>
+<li>用了多个teacher models，包括Cotracker3(online+offline), Cotracker, TAPIR。学生模型就是一个在合成数据集上进行了预训练的CoTracker3。</li>
+</ul>
+<ul>
+<li>在真实数据上，先用sift等选出“更容易track”的点，然后随机选一个教师模型生成伪标签。</li>
+</ul>
+<p>实验：</p>
+<ul>
+<li>baseline是2d point tracking。</li>
+</ul>
+<ul>
+<li>在tapvid，RoboTAP（一个真实序列，涉及机器人操作），DynamicReplica（合成数据集）上测试。</li>
+</ul>
+<ul>
+<li>
+<p>两种测试模式，first query和strided query。</p>
+<ul>
+<li>first模式，以物体上的点第一次出现的时间为query，后面一直追踪。</li>
+</ul>
+<ul>
+<li>strided模式，追踪点每隔5帧被查询一次。</li>
+</ul>
+<ul>
+<li>所以一般first的结果要比strided要稍差。</li>
+</ul>
+</li>
+</ul>
+<p>局限</p>
+<ul>
+<li>offline模型受计算资源限制，online模型又无法从更全局的视角更好处理遮挡和长时间track</li>
+</ul>
+<ul>
+<li>选什么点进行track会稍微影响精度（tab6），并且对于“更好track的点”的结果更好（因为半监督时选的sift）</li>
+</ul>
+<ul>
+<li>精度上限受teacher models的bound。</li>
+</ul>
+<ul>
+<li>用于微调的真实数据集主要包含人类和动物，对于其它场景的表现还有待观察。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>
+<p><a href="https://arxiv.org/pdf/2407.15420v1">Local All-Pair Correspondence for Point Tracking (LocoTrack)</a><br>
+  <code>ECCV'24</code>, <code>2d</code>, <strong><code>阶段性代表作</code></strong><br></p>
+<p>方法上：</p>
+<ul>
+<li>提出4d correlation，即把查询点周围小区域与目标帧的周围小区域计算匹配关系。</li>
+</ul>
+<ul>
+<li>针对4d correlation设计了一个轻量的编码器。</li>
+</ul>
+<ul>
+<li>代码用JAX实现。</li>
+</ul>
+<p>实验上：</p>
+<ul>
+<li>主要测的是2d point tracking。</li>
+</ul>
+<ul>
+<li>4天8张3090训练。在Kubric上训。在kinetics, davis, rgb-stacking上测。</li>
+</ul>
+<ul>
+<li>速度比cotracker快。1w个点花一两秒，10w个点花十几二十秒。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>
+<p><a href="https://arxiv.org/pdf/2306.05422">Tracking Everything Everywhere All at Once</a><br>
+  <code>ICCV'23 Best student paper</code>, <code>2d</code>, <strong><code>阶段性代表作</code></strong><br></p>
+<p>方法上：</p>
+<ul>
+<li>引入了quasi-3d canontical volume。</li>
+</ul>
+<ul>
+<li>有点迷没看懂，回头仔细看看。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><a href="https://www.arxiv.org/pdf/2307.15055">PointOdyssey: A Large-Scale Synthetic Dataset for Long-Term Point Tracking</a><br>
+  <code>ICCV'23</code>, <code>2d</code>, <code>dataset</code>, <code>PIPs++</code><br>
+  提出了个更长序列的2d合成数据集。<br>
+  提出了个方法叫PIPs++，用1d卷积代替了mlp-mixer，能处理任意长序列的特征。</li>
+</ul>
+<h3 id="3d-point-tracking">3D point tracking</h3>
+<ul>
+<li>
+<p><a href="https://arxiv.org/pdf/2404.04319">SpatialTracker: Tracking Any 2D Pixels in 3D Space</a><br>
+  <code>CVPR'24 highlight</code>, <code>3d</code>, <strong><code>阶段性代表作</code></strong><br></p>
+<p>方法上：</p>
+<ul>
+<li>将2d的图像特征，通过predicted depth (ZoeDepth)给lift到3d，并将它们投影到triplane进行高效表示。</li>
+</ul>
+<ul>
+<li>是在相机坐标系下进行的表示，没有考虑相机位姿，也没有把所有帧都warp到统一的世界坐标系。（在spatialtrackerv2的分类属于type II。）</li>
+</ul>
+<ul>
+<li>用了ARAP(as-rigid-as-possible)约束，约束各个运动部分尽可能保持刚性。具体来说，给每个轨迹估计了一个rigidity embedding，然后两个embedding之间来算刚性相似度，进而进行带权的约束。</li>
+</ul>
+<p>实验上：</p>
+<ul>
+<li>2d tracking结果和3d tracking结果。</li>
+</ul>
+<ul>
+<li>2d tracking中，用gt depth比ZoeDepth要好一点。</li>
+</ul>
+<ul>
+<li>是3d tracking的baseline。不过也可以把2d的方法lift。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><a href="https://www.arxiv.org/pdf/2508.21060">Multi-View 3D Point Tracking</a><br>
+  <code>ICCV'25</code>, <code>3D</code>, <code>multi-view</code><br>
+  将多视角的2d特征给lift到3d进行融合，再根据查询点的kNN的特征对track进行迭代更新。<br>
+  特征提取的模块和CoTracker系列+SpatialTrackerv1一样的，就是一个CNN提取金字塔特征。<br>
+  迭代更新的模块是follow CoTracker2。<br>
+  在multiview-kubric上进行训练。3d tracking实验结果似乎比spatialtrackerv2要好（PStudio这个序列）。但是其用了多个视角进行融合，设定更偏向MVS，所以感觉合理。<br>
+  但是2d tracking的结果没CoTracker3好。</li>
+</ul>
+<ul>
+<li><a href="https://arxiv.org/pdf/2504.14717">TAPIP3D: Tracking Any Point in Persistent 3D Geometry</a><br>
+  <code>3D</code>, <strong><code>阶段性代表作</code></strong><br>
+  用MegaSAM对RGB序列给出depth和camera pose，将2d feature map给lift到3d，并且变换到统一的世界坐标系下（一般是第一帧），再在3d中以kNN作为query point的邻域，与其他帧的邻域进行融合。<br>
+  在spatialtrackerv2的分类属于type III。</li>
+</ul>
+<h2 id="_1">其他领域的相关工作</h2>
+<h3 id="vggt">vggt</h3>
+<ul>
+<li><a href="https://www.arxiv.org/abs/2509.02560v1">FastVGGT: Training-Free Acceleration of Visual Geometry Transformer</a><br>
+  在vggt中选择token，只在这些token中做attention，加快速度，节省开销，并且不用重新训练。有可能可以抑制误差累积。<br></li>
+</ul>
+<h2 id="_2">数据集</h2>
+<h3 id="point-tracking">Point tracking 类</h3>
+<h4 id="3d">3d</h4>
+<ul>
+<li>
+<p><a href="https://tapvid3d.github.io/">TAPVid-3d</a><br>
+  <a href="https://github.com/google-deepmind/tapnet/tree/main/tapnet/tapvid3d">github</a>, <a href="https://arxiv.org/pdf/2407.05921">paper</a><br>
+  3dtracking的。有adt, panoptic studio(pstudio), drivetrack三个子集。时长从几秒到十秒不等，4569个clip，25-300帧/clip<br></p>
+<p>https://huggingface.co/datasets/ZhengGuangze/TAPVid-3D/tree/main，这个好像是预处理后的，一共480G。</p>
+<p><em>但是根据<a href="https://github.com/google-deepmind/tapnet/issues/110">issue</a>，tapvid3d作者说它的电脑上只占了138GB。</em></p>
+<ul>
+<li>adt:<ul>
+<li>'images_jpeg_bytes': (T,)</li>
+<li>'queries_xyt': (N, 3), 最后一维(x, y, t)是2d坐标+query的帧</li>
+<li>'tracks_XYZ': (T, N, 3), 最后一维(x, y, z)是3d坐标，在每帧的相机坐标系下，单位是m</li>
+<li>'visibility': (T, N)</li>
+<li>'fx_fy_cx_cy': (4,)</li>
+<li>'depth_preds': (T, H, W)</li>
+</ul>
+</li>
+<li>drivetrack:<ul>
+<li>多了个'extrinsics_w2c': (T, 4, 4)</li>
+<li>其他的和adt一样</li>
+</ul>
+</li>
+<li>'pstudio':<ul>
+<li>和adt一样</li>
+</ul>
+</li>
+</ul>
+<p>序列个数：
+full_eval: 4419 = 1906(adt) + 2407(drivetrack) + 106(pstudio)
+minival: 150 = 50 + 50 + 50</p>
+</li>
+</ul>
+<ul>
+<li>
+<p><a href="https://pointodyssey.com/">PointOdyssey</a><br></p>
+<p><a href="https://www.arxiv.org/pdf/2307.15055">paper</a>, <a href="https://github.com/google-deepmind/tapnet/blob/main/tapnet/tapvid/README.md#downloading-robotap">dataset</a><br></p>
+<p>合成数据集，是长序列。30fps，平均2k+帧一个序列。<br></p>
+<p>数据集<a href="https://drive.google.com/drive/folders/1W6wxsbKbTdtV8-2TwToqa_QgLqRY3ft0">在这</a>下载。</p>
+<p><strong>下好了。</strong></p>
+<p>数据格式：
+- anno.npz: 帧数T，点数N
+  - 'trajs_2d': (T, N, 2), float32
+  - 'trajs_3d': (T, N, 3), float32
+  - 'valids': (T, N), bool
+  - 'visibs': (T, N), bool
+  - 'intrinsics': (T, 3, 3), float32
+  - 'extrinsics': (T, 4, 4), float32
+- info.npz: keys和anno.npz一样，存了上述所有数据的shape。
+- 文件夹rgbs, depths, masks, normals： h=540, w=960</p>
+</li>
+</ul>
+<ul>
+<li>
+<p><a href="https://dynamic-stereo.github.io/">Dynamic Replica</a></p>
+<p>3d point tracking的benchmark。有rgb、depth、相机位姿、2d/3d tracks和visibility等。可以参卡这个链接https://huggingface.co/datasets/ZhengGuangze/DynamicReplica_vlbm。</p>
+</li>
+</ul>
+<ul>
+<li><a href="https://dex-ycb.github.io/">DexYCB-Pt</a><br>
+  <a href="https://www.arxiv.org/abs/2104.04631v1">paper</a><br>
+  手部-物体互动场景，3d。有8个视角，但序列不长，有手部+物体的位姿真值。<br></li>
+</ul>
+<ul>
+<li><a href="https://www.blinkvision.org/index.html">BlinkVision</a><br>
+  训练集大概1.5TB，测试集大概135GB。虚拟数据集。有稠密光流和场景流。</li>
+</ul>
+<ul>
+<li><a href="https://arxiv.org/pdf/2405.14868">Kubirc-4D</a><br>
+  原文是GCD，为这篇论文众多合成数据集中的一个。有稠密场景流。但是hugging-face上好像没有。</li>
+</ul>
+<ul>
+<li><a href="https://stereo4d.github.io/">Stereo4D</a><br>
+  大概3.6TB。含3d tracks，poses，geometry。视频都来源于Youtube。</li>
+</ul>
+<h4 id="2d">2d</h4>
+<ul>
+<li>
+<p><a href="https://huggingface.co/datasets/facebook/CoTracker3_Kubric">TAPVid-kubric(movi_f)</a></p>
+<ul>
+<li>"0000.npy": np.load()后用.item()提取其中数据，dict_keys(['coords', 'coords_depth', 'visibility', 'depth', 'metadata', 'segmentations', 'camera'])<ul>
+<li>'coords': (N, T, 2)</li>
+<li>'coords_depth': (N, T)</li>
+<li>'visibility': (N, T), False是未被遮挡，True是被遮挡</li>
+<li>'depth': (T, H, W, 1)</li>
+<li>'metadata': dict_keys(['backward_flow_range', 'depth_range', 'forward_flow_range', 'height', 'num_frames', 'num_instances', 'video_name', 'width'])</li>
+<li>'segmentations': (T, H, W, 1)</li>
+<li>'camera': dict_keys(['field_of_view', 'focal_length', 'positions', 'quaternions', 'sensor_width'])<ul>
+<li>OpenGL坐标系(x朝右，y朝上，z朝后)。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>"0000_trajs_2d.npy": (N, T, 2)</li>
+</ul>
+<ul>
+<li>"0000_visibility.npy": (N, T)</li>
+</ul>
+<ul>
+<li>"0000_with_rank.npz": ['names', 'extrinsics', 'shared_intrinsics', 'ranking'] <strong>用这个用这个用这个</strong><ul>
+<li>'names': (T,), list of frame names</li>
+<li>'extrinsics': (T, 3, 4), np.float64, world to camera, OpenCV坐标系(x朝右，y朝下，z朝前)，世界坐标系中的三维点Pw可由 Pc = T_i @ Pw 变换到相机坐标系中。</li>
+<li>'shared_intrinsics': (3, 3), np.float64，OpenCV坐标系(x朝右，y朝下，z朝前)</li>
+<li>'ranking': (T, T), unknown usage...</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>depths/ : N个.npy，每个shape(H, W)，和"0000_with_rank.npz"里的shared_intrinsics、extrinsics是配套的。</li>
+</ul>
+<ul>
+<li>frames/ : N个.png</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>
+<p><a href="https://github.com/google-deepmind/tapnet/tree/main/tapnet/tapvid">TAPVid-DAVIS</a></p>
+<p>2d point tracking主要的benchmark。测试集和训练集不一样。</p>
+<p><strong>本地已经有可供cotracker3的测试集。已在cotracker3上成功evaluate.</strong></p>
+</li>
+</ul>
+<ul>
+<li><a href="https://robotap.github.io/">RoboTAP</a><br>
+  <a href="https://www.arxiv.org/pdf/2308.15975">paper</a><br>
+  机械臂操作物体，相机在机械臂上。TAP-Vid系列数据集之一。2d。</li>
+</ul>
+<ul>
+<li>
+<p><a href="https://ahmaddarkhalil.github.io/EgoPoints/">EgoPoints &amp; K-Epic</a></p>
+<p>EgoPoints是验证集，K-epic是训练集。</p>
+<p>2d point tracking的新benchmark，WACV'25。</p>
+<p>egocentric的视频，存在剧烈晃动，物体/点频繁进出画面/遮挡。有大量追踪点消失后又重现。</p>
+<ul>
+<li>序列长度不一，从24帧到2361帧，普遍在几百帧。共有517个序列。</li>
+<li>gt npz:<ul>
+<li>trajs_2d: (221, 7, 2)  #T, N, 2</li>
+<li>valids: (221, 7)</li>
+<li>visibs: (221, 7)</li>
+<li>vis_valids: (221, 7)</li>
+<li>out_of_view: (221, 7)</li>
+<li>occluded: (221, 7)</li>
+<li>dynamic_obj_tracks: (7,)</li>
+</ul>
+</li>
+</ul>
+<p>提出了K-EPIC数据集做训练，semi-real，结合静态场景（epic-fields）和合成的动态3d物体（kubric）。</p>
+<ul>
+<li>序列长度32帧，共有11500个序列</li>
+<li>gt npz:<ul>
+<li>trajs_2d: (24, 2628, 2)  #T, N, 2</li>
+<li>visibs: (24, 2628)</li>
+<li>valids: (24, 2628)</li>
+<li>is_synthetic: (24, 2628)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="video-depth">Video depth类</h3>
+<ul>
+<li>[KITTI]</li>
+</ul>
+<ul>
+<li>[TUM-dynamic]</li>
+</ul>
+<ul>
+<li><a href="https://www.ipb.uni-bonn.de/data/rgbd-dynamic-dataset/index.html">Bonn</a></li>
+</ul>
+<ul>
+<li>[Sintel]</li>
+</ul>
+<h3 id="camera-pose">Camera pose</h3>
+<ul>
+<li>[TUM-dynamic]</li>
+</ul>
+<ul>
+<li>[Lightspeed]</li>
+</ul>
+<ul>
+<li>[Sintel]</li>
+</ul>
+<h2 id="_3">评价指标</h2>
+<ul>
+<li>
+<p>OA, Occlusion Accuracy.</p>
+<p>预测的遮挡与否的标签的准确率，<span class="arithmatex">\(OA=\#_{correct_label}/\#_{points}\)</span></p>
+</li>
+</ul>
+<ul>
+<li>
+<p>APD, APD3d.</p>
+<p>对所有可见点的轨迹，计算在设定的距离误差阈值(1, 2, 5, 10cm...)内的点的比例。对所有距离阈值下的APD取平均。</p>
+</li>
+</ul>
+<ul>
+<li>
+<p>AJ, Average Jaccard.</p>
+<p>设置距离阈值<span class="arithmatex">\(\delta\)</span>，统计以下三类点的数量：
+1. True Positive: 点的gt是可见，模型预测是可见，并且误差小于等于<span class="arithmatex">\(\delta\)</span>。
+2. False Positive: 点的gt是遮挡，模型预测可见；或者，点的gt是可见，模型预测可见，但误差大于<span class="arithmatex">\(\delta\)</span>。
+3. False Negative: 点的gt是可见，模型预测被遮挡。</p>
+<p>计算<span class="arithmatex">\(AJ=TP/(TP+FP+FN)\)</span>，并对所有设定阈值下的AJ取平均。</p>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "header.autohide", "search.suggest", "search.highlight", "search.share"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../_js/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

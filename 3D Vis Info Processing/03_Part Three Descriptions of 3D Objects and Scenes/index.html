@@ -1,0 +1,2371 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../02_Part%20Two%20Integration%20of%203D%20data/">
+      
+      
+        <link rel="next" href="../Full%20notes/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../_assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.2">
+    
+    
+      
+        <title>03 Part Three Descriptions of 3D Objects and Scenes - Knocking's notebook</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="brown" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Knocking&#39;s notebook" class="md-header__button md-logo" aria-label="Knocking's notebook" data-md-component="logo">
+      
+  <img src="../../_assets/icon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Knocking's notebook
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              03 Part Three Descriptions of 3D Objects and Scenes
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/CydKnocking/notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Knocking&#39;s notebook" class="md-nav__button md-logo" aria-label="Knocking's notebook" data-md-component="logo">
+      
+  <img src="../../_assets/icon.png" alt="logo">
+
+    </a>
+    Knocking's notebook
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/CydKnocking/notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Knocking's personal notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about_this_notebook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About this notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Vis Info Processing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    3D Vis Info Processing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00_Introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    00 Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_Part%20One%20Acquisition%20of%203D%20Data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 Part One Acquisition of 3D Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_Part%20Two%20Integration%20of%203D%20data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 Part Two Integration of 3D data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 Part Three Descriptions of 3D Objects and Scenes
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 Part Three Descriptions of 3D Objects and Scenes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第六章 曲面曲率及其计算方法
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="第六章 曲面曲率及其计算方法">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 曲面的几何特性
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 曲面曲率
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 图曲面的曲率计算
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chapter-seven-global-description-of-surfaces-of-3d-objects-parametric-representation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter Seven: Global Description of Surfaces of 3D Objects – Parametric Representation 曲面的参数表示与超二次曲面
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Chapter Seven: Global Description of Surfaces of 3D Objects – Parametric Representation 曲面的参数表示与超二次曲面">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 二次曲面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-generalized-cylinder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 一般化圆柱（generalized cylinder）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-super-quadircs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 超二次曲面（super quadircs）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.3 超二次曲面（super quadircs）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#731" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3.1 球面外积
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#732-superquadriccs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3.2 超二次曲面(superquadriccs)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chapter-eight" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter Eight: 三维模型表面的网格化表示
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Chapter Eight: 三维模型表面的网格化表示">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-marching-squares" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 标量数据的边界抽取：Marching Squares法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-marching-cubes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 三维标量数据的边界抽取：Marching Cubes法
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Full%20notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ML
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ML
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ML/great_links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Great links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Web
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Web/clash/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clash
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Web/domains/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Domains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Datasets
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Datasets
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/TUM_RGBD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TUM RGBD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/TartanAir/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TartanAir
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/proxy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proxy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Github
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Github
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../github/Deploy%20repo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Create a new github repository
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../github/verify%20domain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verify domain
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux and ubuntu
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Linux and ubuntu
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/chmod/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chmod
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/chown/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chown
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/cmatrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cmatrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/crontab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crontab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/dns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/softlink/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Softlink
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/ssh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ssh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/tmux/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/zsh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zsh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Math
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Math
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/great_links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Great links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/quaternion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quaternion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Papers
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Papers
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/discussions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Discussions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/paper_notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paper notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/point_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Point tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/research_diary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research diary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Python
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/rosbag/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rosbag
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/send_email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Send email
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/torch_tips/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Torch tips
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/tqdm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tqdm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第六章 曲面曲率及其计算方法
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="第六章 曲面曲率及其计算方法">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 曲面的几何特性
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 曲面曲率
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 图曲面的曲率计算
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chapter-seven-global-description-of-surfaces-of-3d-objects-parametric-representation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter Seven: Global Description of Surfaces of 3D Objects – Parametric Representation 曲面的参数表示与超二次曲面
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Chapter Seven: Global Description of Surfaces of 3D Objects – Parametric Representation 曲面的参数表示与超二次曲面">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 二次曲面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-generalized-cylinder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 一般化圆柱（generalized cylinder）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-super-quadircs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 超二次曲面（super quadircs）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.3 超二次曲面（super quadircs）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#731" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3.1 球面外积
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#732-superquadriccs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3.2 超二次曲面(superquadriccs)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chapter-eight" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chapter Eight: 三维模型表面的网格化表示
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Chapter Eight: 三维模型表面的网格化表示">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-marching-squares" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 标量数据的边界抽取：Marching Squares法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-marching-cubes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 三维标量数据的边界抽取：Marching Cubes法
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+  <h1>03 Part Three Descriptions of 3D Objects and Scenes</h1>
+
+<!-- # Part Three: Descriptions of 3D Objects and Scenes -->
+
+<p>3D 点云的问题：</p>
+<ul>
+<li>点与点之间没用相互关系</li>
+<li>数据中的冗余量很大</li>
+<li>图形硬件处理的困难（处理三角形面片会更加容易，处理点云比较复杂）</li>
+<li>。。。</li>
+</ul>
+<h2 id="_1">第六章 曲面曲率及其计算方法</h2>
+<h3 id="61">6.1 曲面的几何特性</h3>
+<p>在三维空间<span class="arithmatex">\((x,y,z)\)</span>中，一般可用参数<span class="arithmatex">\(u,v\)</span>将曲面表示为<span class="arithmatex">\(S=\{\vec{x}\in R^3,[x,y,z]^T=[x(u,v),y(u,v),z(u,v)]^T,(u,v)\in D\subset R^2\}\)</span></p>
+<p>各坐标函数<span class="arithmatex">\(x(u,v),y(u,v),z(u,v)\)</span>至少应具有二阶连续偏微分。</p>
+<ol>
+<li>
+<p>曲面的第一基本形式</p>
+<p>因为<span class="arithmatex">\(\vec{dx}=\dfrac{\vec{\partial x}}{\partial u}du+\dfrac{\vec{\partial x}}{\partial v}dv\)</span>，有</p>
+<p><span class="arithmatex">\(I(u,v,du,dv)=\vec{dx}\cdot\vec{dx}=Edu^2+2Fdudv+Gdv^2=\left[\matrix{du&amp;dv}\right]\left[\matrix{g_{11} &amp; g_{12} \\ g_{21} &amp; g_{22}}\right]\left[\matrix{du \\ dv}\right]=\vec{du}^T[g]\vec{du}\)</span></p>
+<p>其中，<span class="arithmatex">\(g_{11}=E=\vec{x}_u\cdot\vec{x}_u,g_{12}=g_{21}=F=\vec{x}_u\cdot\vec{x}_v,g_{22}=G=\vec{x}_v\cdot\vec{x}_v\)</span>。</p>
+<p>矩阵<span class="arithmatex">\([g]\)</span>称作曲面的测度张量，同时，<span class="arithmatex">\([g]\)</span>是一对称矩阵，只有三个独立要素。<span class="arithmatex">\(I(u,v,du,dv)\)</span>为在参数<span class="arithmatex">\((u,v)\)</span>发生微小变化<span class="arithmatex">\((du,dv)\)</span>时，在曲面上出现对应变化的曲线长度。</p>
+<p>一般，可将曲面的面积要素写为<span class="arithmatex">\(|\vec{x}_u\cross\vec{x}_v|dudv=\sqrt{EG-F^2}dudv\)</span></p>
+</li>
+<li>
+<p>曲面的第二基本形式</p>
+<p><span class="arithmatex">\(\vec{n}(u,v)=\dfrac{\vec{x}_u\times\vec{x}_v}{|\vec{x}_u\times\vec{x}_v|}\)</span></p>
+<p><span class="arithmatex">\(II(u,v,du,dv)=-\vec{dx}\cdot\vec{dn}=Ldu^2+2Mdudv+Ndv^2=\left[\matrix{du &amp; dv}\right]\left[\matrix{b_{11} &amp; b_{12} \\ b_{21} &amp; b_{22}}\right]\left[\matrix{du \\ dv}\right]=\vec{du}^T[b]\vec{du}\)</span></p>
+</li>
+</ol>
+<h3 id="62">6.2 曲面曲率</h3>
+<p>对于曲面上的任意一点，可以给出通过此点的无数条曲线。可以计算无数个对应于这些曲线的曲率。一般可通过改变<span class="arithmatex">\((du,dv)\)</span>来产生这些曲线。</p>
+<p><span class="arithmatex">\(k(u,v,du,dv)=\dfrac{-\vec{dx}\cdot\vec{dn}}{\vec{dx}\cdot\vec{dx}}=\dfrac{II(u,v,du,dv)}{I(u,v,du,dv)}=\dfrac{Ldu^2+2Mdudv+Ndv^2}{Edu^2+2Fdudv+Gdv^2}\)</span>。法曲率<span class="arithmatex">\((du,dv)\)</span>。</p>
+<p>在对应于所有的<span class="arithmatex">\((du,dv)\)</span>的法曲率中，其最大值与最小值<span class="arithmatex">\(k_1,k_2\)</span>是唯一确定的。最大值与最小值称作曲面点<span class="arithmatex">\((u,v)\)</span>的主曲率。对应于主曲率的方向<span class="arithmatex">\((du,dv)\)</span>就称作主方向。</p>
+<p>利用第一与第二基本形式的矩阵要素，可知主曲率<span class="arithmatex">\(k_1\)</span>与<span class="arithmatex">\(k_2\)</span>是方程式<span class="arithmatex">\((EG-F^2)\lambda^2-(EN+GL-2FM)\lambda+(LN-M^2)=0\)</span>的两个根。设主方向为<span class="arithmatex">\(\vec{\omega}=\zeta\vec{x}_u+\eta\vec{x}_v\)</span>，并设<span class="arithmatex">\(\phi=\zeta/\eta\)</span>，<span class="arithmatex">\(\phi\)</span>即为方程式<span class="arithmatex">\((LF-EM)\phi^2+(LG-FN)\phi+(MG-FN)=0\)</span>的两个根。</p>
+<p>可以证明任意曲面点的两个主方向总是相互垂直的。</p>
+<p>由主曲率的求解方程式，可知<span class="arithmatex">\(K=k_1k_2=\dfrac{LN-M^2}{EG-F^2},H=\dfrac{k_1+k_2}{2}=\dfrac{EN+GL-2FM}{2(EG-F^2)}\)</span>，前者为高斯曲率，后者为平均曲率。</p>
+<h3 id="63">6.3 图曲面的曲率计算</h3>
+<p>深度图像中的曲面可以表示为<span class="arithmatex">\(\vec{x}(u,v)=(u,v,f(u,v))^T\)</span></p>
+<p>通常，这种曲面称作图曲面（Graph Surface）或Monge Patch。则有<span class="arithmatex">\(\vec{x}_u=(1,0,f_u)^T,\vec{x}_v=(0,1,\vec{f}_v)^T,\vec{x}_{uu}=(0,0,f_{uu})^T,\vec{x}_{vv}=(0,0,f_{vv})^T,\vec{x}_{uv}=(0,0,f_{uv})^T\)</span></p>
+<p>同时，<span class="arithmatex">\(\vec{n}=\dfrac{(f_u, f_v, 1)^T}{\sqrt{1+f_u^2+f_v^2}},E=g_{11}=1+f_u^2,F=g_{12}=f_uf_v,G=g_{22}=1+f_v^2\)</span></p>
+<p><span class="arithmatex">\(L=b_{11}=\dfrac{f_{uu}}{\sqrt{1+f_u^2+f_v^2}},M=b_{12}=\dfrac{f_{uv}}{\sqrt{1+f_u^2+f_v^2}},N=b_{22}=\dfrac{f_{vv}}{\sqrt{1+f_u^2+f_v^2}}\)</span></p>
+<p>则<span class="arithmatex">\(K=\dfrac{f_{uu}f_{vv}-f_{uv}^2}{(1+f_u^2+f_v^2)^2},H=\dfrac{1}{2}\cdot\dfrac{(1+f_v^2)f_{uu}+(1+f_u^2)f_{vv}-2f_uf_vf_{uv}}{(1+f_u^2+f_v^2)^{3/2}}\)</span></p>
+<h2 id="chapter-seven-global-description-of-surfaces-of-3d-objects-parametric-representation">Chapter Seven: Global Description of Surfaces of 3D Objects – Parametric Representation 曲面的参数表示与超二次曲面</h2>
+<p>参数表示的优点：</p>
+<ol>
+<li>能用少量的参数表示大量的数据</li>
+<li>便于用解析的方法进行处理</li>
+<li>能够将数据转换为高层的符号形式</li>
+</ol>
+<h3 id="71">7.1 二次曲面</h3>
+<p><span class="arithmatex">\(f(x,y,z)=a_{11}x^2+a_{22}y^2+a_{33}z^2+2a_{12}xy+2a_{13}xz+2a_{23}yz+2a_{41}x+2a_{42}y+2a_{43}z+a_{44}\)</span></p>
+<p>令<span class="arithmatex">\(f(x,y,z)=0\)</span>。</p>
+<p>通过平行移动、旋转、尺度变换等处理，可将上述形式转换成标准形。</p>
+<p><span class="arithmatex">\(p_1x^2+p_2y^2+p_3z^2=1\quad(p_1\leq p_2\leq p_3,\ p_1,p_2,p_3&gt;0)\)</span>，椭球</p>
+<p><span class="arithmatex">\(p_1x^2+p_2y^2-p_3z^2=1\)</span>，单叶双曲面</p>
+<p><span class="arithmatex">\(p_1x^2-p_2y^2-p_3z^2=1\)</span>，双叶双曲面</p>
+<p><span class="arithmatex">\(p_1x^2+p_2y^2=z\)</span>，椭圆抛物面</p>
+<p>这种曲面还可以退化为一些特种曲面</p>
+<p><span class="arithmatex">\(p_1x^2+p_2y^2=1\)</span>，椭圆柱</p>
+<p><span class="arithmatex">\(p_1x^2-p_2y^2=1\)</span>，双曲柱</p>
+<p><span class="arithmatex">\(p_1x^2=y\)</span>，抛物柱</p>
+<h3 id="72-generalized-cylinder">7.2 一般化圆柱（generalized cylinder）</h3>
+<p>使用一般化圆柱表示物体形状需定义两个函数</p>
+<ul>
+<li>中心轴曲面</li>
+<li>沿中心轴变化的截面曲线</li>
+</ul>
+<p>上述截面与中心轴始终垂直。</p>
+<p>在<span class="arithmatex">\((x,y,z)\)</span>空间中，<span class="arithmatex">\(\vec{a}(s)=(x(s),y(s),z(s))^T\)</span>，<span class="arithmatex">\(\vec{a}(s)\)</span>表示一般化圆柱的中心轴，<span class="arithmatex">\(s\)</span>是曲线的弧长。</p>
+<p>定义截面坐标系<span class="arithmatex">\(\vec{t}(s)=\dfrac{\vec{a}'(s)}{|\vec{a}'(s)|}\)</span>，<span class="arithmatex">\(\vec{n(s)}=\dfrac{\vec{a}''(s)}{|\vec{a}''(s)|}\)</span>，<span class="arithmatex">\(\vec{b}(s)=\vec{t}(s)\times\vec{n}(s)\)</span>，分别为切向量，主法线向量，从法线向量。</p>
+<p>在截面坐标系中，则可在<span class="arithmatex">\((\vec{n}(s),\vec{b}(s))\)</span>平面上定义截面形状曲线为<span class="arithmatex">\((x(s,r),y(s,r))^T\)</span>。</p>
+<p>则得到一般化圆柱为<span class="arithmatex">\(\vec{B}(r,s)=\vec{a}(s)+x(s,r)\vec{n}(s)+y(s,r)\vec{b}(s)\)</span></p>
+<p>Geon，用一般化圆柱构成基本物体。</p>
+<h3 id="73-super-quadircs">7.3 超二次曲面（super quadircs）</h3>
+<h4 id="731">7.3.1 球面外积</h4>
+<p>设有二维曲线</p>
+<p><span class="arithmatex">\(\vec{m}(\eta)=(m_1(\eta)\quad m_2(\eta))^T,\ \eta_0\leq\eta\leq\eta_1\)</span></p>
+<p><span class="arithmatex">\(\vec{h}(\omega)=(h_1(\omega)\quad h_2(\omega))^T,\ \omega_0\leq\omega\leq\omega_1\)</span></p>
+<p>定义<span class="arithmatex">\(\vec{x}(\eta,\omega)=\vec{m}(\eta)\circ\times\vec{h}(\omega)=(m_1(\eta)h_1(\omega)\quad m_1(\eta)h_2(\omega)\quad m_2(\eta))^T\)</span></p>
+<p>这种运算称作<span class="arithmatex">\(\vec{m}(\eta)\)</span>与<span class="arithmatex">\(\vec{h}(\omega)\)</span>的球面外积（Spherical product）</p>
+<p>例：</p>
+<ol>
+<li>
+<p><span class="arithmatex">\(\vec{m}(\eta)=\left(\matrix{\cos\eta \\ \sin\eta}\right),\quad-\dfrac{\pi}{2}\leq\eta\leq\dfrac{\pi}{2}\)</span></p>
+<p><span class="arithmatex">\(\vec{h}(\omega)=\left(\matrix{\cos\omega \\ \sin\omega}\right),\quad -\pi\leq\omega\leq\pi\)</span></p>
+<p>则有<span class="arithmatex">\(\vec{x}(\eta,\omega)=(\cos\eta\cos\omega\quad \cos\eta\sin\omega\quad \sin\eta)^T=(x\quad y\quad z)^T,\quad x^2+y^2+z^2=1\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(\vec{m}(\eta)=\left(\matrix{1+\cos\eta \\ \sin\eta}\right),\quad -\pi\leq\eta\leq\pi\)</span></p>
+<p><span class="arithmatex">\(\vec{h}(\omega)=\left(\matrix{\cos\omega \\ \sin\omega}\right),\quad -\pi\leq\omega\leq\pi\)</span></p>
+</li>
+</ol>
+<h4 id="732-superquadriccs">7.3.2 超二次曲面(superquadriccs)</h4>
+<p>设<span class="arithmatex">\(c_\eta=\cos\eta,s_\eta=\sin\eta,c_\omega=\cos\omega,s_\omega=\sin\omega\)</span>。</p>
+<p>在球面外积的定义中，设<span class="arithmatex">\(\left\{\matrix{\vec{m}(\eta)=\left(\matrix{c_\eta^{\varepsilon_1}\\a_3s_\eta^{\varepsilon_1}}\right),-\dfrac{\pi}{2}\leq\eta\leq\dfrac{\pi}{2}\\\vec{h}(\omega)=\left(\matrix{a_1c_\omega^{\varepsilon_2}\\a_2s_\omega^{\varepsilon_2}}\right),-\pi\leq\omega\leq\pi}\right.\)</span>，则有曲面<span class="arithmatex">\(\vec{\pi}(\eta,\omega)=\left(\matrix{a_1c_\eta^{\varepsilon_1}c_\omega^{\varepsilon_2}\\a_2c_\eta^{\varepsilon_1}s_\omega^{\varepsilon_2}\\a_3s_\eta^{\varepsilon_1}}\right)\)</span>为超二次曲面。</p>
+<p>消除显示表示中的参数<span class="arithmatex">\(\eta,\omega\)</span>，则得到曲面的隐式表示：</p>
+<p><span class="arithmatex">\(f(x,y,z)=\left(\left(\dfrac{x}{a_1}\right)^{\frac{2}{\varepsilon_2}}+\left(\dfrac{y}{a_2}\right)^{\frac{2}{\varepsilon_2}}\right)^{\frac{\varepsilon_2}{\varepsilon_1}}+\left(\dfrac{z}{a_3}\right)^{\frac{2}{\varepsilon_1}}=1\)</span></p>
+<p>通过改变<span class="arithmatex">\(\varepsilon_1,\varepsilon_2\)</span>的取值，可得到不同的曲面。当<span class="arithmatex">\(\varepsilon_1&lt;1,\varepsilon_2&lt;1\)</span>，曲面逼近立方体。当<span class="arithmatex">\(\varepsilon_1&gt;&gt;1,\varepsilon_2&gt;&gt;1\)</span>，则曲面接近于星形。</p>
+<p>对于空间中的一点，可以判断其在超二次曲面上的位置。</p>
+<p><span class="arithmatex">\(f(x_0,y_0,z_0)=1\)</span>，<span class="arithmatex">\((x_0,y_0,z_0)\)</span>在这个超二次曲面上。<span class="arithmatex">\(&gt;1\)</span>，在外部。<span class="arithmatex">\(&lt;1\)</span>在内部。</p>
+<p>这时可定义，对于实测数据<span class="arithmatex">\(\vec{P_i}=(x_i,y_i,z_i),i=1,\cdots,N\)</span>，<span class="arithmatex">\(E=\sum_{i=1}^N|f(x_i,y_i,z_i)-1|^2\)</span>。<span class="arithmatex">\(E\)</span>为优化曲面的误差函数。</p>
+<p>在实际求解过程中，需要求解11个未知变量：<span class="arithmatex">\(a_1,a_2,a_3,\varepsilon_1,\varepsilon_2,T_x,T_y,T_z,\theta,\phi,\varphi\)</span></p>
+<p>变形（deformation）：全局变形，局部变形</p>
+<h2 id="chapter-eight">Chapter Eight: 三维模型表面的网格化表示</h2>
+<h3 id="81-marching-squares">8.1 标量数据的边界抽取：Marching Squares法</h3>
+<p><strong>标量数据</strong>：数据的每一点都附加了一个标量值</p>
+<p>边界抽取：寻找标量数据中具有某一标量值的点的连线。</p>
+<p>算法的基本思想：</p>
+<ol>
+<li>
+<p>将数据平面分成局部四方块（squares，cells）</p>
+</li>
+<li>
+<p>然后在每个四方块内独立分析边界的存在情况</p>
+<p>对每个顶点：<span class="arithmatex">\(s_i&lt;c\)</span>，在边界<span class="arithmatex">\(C\)</span>的外部，取0；反之取1。</p>
+<p>通过顶点的编码，查找该四方块内边界的连接关系。<span class="arithmatex">\(2^4=16\)</span>种连接方式</p>
+</li>
+<li>
+<p>确定相交位置：线性插值</p>
+</li>
+<li>
+<p>对每一个四方块进行处理后即可将得到完整连线。</p>
+</li>
+</ol>
+<p>这个算法在上世纪被发明时，研究者用串行处理的方法思考，实际上这个方法可以对每个四方块并行计算。</p>
+<p>在某些情况下具有歧义。</p>
+<h3 id="82-marching-cubes">8.2 三维标量数据的边界抽取：Marching Cubes法</h3>
+<p>三维标量数据（三维体数据）</p>
+<p>方法与上一节大同小异，不过在第2步中有<span class="arithmatex">\(2^8=256\)</span>种连接方式。上世纪，每个cube都要查找256种连接方式是一件十分耗计算量的事，不过有研究者发现其中只有15种连接方式是独立的。</p>
+<p>同样，也存在歧义性。</p>
+<p>SDF：Signed Distance Function，点在面上为0，在体外为+，在体内为-。</p>
+<p>从点云数据转换为三维空间的SDF标量场，用SDF标量场应用Marching Cubes法。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "header.autohide", "search.suggest", "search.highlight", "search.share"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../_js/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

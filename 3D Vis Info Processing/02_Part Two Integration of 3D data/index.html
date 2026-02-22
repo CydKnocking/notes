@@ -1,0 +1,2455 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../01_Part%20One%20Acquisition%20of%203D%20Data/">
+      
+      
+        <link rel="next" href="../03_Part%20Three%20Descriptions%20of%203D%20Objects%20and%20Scenes/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../_assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.2">
+    
+    
+      
+        <title>02 Part Two Integration of 3D data - Knocking's notebook</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="brown" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#4" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Knocking&#39;s notebook" class="md-header__button md-logo" aria-label="Knocking's notebook" data-md-component="logo">
+      
+  <img src="../../_assets/icon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Knocking's notebook
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              02 Part Two Integration of 3D data
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/CydKnocking/notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Knocking&#39;s notebook" class="md-nav__button md-logo" aria-label="Knocking's notebook" data-md-component="logo">
+      
+  <img src="../../_assets/icon.png" alt="logo">
+
+    </a>
+    Knocking's notebook
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/CydKnocking/notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Knocking's personal notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about_this_notebook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About this notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Vis Info Processing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    3D Vis Info Processing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00_Introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    00 Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_Part%20One%20Acquisition%20of%203D%20Data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 Part One Acquisition of 3D Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 Part Two Integration of 3D data
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 Part Two Integration of 3D data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第4章 三维数据的运动恢复
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="第4章 三维数据的运动恢复">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 不同视点所得到点群的刚体运动
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 三维空间中的旋转
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2 三维空间中的旋转">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#421" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.1 基于欧拉角的旋转表示
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#422-rpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.2 RPY法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#423" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.3 绕空间中任意轴的旋转
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 点群运动的计算
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.3 点群运动的计算">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#431-r" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.1 利用四元数求\(R\)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#registration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第五章 三维数据的配准（registration）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="第五章 三维数据的配准（registration）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-icp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 迭代最近点法的基本原理 ICP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 算法求解的注意事项
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.2 算法求解的注意事项">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#521" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.1 最近点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#522" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.2 算法的收敛性
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#523" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.3 控制点的选择
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#524" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.4 控制点的自动选择
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_Part%20Three%20Descriptions%20of%203D%20Objects%20and%20Scenes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 Part Three Descriptions of 3D Objects and Scenes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Full%20notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ML
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ML
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ML/great_links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Great links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Web
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Web/clash/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clash
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Web/domains/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Domains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Datasets
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Datasets
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/TUM_RGBD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TUM RGBD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/TartanAir/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TartanAir
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/proxy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proxy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Github
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Github
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../github/Deploy%20repo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Create a new github repository
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../github/verify%20domain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verify domain
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux and ubuntu
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Linux and ubuntu
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/chmod/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chmod
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/chown/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chown
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/cmatrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cmatrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/crontab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crontab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/dns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/softlink/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Softlink
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/ssh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ssh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/tmux/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/zsh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zsh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Math
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Math
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/great_links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Great links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/quaternion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quaternion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Papers
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Papers
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/discussions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Discussions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/paper_notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paper notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/point_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Point tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/research_diary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research diary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Python
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/rosbag/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rosbag
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/send_email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Send email
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/torch_tips/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Torch tips
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/tqdm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tqdm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第4章 三维数据的运动恢复
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="第4章 三维数据的运动恢复">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 不同视点所得到点群的刚体运动
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 三维空间中的旋转
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2 三维空间中的旋转">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#421" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.1 基于欧拉角的旋转表示
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#422-rpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.2 RPY法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#423" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2.3 绕空间中任意轴的旋转
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 点群运动的计算
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.3 点群运动的计算">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#431-r" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.1 利用四元数求\(R\)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#registration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        第五章 三维数据的配准（registration）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="第五章 三维数据的配准（registration）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-icp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 迭代最近点法的基本原理 ICP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 算法求解的注意事项
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.2 算法求解的注意事项">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#521" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.1 最近点
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#522" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.2 算法的收敛性
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#523" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.3 控制点的选择
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#524" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.4 控制点的自动选择
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+  <h1>02 Part Two Integration of 3D data</h1>
+
+<!-- # Part Two: Integration of 3D data -->
+
+<h2 id="4">第4章 三维数据的运动恢复</h2>
+<p>视点的差异与对象物的移动是一个可逆过程。一般将通过数据序列的分析来求解传感器运动的过程称为运动恢复。而将不同视点采集到的数据整合到同一坐标系的处理称作配准（registration）。</p>
+<h3 id="41">4.1 不同视点所得到点群的刚体运动</h3>
+<p>假设三维空间的两个点群：<span class="arithmatex">\(P={\vec{P_i}},P'={\vec{P'_i}},i=1,2,\cdots\)</span>。<span class="arithmatex">\(P'\)</span>是<span class="arithmatex">\(P\)</span>通过某种运动而得到两点群之间的关系满足<span class="arithmatex">\(\vec{P_i'}=R\vec{P_i}+\vec{T}+\vec{N_i}\)</span>。</p>
+<p>这里，<span class="arithmatex">\(R\)</span>为旋转矩阵，<span class="arithmatex">\(\vec{T}\)</span>为平移向量，<span class="arithmatex">\(\vec{N_i}\)</span>为测量噪声向量，<span class="arithmatex">\(\vec{N_i}=(N_{ix},N_{iy},N_{iz})^T\)</span>通常<span class="arithmatex">\(\vec{N_i}\)</span>是白色噪声。</p>
+<h3 id="42">4.2 三维空间中的旋转</h3>
+<p>首先考虑在<span class="arithmatex">\(z\)</span>轴周围旋转<span class="arithmatex">\(\theta\)</span>角的情况。<span class="arithmatex">\(R_{z\theta}=\left[\matrix{\cos\theta &amp; -\sin\theta &amp; 0 \\ \sin\theta &amp; \cos\theta &amp; 0 \\ 0 &amp; 0 &amp; 1}\right]=\left[\matrix{c\theta &amp; -s\theta &amp; 0 \\ s\theta &amp; c\theta &amp; 0 \\ 0 &amp; 0 &amp; 1}\right]\)</span>。</p>
+<p>考虑两个坐标系：</p>
+<ul>
+<li><span class="arithmatex">\(OXYZ\)</span>：固定的基准坐标系。</li>
+<li><span class="arithmatex">\(OUVW\)</span>：随物体（点群）而旋转的坐标系</li>
+</ul>
+<h4 id="421">4.2.1 基于欧拉角的旋转表示</h4>
+<p>旋转的合成规则：</p>
+<ol>
+<li>在<span class="arithmatex">\(OZ\)</span>轴周围旋转<span class="arithmatex">\(\phi\)</span>角</li>
+<li>在<span class="arithmatex">\(OU\)</span>轴周围旋转<span class="arithmatex">\(\theta\)</span>角</li>
+<li>在<span class="arithmatex">\(OW\)</span>轴周围旋转<span class="arithmatex">\(\psi\)</span>角</li>
+</ol>
+<p>旋转矩阵为：<span class="arithmatex">\(R_{\phi,\theta,\psi}=R_{z\phi}R_{u\theta}R_{w\psi}=\left[\matrix{c\phi &amp; -s\phi &amp; 0 \\ s\phi &amp; c\phi &amp; 0 \\ 0 &amp; 0 &amp; 1}\right]\left[\matrix{1 &amp; 0 &amp; 0 \\ 0 &amp; c\theta &amp; -s\theta \\ 0 &amp; s\theta &amp; c\theta}\right]\left[\matrix{c\psi &amp; -s\psi &amp; 0 \\ s\psi &amp; c\psi &amp; 0 \\ 0 &amp; 0 &amp; 1}\right]\)</span>。（这里的左右反了，mark一下）</p>
+<h4 id="422-rpy">4.2.2 RPY法</h4>
+<p>合成规则：</p>
+<ol>
+<li>绕<span class="arithmatex">\(OX\)</span>轴旋转<span class="arithmatex">\(\psi\)</span>角  yaw</li>
+<li>绕<span class="arithmatex">\(OY\)</span>轴旋转<span class="arithmatex">\(\theta\)</span>角  pitch</li>
+<li>绕<span class="arithmatex">\(OZ\)</span>轴旋转<span class="arithmatex">\(\theta\)</span>角  roll</li>
+</ol>
+<p>因此，<span class="arithmatex">\(R_{\phi,\theta,\psi}=R_{z\phi}R_{y\theta}R_{x\psi}\)</span>，从左到右是Roll，Pitch，Yaw</p>
+<h4 id="423">4.2.3 绕空间中任意轴的旋转</h4>
+<p>首先构造一个平面<span class="arithmatex">\(V\)</span>与旋转中心轴<span class="arithmatex">\(\vec{w}\)</span>组成的坐标系。这里<span class="arithmatex">\(V\)</span>与<span class="arithmatex">\(\vec{w}\)</span>垂直，同时通过<span class="arithmatex">\(\vec{R}\)</span>与<span class="arithmatex">\(\vec{R'}\)</span>的平面，并将<span class="arithmatex">\(\vec{PR}\)</span>方向以及与此垂直的<span class="arithmatex">\(\vec{PR}\)</span>方向作为<span class="arithmatex">\(V\)</span>上的坐标轴，分别用<span class="arithmatex">\(\vec{u}\)</span>与<span class="arithmatex">\(\vec{v}\)</span>来表示，则有<span class="arithmatex">\(\vec{R'}=\vec{OP}+\vec{PR}\cos\theta+\vec{PQ}\sin\theta\)</span>。</p>
+<p>用向量表示，则有：<span class="arithmatex">\(\vec{OP}=(\vec{R}\cdot\vec{w})\cdot\vec{w},\vec{PQ}=\vec{w}\times\vec{R},\vec{PR}=\vec{R}-(\vec{R}\cdot\vec{w})\cdot\vec{w}\)</span></p>
+<p><span class="arithmatex">\(\vec{R'}=(\vec{R}\cdot\vec{w})\cdot\vec{w}+\cos\theta\left\{\vec{R}-(\vec{R}\cdot\vec{w})\cdot\vec{w}\right\}+\sin\theta(\vec{w}\times\vec{R})=\cos\theta\vec{R}+\sin\theta\vec{w}\times\vec{R}+(1-\cos\theta)(\vec{R}\cdot\vec{w})\cdot\vec{w}\)</span></p>
+<p>设<span class="arithmatex">\(\vec{w}=(\lambda,\mu,\nu)^T\)</span>，这里<span class="arithmatex">\(\lambda^2+\mu^2+\nu^2=1\)</span></p>
+<p><span class="arithmatex">\(\vec{R'}=R_{\cos\theta}\vec{R}\)</span></p>
+<p><span class="arithmatex">\(R_{\cos\theta}=\left[\matrix{c\theta+\lambda^2(1-c\theta) &amp; \lambda\mu(1-c\theta)-\nu s\theta &amp; \nu\lambda(1-c\theta)+\mu s\theta \\ \lambda\mu(1-c\theta)+\nu s\theta &amp; c\theta+\mu^2(1-c\theta) &amp; \mu\nu(1-c\theta)-\lambda s\theta \\ \nu\lambda(1-c\theta)-\mu s\theta &amp; \mu\nu(1-c\theta)+\lambda s\theta &amp; c\theta+\nu^2(1-c\theta) }\right]\)</span></p>
+<p><strong>四元数（quaternion）</strong></p>
+<p>四元数是由四个元素组成的一个数组。</p>
+<p>给定一个标量<span class="arithmatex">\(q_0\)</span>以及一个向量<span class="arithmatex">\(\vec{q}=(q_x,q_y,q_z)^T\)</span>，可将其形成一个四元数<span class="arithmatex">\(\circ{q}=(q_0,\vec{q})\)</span>。</p>
+<p>这里<span class="arithmatex">\(\circ q=q_0+iq_x+jq_y+kq_z\)</span>，这里<span class="arithmatex">\(i^2=j^2=k^2=-1,ij=k,jk=i,ki=j\)</span>。</p>
+<p>四元数乘积的定义为：设<span class="arithmatex">\(q_1=(q_{10},\vec{q_1}),q_2=(q_{20},\vec{q_2})\)</span>，<span class="arithmatex">\(q_1\cdot q_2=(q_{10}q_{20}-\vec{q_1}\cdot\vec{q_2},\vec{q_1}\times\vec{q_2}+q_{20}\vec{q_1}+q_{10}\vec{q_2})\)</span>，并且<span class="arithmatex">\(q=(q_0,\vec{q})\)</span>的共轭为<span class="arithmatex">\(\bar{q}=(q_0,-\vec{q})\)</span>。</p>
+<p>四元数具有以下性质：</p>
+<ol>
+<li><span class="arithmatex">\(|q|^2=q\cdot\bar{q}=q_0^2+|\vec{q}|^2\)</span></li>
+<li><span class="arithmatex">\(|q\cdot q'|^2=|q|^2\cdot|q'|^2\)</span></li>
+</ol>
+<p>使用四元数可以有效地表示空间中的旋转。</p>
+<p>设<span class="arithmatex">\(r=(0,\vec{R}),r'=(0,\vec{R'})\)</span>，同时设<span class="arithmatex">\(q=\left(\cos\dfrac{\theta}{2},\sin\dfrac{\theta}{2}\vec{w}\right)\)</span>，通过使用罗德里格斯公式，可得<span class="arithmatex">\(r'=q\cdot r\cdot\bar{q}\)</span></p>
+<h3 id="43">4.3 点群运动的计算</h3>
+<p>对于两个点群<span class="arithmatex">\(P,P_i\)</span>，<span class="arithmatex">\(\vec{P}=R\vec{P_i}+\vec{T}+\vec{N_i}\)</span>。利用最小二乘法，可将此问题转化为使<span class="arithmatex">\(E^2=\sum_{i=1}^N|\vec{P_i'}-(R\vec{P_i}+\vec{T})|^2\)</span>。</p>
+<p>最小的<span class="arithmatex">\(R\)</span>与<span class="arithmatex">\(\vec{T}\)</span>的估计问题。</p>
+<p>设<span class="arithmatex">\(\vec{P}=\dfrac{1}{N}\sum\vec{P_i},\vec{P'}=\dfrac{1}{N}\sum\vec{P_i'}\)</span>，并做变换<span class="arithmatex">\(\vec{d_i}=\vec{P_i}-\vec{P},\vec{d_i'}=\vec{P_i'}-\vec{P'}\)</span>，则有<span class="arithmatex">\(E^2=\sum|(d_i'+\vec{P'})-[R(\vec{d_i}+\vec{P})+\vec{T}]|^2=\sum|(\vec{d_i}-R\vec{d_i})+(\vec{P'}-(R\vec{P}+T))|^2=\sum|\vec{d_i'}-R\vec{d_i}|^2\)</span>。</p>
+<p>这时，优化问题可分解为</p>
+<ul>
+<li>求使<span class="arithmatex">\(E^2\)</span>最小的<span class="arithmatex">\(\hat{R}\)</span></li>
+<li>求<span class="arithmatex">\(\vec{T}\)</span>，<span class="arithmatex">\(\vec{T}=\vec{P'}-\vec{P}\)</span></li>
+</ul>
+<h4 id="431-r">4.3.1 利用四元数求<span class="arithmatex">\(R\)</span></h4>
+<p>用四元数表示<span class="arithmatex">\(\vec{d_i'},\vec{d_i}\)</span>：<span class="arithmatex">\(\breve{d_i'}=(0,\vec{d_i'}),\breve{d_i}=(0,\vec{d_i})\)</span>。</p>
+<p>同时<span class="arithmatex">\(\breve{q}=(\cos\dfrac{\theta}{2},\sin\dfrac{\theta}{2}\vec{\omega})\rightarrow R\)</span></p>
+<p><span class="arithmatex">\(E^2=\sum|\breve{d_i'}-\breve{q}\cdot\breve{d_i}\cdot\breve{\bar{q}}|^2|\breve{q}|^2=\sum|\breve{d_i'}\cdot\breve{q}-\breve{q}\cdot\breve{d_i}|^2=\sum|\breve{O_i}|^2\)</span></p>
+<p>这时，<span class="arithmatex">\(\breve{O_i}=\breve{d_i'}\cdot\breve{q}-\breve{q}\cdot\breve{d_i}=(\vec{q}\cdot(\vec{d_i'}-\vec{d_i}),(\vec{d_i'}+\vec{d_i})\times\vec{q}+q_0(\vec{d_i'}-\vec{d_i}))\)</span></p>
+<p>设<span class="arithmatex">\(\vec{u}=(u_1,u_2,u_3)^T,\vec{x}=(x_1,x_2,x_3)^T\)</span>，有<span class="arithmatex">\(\vec{u}\times\vec{x}=\vec{x}U^M\)</span>，这里<span class="arithmatex">\(U^M=\left[\matrix{ 0 &amp; u_3 &amp; -u_2 \\ -u_3 &amp; 0 &amp; u_1 \\ u_2 &amp; -u_1 &amp; 0 }\right]\)</span></p>
+<p>利用向量外积的这个性质，有<span class="arithmatex">\(\breve{O}=\vec{q_4}A_i\)</span>，这里<span class="arithmatex">\(\vec{q_4}\)</span>是将四元数转换成向量的表示<span class="arithmatex">\(A_i=\left[\matrix{0 &amp; (\vec{d_i'}-\vec{d_i}) \\ (\vec{d_i}-\vec{d_i'})^T &amp; D_i^M }\right]\)</span>。</p>
+<p><span class="arithmatex">\(D_i^M\)</span>为<span class="arithmatex">\((\vec{d_i}+\vec{d_i'})\)</span>对应于<span class="arithmatex">\(U^M\)</span>的矩阵。</p>
+<p>这里，<span class="arithmatex">\(A_i\)</span>只与数据<span class="arithmatex">\(\vec{d_i},\vec{d_i'}\)</span>有关。根据以上结果，有</p>
+<p><span class="arithmatex">\(E^2=\sum|\breve{0}|^2=\sum\vec{q_4}A_iA_i^T\vec{q_4}^T=\sum\vec{q_4}B_i\vec{q_4}^T=\vec{q_4}(\sum B_i)\vec{q_4}^T=\vec{q_4}B\vec{q_4}^T\)</span>，其中<span class="arithmatex">\(B_i=A_iA_i^T,B=\sum B_i\)</span></p>
+<p><span class="arithmatex">\(\hat{\vec{q_4}}\)</span>是<span class="arithmatex">\(B\)</span>的最小特征值的对应的特征向量。<span class="arithmatex">\(\hat{\vec{q_4}}=(\cos\dfrac{\theta}{2},\sin\dfrac{\theta}{2}\vec{\omega})^T\)</span></p>
+<h2 id="registration">第五章 三维数据的配准（registration）</h2>
+<p>将从不同视点采集的数据整合起来，形成对象物的完整模型。</p>
+<p>计算各个视点的位置关系：</p>
+<ol>
+<li>使用辅助传感器</li>
+<li>在场景中设置靶标（landmark）</li>
+<li>手工选取对应点</li>
+<li>自动配准</li>
+</ol>
+<p>实际场景中的难点：</p>
+<ol>
+<li>三维点云间的对应关系未知。同时，点群中点的数量不相等</li>
+<li>由于视点的遮挡可能不存在对应点</li>
+<li>很难找到物理上完全吻合的对应点</li>
+</ol>
+<h3 id="51-icp">5.1 迭代最近点法的基本原理 ICP</h3>
+<p>假定已知两个点群<span class="arithmatex">\(P,Q\)</span>，<span class="arithmatex">\(\vec{p_i}\in P,\vec{q_i}\in Q\)</span>。这里，下标不在隐含数据间的对应关系。</p>
+<p>设<span class="arithmatex">\(T\)</span>为将<span class="arithmatex">\(P\)</span>变换到<span class="arithmatex">\(Q\)</span>的变换，其中包含平行移动与旋转的运动参数。这时假定<span class="arithmatex">\(P\)</span>与<span class="arithmatex">\(Q\)</span>之间的对应关系为<span class="arithmatex">\(f:P\to Q,\quad \forall\vec{p_i}\in P,f(\vec{p_i})\in Q\)</span>。</p>
+<p>这样，点群间运动参数的计算问题可转化为以下目标函数最小的优化问题：<span class="arithmatex">\(D(P,Q)=\sum|T\vec{p_i}-f(\vec{p_i})|^2\)</span></p>
+<p>这时，可以考虑以下策略求解这个问题：根据某种几何特性对数据进行匹配，并将匹配点设为假象对应点，再根据这种对应关系求解运动参数。再利用这些参数将数据进行变换。</p>
+<p>在新的情况下，重复上述过程。这是一个迭代的计算过程。</p>
+<p>在确定上述假象对应点时，使用在空间位置上最近的点。</p>
+<p>——Iterative Closest Point Method</p>
+<p>将此过程公式化后，有求解使下式最小的优化问题<span class="arithmatex">\(E=\sum_i^N|T\vec{p_i}-\vec{q_i}|^2\)</span>，这里<span class="arithmatex">\(\vec{q_i}=q|\min_{\vec{q}}|T\vec{p_i}-\vec{q}||\)</span>最近点匹配。</p>
+<p>这里，必须同时满足以下两个条件：</p>
+<ol>
+<li>通过<span class="arithmatex">\(T\)</span>将<span class="arithmatex">\(P\)</span>与<span class="arithmatex">\(Q\)</span>整合</li>
+<li><span class="arithmatex">\(\vec{p_i}\)</span>与<span class="arithmatex">\(\vec{q_j}\)</span>通过<span class="arithmatex">\(T\)</span>建立对应关系</li>
+</ol>
+<p>求解配准问题，必须完成以下的优化过程：</p>
+<p><span class="arithmatex">\(E=\sum_{i=1}^{N}|T\vec{p_i}-\vec{q_j}|^2\)</span>，这里<span class="arithmatex">\(\vec{q_j}=\arg\min_{\vec{q}}|T\vec{p_i}-\vec{q}|\)</span>，即最近点匹配</p>
+<p>这时可将整个优化过程用迭代方式求解。在某一步<span class="arithmatex">\(k\)</span>利用前一步所得到的<span class="arithmatex">\(T^{k-1}\)</span>，求下述问题的最优解：</p>
+<p><span class="arithmatex">\(E^k=\sum_{i=1}^{N}|T^k\vec{p_i}-\vec{q_j^k}|^2\)</span>，这里<span class="arithmatex">\(\vec{q_j^k}=\arg\min_\vec{q}|T^{k-1}\vec{p_i}-\vec{q}|\)</span></p>
+<p>在这一步，将<span class="arithmatex">\(\vec{q_j^k}\)</span>看作是<span class="arithmatex">\(\vec{p_i}\)</span>的假想对应点。</p>
+<p>那么，三维点云的<strong>ICP配准算法</strong>如下：</p>
+<ol>
+<li>
+<p>在左边点云里选择控制点<span class="arithmatex">\(\vec{p_i}\in P\)</span>，设置<span class="arithmatex">\(T\)</span>的初始值<span class="arithmatex">\(T^0\)</span>。</p>
+</li>
+<li>
+<p>重复执行以下各步骤<span class="arithmatex">\(k=1,2,\dots\)</span>，直到满足收敛条件。</p>
+<ol>
+<li>对各个控制点<span class="arithmatex">\(\vec{p_i}\)</span>，使其通过运动变换为<span class="arithmatex">\(\vec{p_i}'=T^{k-1}\vec{p_i}\)</span>，求<span class="arithmatex">\(\vec{p_i}'\)</span>的最近点<span class="arithmatex">\(\vec{q_j}'^k\)</span></li>
+<li>对于此时所确定的假象对应关系<span class="arithmatex">\((\vec{p_i'},\vec{q_j}'^k)\)</span>，求以下优化问题的解：<span class="arithmatex">\(E^k=\sum_{i=1}^{N}|T\cdot T^{k-1}\vec{p_i}-\vec{q_j'^k}|^2\)</span></li>
+<li><span class="arithmatex">\(T^k=T\cdot T^{k-1}\)</span></li>
+</ol>
+<p>算法收敛条件：<span class="arithmatex">\(\delta=\dfrac{|E^k-E^{k-1}|}{M}\leq\varepsilon_e\)</span></p>
+</li>
+</ol>
+<h3 id="52">5.2 算法求解的注意事项</h3>
+<h4 id="521">5.2.1 最近点</h4>
+<p>在实际求解过程中，仅仅是欧氏距离最近点不能保证两个曲面点在空间位置上最近，有种更可靠的方法是：将点<span class="arithmatex">\(\vec{p_i}\)</span>转换成<span class="arithmatex">\(T^{k-1}\vec{p_i}\)</span>，然后使用<span class="arithmatex">\(T^{k-1}\vec{p_i}\)</span>的法线与<span class="arithmatex">\(Q\)</span>的交点作为对应点<span class="arithmatex">\(\vec{q_j}'^k\)</span>，<span class="arithmatex">\(\vec{q_j}'^k=(T^{k-1}\vec{p_i}\cap Q)\)</span>，其中<span class="arithmatex">\(\cap\)</span>为求交点。</p>
+<p>这时，求<span class="arithmatex">\(\vec{l^k}=\{\vec{a}|(T^{k-1}\vec{p_i}-\vec{a})\times\vec{n_{p_i}}=0\}\)</span>，这里<span class="arithmatex">\(\vec{n_{p_i}}\)</span>为<span class="arithmatex">\(T^{k-1}\vec{p_i}\)</span>的法线方向向量。</p>
+<p>再得到<span class="arithmatex">\(\vec{q_j}'^k=(T^{k-1}\vec{l_i})\cap Q'\)</span>，<span class="arithmatex">\(Q'\)</span>为右边曲面的切平面。</p>
+<h4 id="522">5.2.2 算法的收敛性</h4>
+<p>在此算法中，执行了两个优化过程：</p>
+<ul>
+<li>确定假想对应关系：<span class="arithmatex">\(d_k=\min\sum|T^{k-1}\vec{p_i}-\vec{q}'^k|^2\)</span></li>
+<li>求运动参数<span class="arithmatex">\(T\)</span>，<span class="arithmatex">\(E_k=\min\sum|T\cdot T^{k-1}\vec{p_i}-\vec{q}'k|^2\)</span></li>
+</ul>
+<p>首先证明<span class="arithmatex">\(E_k\leq d_k\)</span>。</p>
+<p>设<span class="arithmatex">\(T=I\)</span>，则有<span class="arithmatex">\(E_k=d_k\)</span>。</p>
+<p>如果最小化的结果是<span class="arithmatex">\(T\neq I\)</span>，则只能是<span class="arithmatex">\(E_k\leq d_k\)</span>。</p>
+<p>下一步，显示<span class="arithmatex">\(d_{k+1}\leq E_k\)</span></p>
+<p>如果在<span class="arithmatex">\((k+1)\)</span>步与<span class="arithmatex">\(k\)</span>步的对应关系不变，则有<span class="arithmatex">\(d_{k+1}=E_k\)</span>。</p>
+<p>但是在<span class="arithmatex">\((k+1)\)</span>步中，如果点<span class="arithmatex">\(\vec{p_i}\)</span>的对应关系发生了变化，则说明有新的点<span class="arithmatex">\(\vec{q_j}'^{(k+1)}\)</span>比<span class="arithmatex">\(\vec{q_j}'^k\)</span>更靠近<span class="arithmatex">\(\vec{p_i}\)</span>。</p>
+<p><span class="arithmatex">\(|T\cdot T^k\vec{p_i}-\vec{q_j}'^{(k+1)}|\leq |T\cdot T^k\vec{p_i}-\vec{q_j}'k|\)</span></p>
+<p>即<span class="arithmatex">\(d_{k+1}\)</span>变小了，<span class="arithmatex">\(d_{k+1}\leq E_k\)</span>。</p>
+<p>因此，得到<span class="arithmatex">\(d_0\geq E_0\geq d_1\cdots\geq d_k\geq E_k\geq d_{k+1}\geq\cdots\)</span>，误差在不断地减小，算法是收敛的。</p>
+<h4 id="523">5.2.3 控制点的选择</h4>
+<ol>
+<li>
+<p>计算量</p>
+</li>
+<li>
+<p>收敛速度</p>
+<p>尽量避免在数据中的平坦区域寻找控制点</p>
+</li>
+<li>
+<p>计算精度</p>
+<p>避免噪声多的数据区域</p>
+</li>
+<li>
+<p>遮挡问题</p>
+</li>
+</ol>
+<h4 id="524">5.2.4 控制点的自动选择</h4>
+<p><span class="arithmatex">\(E_k=\dfrac{1}{W}\sum_{i=1}^Nw_i|T\cdot T^{k-1}\vec{p_i}-\vec{q_j^k}|^2,\quad W=\sum w_i\)</span>。</p>
+<p><span class="arithmatex">\(w_i\)</span>定义如下：</p>
+<p>设<span class="arithmatex">\(d_i=|T^{k-1}\vec{p_i}-\vec{q_j}'^{k-1}|\)</span>，<span class="arithmatex">\(w_i=\left\{\begin{aligned}&amp;1 &amp; 0\leq d_i\leq \varepsilon_1 \\&amp;\rho(\dfrac{1}{d_i}) &amp; \varepsilon_1\leq d_i\leq \varepsilon_2 \\ &amp;0 &amp; \varepsilon_2\leq d_i \end{aligned}\right.\)</span>，其中<span class="arithmatex">\(\rho(x)\)</span>为<span class="arithmatex">\(x\)</span>的单纯增长函数，<span class="arithmatex">\(0&lt;\rho(x)&lt;1\)</span>。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "header.autohide", "search.suggest", "search.highlight", "search.share"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../_js/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
