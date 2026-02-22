@@ -709,7 +709,7 @@ Rich Sutton的博客文章：[The Bitter Lesson](http://www.incompleteideas.net/
   在token阶段，对于车的不同运动模式进行了embedding。<br>
   暂未开源。
 
-- [**TrajVG: 3D Trajectory-Coupled Visual Geometry Learning**](https://www.arxiv.org/abs/2602.04439)<br>
+- [**TrajVG: 3D Trajectory-Coupled Visual Geometry Learning**](https://xingy038.github.io/TrajVG/)<br>
   在pi^3的网络上多加了个Track head，用来估计3D correspondences。<br>
   暂未开源。
 
@@ -783,3 +783,16 @@ Execution time: 683.297737 seconds for 96 images
   - pointmaps: <class 'list'>, 17, ['pts3d', 'conf']
     - pointmaps[pts3d]: torch.Size([1, 17, 294, 518, 3]), torch.float32, -0.5402331352233887, 2.065545082092285
     - pointmaps[conf]: torch.Size([1, 17, 294, 518]), torch.float32, 1.0000206232070923, 25.831775665283203
+  - 其中，pointmaps是一个长度为S的list，其中第i个元素是一个dict，保存的是所有帧**在第i帧时刻下，在第0帧视角下**的point map和confidence。
+
+PointOdyssey数据集处理好了。尝试在test / val上面评价3d point map、poses、3d point tracking。
+
+考虑：
+- 评测相关问题
+  - 如何评测3d
+  - 如何评测poses
+  - 如何在window之间将correspondence连起来，用来评测3d point tracking
+- sliding window相关问题
+  - VDPM在sliding window下，如何在window间进行对齐？（乘一个sim3？）
+  - 长序列下是否有drifting问题，是否要加BA之类的优化？
+  - 是否要加关键帧？
