@@ -784,6 +784,7 @@ Execution time: 683.297737 seconds for 96 images
     - pointmaps[pts3d]: torch.Size([1, 17, 294, 518, 3]), torch.float32, -0.5402331352233887, 2.065545082092285
     - pointmaps[conf]: torch.Size([1, 17, 294, 518]), torch.float32, 1.0000206232070923, 25.831775665283203
   - 其中，pointmaps是一个长度为S的list，其中第i个元素是一个dict，保存的是所有帧**在第i帧时刻下，在第0帧视角下**的point map和confidence。
+  - 其中，pose_enc可以通过pose_encoding_to_extri_intri()提取出extrinsic和intrinsic。其中，extrinsic本来是world to camera，但在visualise.py的实例中inv成 camera to world 4x4 matrix了。
 
 PointOdyssey数据集处理好了。尝试在test / val上面评价3d point map、poses、3d point tracking。
 
