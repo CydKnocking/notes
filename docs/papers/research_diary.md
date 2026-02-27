@@ -806,3 +806,19 @@ PointOdyssey用来测试benchmark的Dataset写好了。
 PointOdyssey中，anno.npz中的extrinsics是world to camera transformation matrix。
 
 沿用0222的任务，继续。
+
+
+### 0224
+
+VDPM网络的输出，通过转化后的extrinsic是world to camera，但是在visualize.py中的compute_predictions()中转换成了camera to world。
+
+或许把point map的evaluation给搞定了。沿用0222的任务，继续。
+
+
+### 0225
+
+把poses的evaluation给搞定了。
+
+考虑3d point tracking的evaluation：
+- 可以先用只在第一帧里visible的点来eval。它们的tracks是 $P_{0}(t_i, \pi_0)$ ，其中t_i是所有的时间戳。
+- 再好好想想correspondences如何在window之间连起来？如果要靠overlap的P_{t_i}(t_i, \pi_i)的话，那如何处理
