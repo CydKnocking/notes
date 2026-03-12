@@ -822,3 +822,16 @@ VDPM网络的输出，通过转化后的extrinsic是world to camera，但是在v
 考虑3d point tracking的evaluation：
 - 可以先用只在第一帧里visible的点来eval。它们的tracks是 $P_{0}(t_i, \pi_0)$ ，其中t_i是所有的时间戳。
 - 再好好想想correspondences如何在window之间连起来？如果要靠overlap的P_{t_i}(t_i, \pi_i)的话，那如何处理
+
+
+### 0312
+
+St4RTrack的infer.py的保存文件：
+- conf1_p0.npy, conf2_p0.npy: (H, W), float32
+- img1_p0.png, img2_p0.png
+- pts3d1_p0.npy, pts3d2_p0.npy: (H, W, 6), float32. 最后一维(x, y, z, r, g, b).
+
+cab_e_3rd_6
+dancingroom1_3rd1_14
+dancingroom1_3rd2_5
+seminar_g110_0315_ego1_18
