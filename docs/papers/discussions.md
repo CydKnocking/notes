@@ -105,3 +105,18 @@ TODO：
 1. 找到Any4D的failure case（depth+pose+track）
 2. 试试window+optional inputs
 3. 试试local BA，看看长序列的表现
+
+## 20260309 with 老颜
+
+基于VDPM
+1. vgg-t^3的at scale
+2. efficiency (fast-vggt)
+3. streaming: two-view好改，multi-view的error accumulation更小
+
+现阶段baseline:
+track-on2（2d在线）, st4rtrack（4d在线）, vdpm（离线sota）
+
+在线的baseline查推理速度，是不是realtime。精度差在哪儿。
+
+整理rel work，列出各自故事上主要的feature，考虑加到上述三个baseline的可行性和代价。
+
