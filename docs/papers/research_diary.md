@@ -767,6 +767,7 @@ decode time: 527.383065 seconds, avg 5.493574 s/frame
 point head time: 142.252627 seconds, avg 1.481798 s/frame
 camera head time: 1.118869 seconds
 Execution time: 683.297737 seconds for 96 images
+GPU: 58274 MB
 
 - aggregator包含了image encoding的backbone，camera token + time token + register token + 图像 patch token的concat，以及帧内self-attention和帧间cross-attention。
   
