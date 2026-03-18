@@ -19,7 +19,9 @@ baseline: VDPM
 - [DynamicVGGT](https://arxiv.org/pdf/2603.08254)
   自动驾驶场景的动态4d场景重建。
 
-  
+  1. MTA，感知时间注意力模块，并且于VGGT原先的alternative attn模块并行。
+  2. 增加了Future point head用于预测未来点图。
+  3. 动态3dgs头
 
 - [VGGT-World](https://arxiv.org/abs/2603.12655)
   把VGGT改成可以“预测未来3D几何演变的几何世界模型”，在geometry fundation model的高维特征空间中预测未来的几何状态（相比预测视频外观，更能保证3d结构的一致性）。
