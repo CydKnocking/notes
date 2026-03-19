@@ -95,6 +95,31 @@ baseline: VDPM
   4. 将第一帧所有token设为不可变。
   5. 基于StreamVGGT的改造，永乐因果时间注意力
 
+- [OVGGT](https://arxiv.org/abs/2603.05959)
+  Training-free。O(1)的显存复杂度。（静态场景）
+
+  把kv cache压缩到固定大小。
+  1. 用transformer中间残差的幅度，评价token几何重要性。
+  2. 引入spatial gaussian smoothing确保留下来的token有空间连贯性。
+  3. 结合当前帧激活值+历史缓存的特征多样性，淘汰冗余token
+  4. 把第一帧token保存。
+  5. 时空注意力
+
+- [XStreamVGGT](https://arxiv.org/abs/2601.01204)
+  Training-free。基于StreamVGGT继续改进。
+
+  kv-cache
+  1. 保留首帧和当前帧
+  2. 中间帧的token通过query pooling进行压缩，基于压缩后的q和key的相似度保留top-k token。
+  3. 精度量化：对key张量采用per-channel量化；对value采用per-token量化
+
+- [FrameVGGT](https://arxiv.org/abs/2603.07690)
+  Training-free。基于infiniteVGGT。
+
+  1. 不用token级别的兼职，而将每一帧的kv-cache作为完整的块进行保留/丢弃，能够保证局部几何结构。（类似关键帧）
+  2. 中短期即以苦：将每帧的块进行压缩，基于距离的贪心策略，选择块的去留。
+  3. 全局锚点层。
+
 
 ### 效率提升，减少开销
 
@@ -124,7 +149,16 @@ baseline: VDPM
   1. 早期层特征缺乏3d信息，无法建立对应关系 -> 把早期层(前9层)的global attn换成单帧attn。
   2. 中间层负责跨视角对齐，晚期层负责微小的特征细化 -> 类似“稀疏点云对齐”，在有global attn的层对key value用2d网格均匀稀疏采样，保留所有query。（还有对角线保留、均值填补）
 
-
+- [LiteVGGT](https://arxiv.org/abs/2512.04939)
+  
+  1. 通过融合像素梯度和token方差，评估token的“几何重要性”
+  2. 保留前10%的token作为“global-aware tokens”
+  3. 相邻层的token相似度非常稳定 -> 每6层才计算一次
+  4. FP8量化
+  
+  微调网络：
+  1. 微调aggregator、camera head、depth head
+  2. 8张H20，3天
 
 
 
@@ -181,22 +215,16 @@ baseline: VDPM
   1. float32降成BFloat16
   2. 引入分块帧级注意力处理
 
-
-
-
-
-
-
-
 - [Dense Semantic Matching with VGGT Prior](https://arxiv.org/abs/2509.21263)
+  用VGGT做密集语义匹配。保留VGGT早期的3D几何先验，微调后续层来提取语义token，用DPT做语义匹配头。
 
-- [OVGGT](https://arxiv.org/abs/2603.05959)
 
-- [XStreamVGGT](https://arxiv.org/abs/2601.01204)
 
-- [FrameVGGT](https://arxiv.org/abs/2603.07690)
 
-- [LiteVGGT](https://arxiv.org/abs/2512.04939)
+
+
+
+
 
 - [SwiftVGGT](https://arxiv.org/abs/2511.18290)
 
