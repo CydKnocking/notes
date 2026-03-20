@@ -2,37 +2,90 @@
 
 ## xxx3R/xxx4R 相关
 
+这篇文章主要做了什么工作？它基于什么已有的工作？和它基于的工作相比，关系和不同在哪？
+
 baseline: St4RTrack
 
-- [DUSt3R](https://github.com/naver/dust3r)
+- [DUSt3R](https://arxiv.org/abs/2312.14132)
+  提出了用transformer估计pointmap，可以做到像素级匹配、估计相机参数、场景几何。pair-wise。
 
-- [MonST3R](https://github.com/Junyi42/monst3r)
+### 动态场景重建 / 跟踪
 
-- [Spann3R](https://github.com/HengyiWang/spann3r)
+- [MonST3R](https://arxiv.org/abs/2410.03825)
+  基于dust3r做动态场景。
 
-- [CUT3R](https://github.com/CUT3R/CUT3R)
-
-- [Point3R](https://github.com/YkiWu/Point3R)
-
-- [TTT3R](https://github.com/Inception3D/TTT3R)
-
-- [Pow3R]
-
-- [MASt3R-SLAM](https://github.com/rmurai0610/MASt3R-SLAM)
-
-- [SLAM3R]
+  1. 冻结encoder进行了重新训练
+  2. sliding window.
 
 - [POMATO](https://arxiv.org/pdf/2504.05692)
+  动态场景3d重建。
 
-- [Flow3r](https://github.com/Kidrauh/flow3r)
+  引入：
+  1. 新的matching head，预测第2帧图像在第1帧时刻下的pointmap
+  2. 时间运动模块，在时间维度上加注意力机制
 
-- [Flow4R](https://shenhanqian.github.io/flow4r)
+- [Flow3r](https://arxiv.org/abs/2602.20157)
+
+- [Flow4R](https://arxiv.org/abs/2602.14021)
+  
+
+### 增量式 / 序列 / SLAM / 实时
+
+- [Spann3R](https://arxiv.org/abs/2408.16061)
+  引入Spatial Memory增量式重建。基于dust3r。
+
+  基于memory，实现每一帧都在全局坐标系下进行估计，同时能够对齐点云。
+
+  记忆分为
+  1. 工作记忆。保存最近5帧的特征。短期记忆
+  2. 长期记忆。记录每个token被“关注”(attn)的累积权重，只保留top-k。
+
+- [CUT3R](https://arxiv.org/pdf/2501.12387)
+  在线、连续的密集3d重建。支持动态场景。基于dust3r。十几fps。
+
+  基于persistent state。
+
+- [Point3R](https://arxiv.org/abs/2507.02863)
+  streaming 3d recon。基于spann3r和cut3r。
+
+  基于显式空间指针内存。
+  1. 不存储历史帧，而是探索过的物理位置的feature。
+  2. 动态扩展，会将物理距离相近的新旧指针进行合并。
+
+- [TTT3R](https://arxiv.org/abs/2509.26645)
+  解决在线3d recon处理长序列的灾难性遗忘问题。基于cut3r。training-free。对hidden state进行带权重的更新。
+
+- [MASt3R-SLAM](https://arxiv.org/abs/2412.12392)
+  基于mast3r构建slam。15fps。
+
+  基于射线角度进行局部优化；基于射线误差；引入sim(3)的二阶全局优化器。
+
+- [SLAM3R](https://arxiv.org/abs/2412.09401)
+  20+FPS。基于dust3r。
+
+  1. Image-to-Points：对sliding window预测局部坐标系下的3d。把dust3r从两帧改到多帧，引入多视角交叉注意力。
+  2. local-to-world：通过feed-forward网络增量式将局部点云融合到全局。
+
+- [STream3R](https://arxiv.org/pdf/2508.10893)
+  streaming处理。重点改造decoder。有基于dust3r和vggt的两种变体
+
+  1. 因果注意力
+  2. kv-cache
+
+
+
+
+### 其他改进
+
+- [Pow3R](https://arxiv.org/abs/2503.17316)
+  支持rgb，内参，外参等多种输入。
+
+
+
 
 - [DDUSt3R](https://cvlab-kaist.github.io/DDUSt3R/)
 
 - [Human3R](https://arxiv.org/pdf/2510.06219)
-
-- [STream3R](https://arxiv.org/pdf/2508.10893)
 
 - [Test3R](https://openreview.net/pdf?id=UcKYgtOIuX)
 
@@ -120,6 +173,24 @@ baseline: VDPM
   2. 中短期即以苦：将每帧的块进行压缩，基于距离的贪心策略，选择块的去留。
   3. 全局锚点层。
 
+- [SwiftVGGT](https://arxiv.org/abs/2511.18290)
+  大规模场景（自动驾驶公里级）。保证3d重建和跟踪精度，降低推理时间。主要与VGGT-Long对比。
+
+  1. 块对齐时，基于深度图对齐差异和置信度的采样，采样的点直接用SVD对齐。
+  2. loop closure的时候，直接用DINO图像块token转换成全局描述符，无需其他模型。
+
+- [LongStream](https://arxiv.org/pdf/2602.13172)
+  3D重建长序列，解决轨迹崩溃、尺度漂移、外推失败。18FPS。
+
+  “规范解耦”
+  1. 预测当前帧相对局部关键帧的相对位姿（而不是相对第一帧）
+  2. 引入scale token和尺度预测头。将几何形状和尺度预测解耦，减少尺度漂移。
+  3. StreamVGGT遇到“注意力下沉”问题，导致长序列跟踪失败 -> 缓存一致性训练（Cache-consistent training），训练时截断并传递kv-cache。在推理时采用周期性缓存刷新策略。
+  
+  重新训练了
+  1. 一阶段32张A100，3天
+  2. CCT训练
+
 
 ### 效率提升，减少开销
 
@@ -185,6 +256,12 @@ baseline: VDPM
   2. 增加了Future point head用于预测未来点图。
   3. 动态3dgs头
 
+- [VGGT4D](https://arxiv.org/abs/2511.19971)
+  动态4D场景重建。Training-free。
+
+  1. 发现attn层的Gram相似度隐式的编码了物体运动信息 -> 跨帧聚合浅层、中层、深层的gram相似度统计数据，可以直接提取动态物体的初始mask（不依赖其他模块）
+  2. mask细化阶段，利用点云投影的几何和广度残差梯度。
+  3. 在1-5层主动屏蔽动态图像token，防止运动信息干扰后续的几何推理过程。
 
 ### 其他任务
 
@@ -218,19 +295,6 @@ baseline: VDPM
 - [Dense Semantic Matching with VGGT Prior](https://arxiv.org/abs/2509.21263)
   用VGGT做密集语义匹配。保留VGGT早期的3D几何先验，微调后续层来提取语义token，用DPT做语义匹配头。
 
-
-
-
-
-
-
-
-
-- [SwiftVGGT](https://arxiv.org/abs/2511.18290)
-
-- [VGGT4D](https://arxiv.org/abs/2511.19971)
-
-- [LongStream](https://arxiv.org/pdf/2602.13172)
 
 
 ## 其他模型相关
