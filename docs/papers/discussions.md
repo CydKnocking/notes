@@ -120,3 +120,18 @@ track-on2（2d在线）, st4rtrack（4d在线）, vdpm（离线sota）
 
 整理rel work，列出各自故事上主要的feature，考虑加到上述三个baseline的可行性和代价。
 
+
+## 20260320 with 老颜
+
+VGGT部分可以做的结论：
+1. vdpm+序列输入（check一下training-free是基于VGGT的还是StreamVGGT的）
+2. vdpm+多视图提升效率，减少开销，做成unending（离线可以处理很多帧，效率变高）
+3. 特性挖掘：feed-forward 3d recon models are robust 3d tracker??得先确定要做什么目的，比如提取tracking/motion之类的
+
+优先check一下：
+1. 流式这块，如果OVGGT是基于VGGT的话，那它们的training-free可以直接拿过来用（不必像StreamVGGT重训）
+2. 3r那边，看看St4rtrack能不能类似地加memory
+3. pi^3的几何还是比VDPM好，看看vggt, pi^3能不能做4d recon is tracker
+
+想好：
+1. 实验要对比的baseline（recon / pose / 2d or 3d point track），对比的方法，数据集
