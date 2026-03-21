@@ -83,13 +83,13 @@ baseline: St4RTrack
 
 
 
-- [DDUSt3R](https://cvlab-kaist.github.io/DDUSt3R/)
+- [DDUSt3R](https://arxiv.org/abs/2504.06264)
 
 - [Human3R](https://arxiv.org/pdf/2510.06219)
 
-- [Test3R](https://openreview.net/pdf?id=UcKYgtOIuX)
+- [Test3R](https://arxiv.org/abs/2506.13750)
 
-- [PointSt3R](https://openaccess.thecvf.com/content/WACV2026/papers/Guerrier_PointSt3R_Point_Tracking_through_3D_Ground_Correspondence_WACV_2026_paper.pdf)
+- [PointSt3R](https://arxiv.org/abs/2510.26443)
 
 - [Rig3R](https://arxiv.org/pdf/2506.02265)
 
@@ -97,9 +97,9 @@ baseline: St4RTrack
 
 - [MUT3R](https://arxiv.org/pdf/2512.03939)
 
-- [PAD3R](https://dl.acm.org/doi/epdf/10.1145/3757377.3763836)
+- [PAD3R](https://arxiv.org/pdf/2509.25183)
 
-- [Regist3R](https://dl.acm.org/doi/epdf/10.1145/3746027.3755466)
+- [Regist3R](https://arxiv.org/abs/2504.12356)
 
 - [SIU3R](https://arxiv.org/pdf/2507.02705)
 
@@ -107,7 +107,7 @@ baseline: St4RTrack
 
 - [Evict3R](https://arxiv.org/abs/2509.17650)
 
-- [Mono3R](https://dl.acm.org/doi/epdf/10.1145/3746027.3755722)
+- [Mono3R](https://arxiv.org/abs/2504.13419)
 
 - [NOVA3R](https://arxiv.org/abs/2603.04179)
 
