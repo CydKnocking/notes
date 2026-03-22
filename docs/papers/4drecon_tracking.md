@@ -4,7 +4,7 @@
 
 这篇文章主要做了什么工作？它基于什么已有的工作？和它基于的工作相比，关系和不同在哪？
 
-baseline: St4RTrack
+baseline: [St4RTrack](https://arxiv.org/abs/2504.13152)
 
 - [DUSt3R](https://arxiv.org/abs/2312.14132)
   提出了用transformer估计pointmap，可以做到像素级匹配、估计相机参数、场景几何。pair-wise。
@@ -25,9 +25,28 @@ baseline: St4RTrack
   2. 时间运动模块，在时间维度上加注意力机制
 
 - [Flow3r](https://arxiv.org/abs/2602.20157)
+  4d重建+光流。
+
+  因式分解流预测：
+  1. 用现有光流方法生成pseudo-gt
+  2. 以不同的token组合作为输入，可以生成不同帧的光流
 
 - [Flow4R](https://arxiv.org/abs/2602.14021)
+  4d重建+场景流。对称设计。处理流的模式和st4rtrack一样，都是固定第一帧，滑第二帧。
+
+- [DDUSt3R](https://arxiv.org/abs/2504.06264)
+  动态场景重建。
   
+  1. 利用已有的方法(SEA-RAFT)或数据集的光流真值，分别针对动态-静态区域的3d预测设计了监督目标。
+  2. 多了两个预测头：动态mask预测头（基于DPT），光流预测头（基于RAFT）。
+
+- [PointSt3R](https://arxiv.org/abs/2510.26443)
+  动态重建+点跟踪（2d3d都可以）。其实可以看作是点匹配问题，因为输入是两帧，网络做的是2-frame dense correspondence。基于mast3r。
+
+  1. 添加动态点匹配的损失函数，和一个visibility head。
+
+
+
 
 ### 增量式 / 序列 / SLAM / 实时
 
@@ -80,16 +99,16 @@ baseline: St4RTrack
 - [Pow3R](https://arxiv.org/abs/2503.17316)
   支持rgb，内参，外参等多种输入。
 
-
-
-
-- [DDUSt3R](https://arxiv.org/abs/2504.06264)
-
 - [Human3R](https://arxiv.org/pdf/2510.06219)
+  4d人物+场景重建框架。feed-forward输出所有人体的3d人体网格+3d点云+相机位姿。
+
+  3d人体网格是基于Multi-HMR这个工作。
 
 - [Test3R](https://arxiv.org/abs/2506.13750)
+  test-time training。基于dust3r。
 
-- [PointSt3R](https://arxiv.org/abs/2510.26443)
+  在测试时，用不同的输入图像组合的结果（1+2, 1+3），用“一致性”来监督网络。在dust3r的Transformer编码器层插入少量可学习的token进行微调。
+
 
 - [Rig3R](https://arxiv.org/pdf/2506.02265)
 
