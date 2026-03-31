@@ -836,3 +836,11 @@ cab_e_3rd_6
 dancingroom1_3rd1_14
 dancingroom1_3rd2_5
 seminar_g110_0315_ego1_18
+
+
+### 0326
+
+- [Track4World](arxiv.org/abs/2603.02573)
+
+- [DROID-W](arxiv.org/abs/2603.19076)
+
