@@ -41,9 +41,13 @@ baseline: [St4RTrack](https://arxiv.org/abs/2504.13152)
   2. 多了两个预测头：动态mask预测头（基于DPT），光流预测头（基于RAFT）。
 
 - [PointSt3R](https://arxiv.org/abs/2510.26443)
-  动态重建+点跟踪（2d3d都可以）。其实可以看作是点匹配问题，因为输入是两帧，网络做的是2-frame dense correspondence。基于mast3r。
+  动态重建+点跟踪（2d3d都可以）。其实可以看作是点匹配问题，本文只用3d grounded correspondence就能做好tracking。输入是两帧，网络做的是2-frame dense correspondence。基于mast3r。
 
   1. 添加动态点匹配的损失函数，和一个visibility head。
+  2. 直接在提取的特征图上，对query point通过余弦相似度找对应点，对多帧找对应点其实就是tracks。（只是2d图像空间）
+  3. 由于自身可以输出point map，所以可以把上述过程给lift到3d。
+  
+  文中有对cotracker3，mast3r，本文方法提取的特征的可视化。
 
 
 
