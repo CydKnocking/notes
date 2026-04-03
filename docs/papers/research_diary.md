@@ -858,9 +858,18 @@ seminar_g110_0315_ego1_18
   **需要调研一下stable video diffusion相关的文章和方法**
 
 - [RayMap3R](https://arxiv.org/abs/2603.20588)
+  
+  training-free。基于CUT3R的工作。
+
+  两个分支。
+  1. 原分支输入图像特征和RayMap特征，预测完整的场景深度和置信度
+  2. RayMap分支只输入RayMap特征（因为缺乏图像外观信息，这个分支会利用memory中的长期一致性结构进行预测），会预测出更偏向于静态背景的深度
+  3. 将上述两个深度，计算相对深度差异，得到动态区域mask。
+  4. 在更新latent时，采用门控更新，抑制动态区域的memory更新
+  5. 由于要防止内存漂移，要每50帧要重置一次memory，会导致scale不一致。在重置时算一次Sim(3)。
 
 - [FILT3R](https://arxiv.org/abs/2603.18493)
-
+  
   CUT3R和TTT3R的后续工作，training-free。
 
   把latent space的更新视为在token空间的随机状态估计问题，用了卡尔曼滤波。并证明CUT3R和TTT3R是卡尔曼滤波的特解。
