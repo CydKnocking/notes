@@ -843,6 +843,24 @@ seminar_g110_0315_ego1_18
 - [Track4World](arxiv.org/abs/2603.02573)
 
 - [DROID-W](arxiv.org/abs/2603.19076)
+=======
+### 0402
+
+- [MotionCrafter: Dense Geometry and Motion Reconstruction with a 4D VAE](https://arxiv.org/abs/2602.08961)
+  一个生成式4d重建+scene flow。
+
+  主要模块：
+  1. 一个4D VAE，将geometry和motion同时encode进4D latent空间。用合成数据集的gt geometry和scene flow做训练。
+  2. 一个基于Stable Video Diffusion微调的扩散模型，在4D latent空间里进行扩散。
+  
+  用的是diffusion，是不是可以自然地用去做3d一致的世界模型？
+
+  **需要调研一下stable video diffusion相关的文章和方法**
+
+- [RayMap3R](https://arxiv.org/abs/2603.20588)
+
+- [FILT3R](https://arxiv.org/abs/2603.18493)
+>>>>>>> update
 
 ### 0402
 
