@@ -844,6 +844,7 @@ seminar_g110_0315_ego1_18
 
 - [DROID-W](arxiv.org/abs/2603.19076)
 
+
 ### 0402
 
 - [MotionCrafter: Dense Geometry and Motion Reconstruction with a 4D VAE](https://arxiv.org/abs/2602.08961)
@@ -874,3 +875,7 @@ seminar_g110_0315_ego1_18
 
   把latent space的更新视为在token空间的随机状态估计问题，用了卡尔曼滤波。并证明CUT3R和TTT3R是卡尔曼滤波的特解。
 
+
+### 0407
+
+- [Geo4D](https://arxiv.org/abs/2504.07961)
