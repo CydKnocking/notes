@@ -879,3 +879,38 @@ seminar_g110_0315_ego1_18
 ### 0407
 
 - [Geo4D](https://arxiv.org/abs/2504.07961)
+
+
+### 0413
+
+- [Self-Improving 4D Preception via Self-Distillation](arxiv.org/abs/2604.08532)
+
+- [Mem3R](https://arxiv.org/abs/2604.07279)
+  
+  长序列流式重建，解决误差积累和时序遗忘问题。
+
+- [Scal3R](https://arxiv.org/abs/2604.08542)
+  
+  公里级长序列重建，test-time training。基于VGGT加的TTT。
+
+  1. 分段处理（分sliding window），多GPU并行
+  2. 在global attn层后加了个轻量的神经全局上下文记忆模块GCM：
+     1. GCM学习的是从key映射到value，学好后就可以用query直接查询得到output
+     2. GCM需要和VGGT一块的端到端离线训练。32张A800训练3天。
+     3. GCM的在线更新阶段，会通过全局上下文同步GCS，通过all-reduce在不同GPU之间同步。
+
+- [HyVGGT-VO](https://arxiv.org/abs/2604.02107)
+  
+  异步VO。
+  
+  前端：基于KLT稀疏光流的高效VO + VGGT增加鲁棒性。
+
+  分层后端：第一阶段，基于共视关系的local BA；第二阶段，将VGGT预测的相对位姿作为结构约束，进行局部位姿图优化。
+
+- [PTC-Depth](https://arxiv.org/abs/2604.01791)
+  
+  针对移动机器人和自动驾驶的单目深度估计。
+
+  1. 利用光流计算相对运动，结合轮式odometry提供的baseline，通过recursive Bayesian update修正深度的绝对尺度。
+  2. 从光流中估计相机相对位姿
+  3. 将三角测量的稀疏深度，和深度估计fundation model的相对深度进行融合。
