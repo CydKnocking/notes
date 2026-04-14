@@ -8,7 +8,7 @@ This is Knocking's personal notebook.
 Please "Ctrl+F5" to update newest notes.
 
 ## Recent updates
-- [research_diary.md](papers/research_diary/) <div style="text-align: right">2026-04-14 16:35:56.588660</div>
+- [research_diary.md](papers/research_diary/) <div style="text-align: right">2026-04-14 20:57:15.708199</div>
 - [4drecon_tracking.md](papers/4drecon_tracking/) <div style="text-align: right">2026-04-07 17:55:46.151466</div>
 - [discussions.md](papers/discussions/) <div style="text-align: right">2026-03-22 21:12:59.910064</div>
 - [point_tracking.md](papers/point_tracking/) <div style="text-align: right">2026-02-23 23:00:31.439572</div>
