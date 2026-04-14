@@ -883,7 +883,7 @@ seminar_g110_0315_ego1_18
 
 ### 0413
 
-- [Self-Improving 4D Preception via Self-Distillation](arxiv.org/abs/2604.08532)
+- [Self-Improving 4D Preception via Self-Distillation](http://arxiv.org/abs/2604.08532)
   
   对3d fundamental model的自蒸馏方法，可用于VGGT、pi3等。
 
