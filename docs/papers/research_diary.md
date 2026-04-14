@@ -884,10 +884,28 @@ seminar_g110_0315_ego1_18
 ### 0413
 
 - [Self-Improving 4D Preception via Self-Distillation](arxiv.org/abs/2604.08532)
+  
+  对3d fundamental model的自蒸馏方法，可用于VGGT、pi3等。
+
+  1. teacher模型
+     1. 输入的帧数更多，上下文更丰富。输入帧数在24-64帧。
+     2. 输出伪标签。（梯度截断）
+  2. student模型
+     1. 输入的帧数更少（teacher的子集）。帧数在2-12帧。随机帧丢弃。
+     2. 以teacher的输出为监督目标。
+  3. 损失函数：点图预测对齐 + 特征匹配损失（但无一致性增益，故不用）
+  4. 更新方式
+     1. student通过损失函数直接更新。
+     2. teacher通过EMA更新，lambda设为0.995(VGGT)和0.99(pi3)。
 
 - [Mem3R](https://arxiv.org/abs/2604.07279)
   
-  长序列流式重建，解决误差积累和时序遗忘问题。
+  长序列流式重建，解决误差积累和时序遗忘问题。基于CUT3R改的。
+
+  1. 隐式记忆：轻量级SwiGLU MLP层，记为f(·)，其权重是test-time training。
+     1. 可以通过query q_t，得到位姿先验$\hat{p}_t = f(q_t)$，$\hat{p}_t$替代了CUT3R中的可学习位姿token z_t。
+     2. 后面的解码器产生后验位姿p_t后，通过$L(\hat{p}_t, p_t)= <\hat{p}_t, p_t>$更新。
+  2. 显式记忆：一组固定数量的token。通过通道级门控更新。
 
 - [Scal3R](https://arxiv.org/abs/2604.08542)
   
@@ -914,3 +932,63 @@ seminar_g110_0315_ego1_18
   1. 利用光流计算相对运动，结合轮式odometry提供的baseline，通过recursive Bayesian update修正深度的绝对尺度。
   2. 从光流中估计相机相对位姿
   3. 将三角测量的稀疏深度，和深度估计fundation model的相对深度进行融合。
+
+
+### 0414
+
+- [VGGT-SLAM++](https://arxiv.org/abs/2604.06830)
+  
+  前端：RGB按照视差分成子图（每个子图最多32帧），用VGGT输出深度图、点云、位姿；相邻子图通过Sim(3)对齐。
+
+  DEM子地图构建：
+
+  1. 对VGGT输出的3D点，用RANSAC + SVD拟合主平面（地面/地板）
+  2. 将所有点变换到平面对齐的标准正交坐标系(u,v,h)，h为相对平面高度
+  3. 高度场光栅化。
+  4. 全局DEM切分成2x2米的小tile，每个tile独立索引。
+  
+  共视图构建：
+
+  1. 每个DEM tile送入DINOv2，加了高斯位置权重（抑制边界噪声）和可见性掩码。
+  2. 新查询子地图的chip和全局DEM tile通过余弦相似度算相似性，得分高的认为是共视邻居，在共视图里连边。
+  
+  后端：对共视图的所有回环边，通过Sim(3)进行优化。
+  
+- [ViBA](https://arxiv.org/abs/2604.03377)
+  
+  把可微分BA融合到feature matching框架。
+
+- [StereoVGGT](https://arxiv.org/abs/2603.29368)
+  
+  基于VGGT的training free，在encoding阶段融合了VGGT(多视角几何)、moge-2(单目深度)、DINOv2(语义)三种特征，保留结构细节和相机几何先验。
+
+  1. 熵最小化权重合并。几种特征通过线性加权得到最终特征，权重通过最小化信息熵得到。
+  2. 通过VGGT的frame attention对特征进行调制并加权。
+
+- [Reliev3R](https://www.arxiv.org/abs/2604.00548)
+  
+  弱监督训练feed-forward recon model，无需3d真值标注。基于pi3做的修改。
+
+  伪标签来源是depth pro估计的深度、cotracker生成的稀疏2d点对应。
+
+- [Robust 4D Visual Geometry Transformer with Uncertainty-Aware Priors](https://arxiv.org/abs/2604.09366)
+  
+  基于VGGT的training free。动态场景重建框架，解决VGGT因运动物体导致的几何歧义和姿态漂移问题。
+
+  动态区域的本质是多视图几何中表现的**高不确定性**：注意力方差大、局部几何不一致、投影置信度低。
+
+- [Who Handles Orientation? Investigating Invariance in Feature Matching](https://arxiv.org/abs/2604.11809)
+  
+- [Online3R](https://arxiv.org/abs/2604.09480)
+
+- [Point2Pose](https://arxiv.org/abs/2604.10415)
+
+- [LoMa](https://arxiv.org/abs/2604.04931)
+  
+- [TAPNext++](https://arxiv.org/abs/2604.10582)
+
+- [IncVGGT](https://www.scholar-inbox.com/paper/p2rlao/detail)
+  
+- [DINO-VO](https://arxiv.org/abs/2604.04055)
+  
+- [ReFlow](https://arxiv.org/abs/2604.01561)
