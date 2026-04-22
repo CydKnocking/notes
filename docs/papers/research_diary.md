@@ -1003,7 +1003,7 @@ seminar_g110_0315_ego1_18
   - Aggregator：VGGT网络，24层alternate attention block，每个block内一层self-attn + 一层global-attn。第4、11、17、23层（从0开始）的特征会输出给Decoder。
   - Decoder：两层alternate conditional attention block，用的时候会以不同帧的time token为condition。
 
-- 方案1：只在Aggregator里的global attn层加causal attn，可以得到一个时序上增量式的temporal corresponding aware的latent feature。然后把Decoder + camera head + point head 看作统一的decode模块，既可以解码出每一帧各自时刻下的point map，也可以解码出any frame at any time。
+- 方案1：只在Aggregator里的global attn层加causal attn，可以得到一个时序上增量式的temporal corresponding aware的latent feature。然后把Decoder + camera head + point head 看作统一的decode模块，既可以解码出每一帧各自时刻下的point map，也可以解码出any frame at any time。**Why should we do this?** The Aggregator in original VDPM is time efficient enough.
 
 
 
