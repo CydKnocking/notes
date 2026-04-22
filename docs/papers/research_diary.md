@@ -992,3 +992,24 @@ seminar_g110_0315_ego1_18
 - [DINO-VO](https://arxiv.org/abs/2604.04055)
   
 - [ReFlow](https://arxiv.org/abs/2604.01561)
+
+
+
+### 0422
+
+关于VDPM网络如何改成时序增量的处理方式：
+
+- 原本的VDPM网络
+  - Aggregator：VGGT网络，24层alternate attention block，每个block内一层self-attn + 一层global-attn。第4、11、17、23层（从0开始）的特征会输出给Decoder。
+  - Decoder：两层alternate conditional attention block，用的时候会以不同帧的time token为condition。
+
+- 方案1：只在Aggregator里的global attn层加causal attn，可以得到一个时序上增量式的temporal corresponding aware的latent feature。然后把Decoder + camera head + point head 看作统一的decode模块，既可以解码出每一帧各自时刻下的point map，也可以解码出any frame at any time。
+
+
+
+
+
+
+现在,我在之前的代码上进行了一些debug.我现在发现,VDPM一开始的inference()中,之所以self.aggregator阶段可以对所有帧一起处理,而self.decoder阶段有个for循环,这么做的原因是,self.decoder这个网络本质上是一个conditional
+
+
