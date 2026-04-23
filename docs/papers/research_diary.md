@@ -1006,10 +1006,26 @@ seminar_g110_0315_ego1_18
 - 方案1：只在Aggregator里的global attn层加causal attn，可以得到一个时序上增量式的temporal corresponding aware的latent feature。然后把Decoder + camera head + point head 看作统一的decode模块，既可以解码出每一帧各自时刻下的point map，也可以解码出any frame at any time。**Why should we do this?** The Aggregator in original VDPM is time efficient enough.
 
 
+### 0423
 
+VDPM原版用的数据集：
+
+- ScanNet++: 04只有一部分，05没有
+- Blended-MVS
+- Kubric-F
+- Kubric-G
+- PointOdyssey: 04 05都有
+- Waymo
 
 
 
 现在,我在之前的代码上进行了一些debug.我现在发现,VDPM一开始的inference()中,之所以self.aggregator阶段可以对所有帧一起处理,而self.decoder阶段有个for循环,这么做的原因是,self.decoder这个网络本质上是一个conditional
+
+
+HTTPS_PROXY=http://127.0.0.1:7890 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 torchrun --nproc_per_node=8 --master_port=14725 train_distill.py \
+    --dataset data/point_odyssey \
+    --S 20
+
+
 
 
