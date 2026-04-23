@@ -1026,6 +1026,11 @@ HTTPS_PROXY=http://127.0.0.1:7890 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 torchrun 
     --dataset data/point_odyssey \
     --S 20
 
+TODO: 
+- [ ] 更多的数据集
+- [ ] 训练方式：loss是用教师-学生网络，还是像StreamVGGT那样用真值
+- [ ] inference方式：增量式
+- [ ] 论文表1表2测评
 
 
 
