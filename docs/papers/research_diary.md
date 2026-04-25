@@ -1033,4 +1033,10 @@ TODO:
 - [ ] 论文表1表2测评
 
 
+### 0425
+
+check一下flashattention是否支持attn_mask
+
+考虑利用decoder里的attention稀疏性、、、
+
 
