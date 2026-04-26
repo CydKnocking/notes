@@ -1040,3 +1040,27 @@ check一下flashattention是否支持attn_mask
 考虑利用decoder里的attention稀疏性、、、
 
 
+### 0426
+
+可以用pytorch自带的FlexAttention，它可以自定义任何attention mask，或者可以进行score modification。
+
+仔细check一下decoder里四层layer中global attention score的特点：
+- agg04_layer3: 对每一帧的相应位置邻域空间都有较高的相应
+- agg11_layer2 & agg11_layer3: 动态区域和静态区域的分布不一样，动态区域的attention主要集中于动态区域，静态区域的attention似乎均匀分布在整张图里。
+
+- agg17_layer0: 同上，不过time condition现象更明显
+- agg17_layer1: 高相应只集中在time condition前后帧+匹配邻域
+- agg17_layer2: 动态区域高相应只集中在time condition前后帧+匹配区域，静态区域高相应集中在每一帧的匹配区域，当然time condition帧的相应总体最高。
+- agg17_layer3: 高相应只集中在time condition前后帧+匹配邻域
+
+- agg23_layerX: 似乎aggregator23层特征在decoder中任意层都在向time=0帧（及1 2 3帧等）看齐，似乎是在对齐世界坐标系。
+
+初步结论：
+- agg17的layer1 2 3在对特征进行time conditioning matching，会在target timestamp中的对应位置附近相应很高。对layer 1 2 3，可以将attention限制在(t - target_t)=3, 2, 1帧的范围。
+- agg23的layer1 2 3在将特征给对齐至世界坐标系(t=0)，会在t=0(和最后一帧)的响应比较显著。可以考虑layer 2 3，可以将attention限制在头4后4+头2后2帧里。
+
+
+我发现在原版VDPM的预训练权重中,Decoder中间的global attention呈现非常明显的稀疏性.具体而言,Decoder会输入Aggregator的中间层特征,并提取出第4,11,17,23层特征,再进行Decoder里的各种attention.其中,第17层aggregator特征在decoder里进行global
+attention时,在第1,2,3层(从第0层开始计数,不包含第0层)中计算global attention时,只对目标time condition帧及前后帧有较高的相应.现在,我在debug_code/debug_flex_attn.py这个文件中,知道了在计算attention的时候可以通过flex_attention来高效地处理带自定义attention
+mask的attention.请帮我结合以上要求,用flex_attention的实现方式,在decoder中对第17层aggregator特征,在第1,2,3层global
+attention时构建相应的mask,使得计算attention的时候,第1层只局限在cond_view_idxs前后3帧,第2层只局限在cond_view_idxs前后2帧,第3层只局限在cond_view_idxs前后1帧.
