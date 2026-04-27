@@ -1064,3 +1064,6 @@ check一下flashattention是否支持attn_mask
 attention时,在第1,2,3层(从第0层开始计数,不包含第0层)中计算global attention时,只对目标time condition帧及前后帧有较高的相应.现在,我在debug_code/debug_flex_attn.py这个文件中,知道了在计算attention的时候可以通过flex_attention来高效地处理带自定义attention
 mask的attention.请帮我结合以上要求,用flex_attention的实现方式,在decoder中对第17层aggregator特征,在第1,2,3层global
 attention时构建相应的mask,使得计算attention的时候,第1层只局限在cond_view_idxs前后3帧,第2层只局限在cond_view_idxs前后2帧,第3层只局限在cond_view_idxs前后1帧.
+
+
+### 0427
