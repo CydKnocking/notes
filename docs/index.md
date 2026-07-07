@@ -8,7 +8,7 @@ This is Knocking's personal notebook.
 Please "Ctrl+F5" to update newest notes.
 
 ## Recent updates
-- [pano_3drecon.md](papers/pano_3drecon/) <div style="text-align: right">2026-07-02 21:27:10.174831</div>
+- [pano_3drecon.md](papers/pano_3drecon/) <div style="text-align: right">2026-07-07 21:45:20.866209</div>
 - [4drecon_tracking.md](papers/4drecon_tracking/) <div style="text-align: right">2026-06-30 17:57:37.619412</div>
 - [research_diary.md](papers/research_diary/) <div style="text-align: right">2026-06-30 17:57:37.615412</div>
 - [3dgs.md](papers/3dgs/) <div style="text-align: right">2026-06-30 17:55:03.792695</div>
