@@ -16,3 +16,8 @@
   
   8张A100训练10天。用的数据集：PanoCity、Matterport3D、Stanford2D3D 和 Structured3D。
 
+- [VGGT-360](https://arxiv.org/abs/2603.18943)
+  
+  
+
+
