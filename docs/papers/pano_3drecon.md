@@ -18,6 +18,35 @@
 
 - [VGGT-360](https://arxiv.org/abs/2603.18943)
   
-  
 
+
+## 数据集
+
+- [360+x](https://x360dataset.github.io/)
+
+  动态场景。无3D标注。室内室外。
+
+- [Pano3D](https://vcl3d.github.io/Pano3D/)
+
+  静态场景。有3D标注。室内。
+
+- [Panorama_498](https://github.com/CrazyPhilip/Panorama_498)
+
+- [H-OmniStereo](https://github.com/JIANG-CX/H-OmniStereo)
+
+- [OmniStereo](https://sites.google.com/view/snu-rvlab/research/omnistereo)
+
+  合成数据集。动态场景。有depth标注，室外驾驶场景。
+
+- [SUN360]()
+
+- [Matterport3D](https://niessner.github.io/Matterport/)
+
+- [Holo360D](https://huggingface.co/datasets/ouou123/Holo360D)
+
+- [OmniHorizon](https://omnihorizon.github.io/)
+
+- [Stanford2D3D]()
+
+- [Structured3D]()
 
