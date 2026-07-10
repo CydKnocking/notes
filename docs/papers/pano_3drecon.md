@@ -40,7 +40,7 @@
 
 - [SUN360]()
 
-- [Matterport3D](https://niessner.github.io/Matterport/)
+- [Matterport3D](https://huggingface.co/datasets/Gen3DF/Matterport3d/tree/main/matterport3d)
 
 - [Holo360D](https://huggingface.co/datasets/ouou123/Holo360D)
 
@@ -48,5 +48,7 @@
 
 - [Stanford2D3D]()
 
-- [Structured3D]()
+- [Structured3D](https://huggingface.co/datasets/Gen3DF/Structured3D)
+
+- [2D-3D-S](https://github.com/alexsax/2D-3D-Semantics)
 
