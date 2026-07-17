@@ -3,13 +3,13 @@
 
 This is Knocking's personal notebook.
 
-杩欓噷鏄疜nocking鐨勪釜浜虹瑪璁版湰.
+这里是Knocking的个人笔记本.
 
 Please "Ctrl+F5" to update newest notes.
 
 ## Recent updates
-- [research_diary.md](papers/research_diary/) <div style="text-align: right">2026-07-17 16:21:00.079119</div>
-- [point_tracking.md](papers/point_tracking/) <div style="text-align: right">2026-07-17 16:21:00.079119</div>
-- [pano_3drecon.md](papers/pano_3drecon/) <div style="text-align: right">2026-07-10 22:34:37.041476</div>
-- [4drecon_tracking.md](papers/4drecon_tracking/) <div style="text-align: right">2026-06-30 17:57:37.619412</div>
-- [3dgs.md](papers/3dgs/) <div style="text-align: right">2026-06-30 17:55:03.792695</div>
+- [research_diary.md](papers\research_diary/) <div style="text-align: right">2026-07-17 20:51:35.619582</div>
+- [pano_3drecon.md](papers\pano_3drecon/) <div style="text-align: right">2026-07-17 20:51:35.618582</div>
+- [point_tracking.md](papers\point_tracking/) <div style="text-align: right">2026-07-17 20:51:35.618582</div>
+- [4drecon_tracking.md](papers\4drecon_tracking/) <div style="text-align: right">2026-07-01 22:03:02.178166</div>
+- [3dgs.md](papers\3dgs/) <div style="text-align: right">2026-06-25 15:59:48.898451</div>
