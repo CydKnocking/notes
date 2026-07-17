@@ -230,7 +230,7 @@ tag: `ICCV'25`, `3D`, `multi-view`
     - 'intrinsics': (T, 3, 3), float32
     - 'extrinsics': (T, 4, 4), float32, world to camera T matrix
   - info.npz: keys和anno.npz一样，存了上述所有数据的shape。
-  - 文件夹rgbs, depths, masks, normals： h=540, w=960
+  - 文件夹rgbs, depths, masks, normals： h=540, w=960, depth单位是meters
 
 
 - [Dynamic Replica](https://dynamic-stereo.github.io/)

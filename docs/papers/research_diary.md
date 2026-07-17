@@ -1314,7 +1314,7 @@ TODO 关于PointOdyssey合成数据集的渲染管线:
   - [x] PartNet: 下载完了，但是如何放在data/里还得看看 (https://github.com/kevin-kaixu/partnet-symh)
   - [x] GSO: data/GSO 里自带一些(https://app.gazebosim.org/GoogleResearch/fuel/collections/Scanned%20Objects%20by%20Google%20Research)
   - [x] BlenderKit: 下载完了，以add-on形式安装了
-  - [ ] Mixamo: 没有下载，也不知道放哪里
+  - [x] Mixamo: 根据(https://github.com/y-zheng18/point_odyssey/issues/26)下载并预处理，处理完毕
 - [ ] outdoors + animal环境的一堆add-on
   - [ ] DeformingThings4D: 好像 data/deformingthings4d 自带一些了
 - [ ] indoors环境的一堆add-on
