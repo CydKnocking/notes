@@ -1324,3 +1324,11 @@ TODO 关于PointOdyssey合成数据集的渲染管线:
   - [ ] 3D-front
   - [ ] Mixamo
   - [ ] Turbosquid
+
+
+### 0719
+
+全景四维重建TODO：
+- [ ] 如何测试？
+  - 测试内容：测point cloud、depth estimation、camera pose？
+  - 测试数据：用什么benchmark？用现成的？自己造？
