@@ -1,5 +1,9 @@
 本文档为全景相机做三位重建/四维重建的相关论文的整理。
 
+
+## 相关工作
+
+
 - [PanoVGGT](https://arxiv.org/abs/2603.17571)
   
   全景相机版本VGGT，上海科大。静态场景，离线。
@@ -19,7 +23,6 @@
 - [VGGT-360](https://arxiv.org/abs/2603.18943)
   
 
-
 ## 数据集
 
 - [360+x](https://x360dataset.github.io/)
@@ -34,21 +37,61 @@
 
 - [H-OmniStereo](https://github.com/JIANG-CX/H-OmniStereo)
 
+  合成数据集。双全景相机。动态场景。室内外。暂未开源。
+
 - [OmniStereo](https://sites.google.com/view/snu-rvlab/research/omnistereo)
 
   合成数据集。动态场景。有depth标注，室外驾驶场景。
 
-- [SUN360]()
+- [SUN360](https://3dvision.princeton.edu/projects/2012/SUN360/)
+
+  静态场景。
 
 - [Matterport3D](https://huggingface.co/datasets/Gen3DF/Matterport3d/tree/main/matterport3d)
 
+  静态场景。benchmark。
+
 - [Holo360D](https://huggingface.co/datasets/ouou123/Holo360D)
+
+  静态场景。室内外。真实数据集。有depth，camera poses。2.66T。ECCV2026。
 
 - [OmniHorizon](https://omnihorizon.github.io/)
 
-- [Stanford2D3D]()
+  暂未开源。
 
 - [Structured3D](https://huggingface.co/datasets/Gen3DF/Structured3D)
 
+- [Stanford 2D-3D-S](https://github.com/alexsax/2D-3D-Semantics)
+
+
+
+## 方法方案
+
+### 实验
+
+评测数据集
+
+- [PanoCity]
+
+  相机位姿、深度、点云重建
+
+- [Matterport3D]
+
+  相机位姿、深度、点云重建
+
 - [2D-3D-S](https://github.com/alexsax/2D-3D-Semantics)
+
+  相机位姿、深度、室内点云重建。[下载链接](https://sdss.redivis.com/datasets/f304-a3vhsvcaf)
+
+  test split是area_5b序列。
+
+- [Structured3D](https://zju-kjl-jointlab-azure.kujiale.com/Structured3D/README.txt)
+
+  弹幕深度估计
+
+- [Pano3D]
+
+  zero-shot测深度
+
+
 

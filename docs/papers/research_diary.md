@@ -1332,3 +1332,10 @@ TODO 关于PointOdyssey合成数据集的渲染管线:
 - [ ] 如何测试？
   - 测试内容：测point cloud、depth estimation、camera pose？
   - 测试数据：用什么benchmark？用现成的？自己造？
+
+
+### 0721
+
+Rich Sutton 分享 at 智元
+
+Continual learning from experience, the most important part to learn may be perception model / state model. 其他选项：policy, transition model。
