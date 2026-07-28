@@ -1339,3 +1339,17 @@ TODO 关于PointOdyssey合成数据集的渲染管线:
 Rich Sutton 分享 at 智元
 
 Continual learning from experience, the most important part to learn may be perception model / state model. 其他选项：policy, transition model。
+
+
+### 0726
+
+pano4dr
+
+需要的数据集：
+- [x] PanoCity: done, outdoor
+- [x] Matterport3d: 原始数据没包含pano数据，已生成，indoor
+- [x] Stanford2d3ds: done, indoor
+- [x] Structure3D: done, indoor
+- [x] pano_point_odyssey: done, indoor/outdoor, dynamic
+
+已将以上数据集加入训练。
