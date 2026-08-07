@@ -1163,6 +1163,30 @@ Point Odyssey的image size是540, 960，其他数据集不是，如果图像过�
   peak torch.cuda.max_memory_allocated: 10.598 GiB
   peak torch.cuda.max_memory_reserved:  12.592 GiB
 
+- 8 frames StreamDPM:
+  aggregator:
+    total (sum over 8 frames, one sequence): mean=478.579 ms  std=2.536 ms
+    mean per frame: 59.822 ms
+    last frame (t=7): mean=69.282 ms  std=0.661 ms
+  decoder (full prefix, internal cond_tokens):
+    total (sum over 8 frames, one sequence): mean=1092.747 ms  std=4.517 ms
+    mean per frame: 136.593 ms
+    last frame (t=7): mean=249.409 ms  std=1.383 ms
+  camera_head:
+    total (sum over 8 frames, one sequence): mean=41.373 ms  std=0.083 ms
+    mean per frame: 5.172 ms
+    last frame (t=7): mean=5.176 ms  std=0.020 ms
+  point_head:
+    total (sum over 8 frames, one sequence): mean=149.146 ms  std=0.699 ms
+    mean per frame: 18.643 ms
+    last frame (t=7): mean=30.474 ms  std=0.246 ms
+  wall (per-frame segment):
+    total (sum over 8 frames, one sequence): mean=1774.745 ms  std=6.926 ms
+    mean per frame: 221.843 ms
+    last frame (t=7): mean=356.768 ms  std=1.791 ms
+  peak torch.cuda.max_memory_allocated: 12.015 GiB
+  peak torch.cuda.max_memory_reserved:  15.775 GiB
+
 - 10 frames VDPM:
   aggregator (1×): mean=375.249 ms  std=2.071 ms
   decoder total (10×): mean=3277.705 ms  std=12.789 ms
