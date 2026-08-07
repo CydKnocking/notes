@@ -24,7 +24,7 @@ files = sorted(files, key=lambda t: -os.stat(t).st_mtime) # descending modificat
 
 # write recent updated files to index.md
 files = files[:5]
-with open(INDEX_FILE, 'w') as handle:
+with open(INDEX_FILE, 'w', encoding='utf-8', newline='\n') as handle:
     handle.write(INDEX_HEADER)
     for file in files:
         name = os.path.basename(file)
