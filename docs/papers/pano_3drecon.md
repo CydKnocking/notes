@@ -1,10 +1,10 @@
 本文档为全景相机做三维重建/四维重建的相关论文整理。  
-范围：近三年（约 2023–2025）CVPR / ICCV / ECCV / AAAI / NeurIPS / ICLR / ICRA / 3DV / TPAMI / ICML / IROS（及紧密相关的 RA-L）。  
-重点：动态场景 / 4D；其次为静态新视角合成、深度/立体、SLAM。
+范围：约 2023–2026，CVPR / ICCV / ECCV / AAAI / NeurIPS / ICLR / ICRA / 3DV / TPAMI / ICML / IROS（及紧密相关的 RA-L）+ **arXiv 2025–2026**。  
+重点：动态场景 / 4D；其次为静态新视角合成、深度/立体、SLAM、feed-forward 几何基础模型。
 
 > **总览判断**  
-> - **真·全景动态重建（从真实 360 视频重建可漫游 4D）仍极少**：明确顶会代表作主要是 **OmniLocalRF (CVPR’24)**（偏“去动态、保静态”）与生成式 **4K4DGen (ICLR’25)** 等。  
-> - 主线仍是：**全景几何适配（球坐标 / ERP 光栅化）→ 可泛化 feed-forward 3DGS → 单张全景 lift-to-3D → 全景深度/OSM / SLAM**。  
+> - **真·全景动态重建（从真实 360 视频重建可漫游 4D）仍极少**：观测驱动代表仍是 **OmniLocalRF (CVPR’24)**（去动态）；生成式有 **4K4DGen / HoloTime / TiP4GEN**；**4DGS360 (arXiv’26)** 是透视视频上的“360° 物体环视 4D”，**输入不是 ERP 全景相机**。  
+> - **2026 年主线转向 feed-forward 全景几何**：PanoVGGT / VGGT-360 / Depth Any Panoramas / CylinderSplat / ODGS-SLAM / PFGS360；数据侧 **Holo360D (ECCV’26)**、PanoCity、AirSim360、ORBIT 明显补强。  
 > - 透视域 4D（4D-GS、MonST3R 等）很热，但多数**未原生支持 ERP/鱼眼**；全景 4D 多走“生成视频 + lift”而非观测驱动重建。
 
 
@@ -27,15 +27,88 @@
 - [HoloTime](https://zhouhyocean.github.io/holotime/) — arXiv 2025（跟进类）  
   360World 数据集 + Panoramic Animator（图生视频）+ 时空深度对齐 + 4D-GS。同属生成式全景 4D。
 
-### 1.3 空白与可做方向（结合本仓库兴趣）
+- [TiP4GEN](https://arxiv.org/abs/2508.12415) — arXiv 2025  
+  **Text → 动态全景 4D**：双分支（全景+透视）视频生成 + 度量深度对齐的 3DGS 重建。
+
+### 1.3 环视/全向动态（注意：多为透视输入，非 ERP 相机）
+
+- [4DGS360](https://jaewon040.github.io/4dgs360/) — arXiv 2026（`2603.21618`）  
+  单目透视视频 → **物体完整 360° 环视 4D GS**；AnchorTAP3D（2D track 锚定 3D 轨迹）缓解遮挡区深度歧义；新基准 **iPhone360**（测试视角与训练差可达 135°）。**不是全景相机输入**，但对“大视角动态几何”有参考价值。
+
+### 1.4 空白与可做方向（结合本仓库兴趣）
 
 | 方向 | 现状 |
 |------|------|
 | 真实 360 视频上的 dense 4D + correspondence | 几乎空；透视域有 St4RTrack / CUT3R / Flow4R |
-| 全景 feed-forward 动态几何（类 MonST3R/POMATO 的 ERP 版） | 未见顶会成熟方案；PanoVGGT 等偏静态 |
-| 驾驶/室内全景动态 + metric scale | 数据稀缺；Helvipad 等仍偏立体深度 |
+| 全景 feed-forward 动态几何（类 MonST3R/POMATO 的 ERP 版） | **2026 仍未见顶会成熟方案**；PanoVGGT / CylinderSplat 偏静态 |
+| 驾驶/室内全景动态 + metric scale | Helvipad、Holo360D、PanoCity 补数据，但动态标注仍弱 |
 
 相关透视动态工作见 `4drecon_tracking.md`，可迁移球形 PE / ERP 光栅化。
+
+
+## 〇、2026 会议 + 2025–2026 arXiv（补遗，优先读）
+
+### 0.1 CVPR 2026（全景 3D/深度/SLAM 相关）
+
+- [PanoVGGT](https://openaccess.thecvf.com/content/CVPR2026/html/Guo_PanoVGGT_Feed-Forward_3D_Reconstruction_from_Panoramic_Imagery_CVPR_2026_paper.html) — **CVPR 2026**  
+  无序多张 ERP → 单次前向联合预测 pose / depth / 点云；球感 PE + SO(3) 三轴旋转增强 + stochastic anchoring；发布 **PanoCity**。见下文第五节详细笔记。
+
+- [VGGT-360](https://openaccess.thecvf.com/content/CVPR2026/html/Yuan_VGGT-360_Geometry-Consistent_Zero-Shot_Panoramic_Depth_Estimation_CVPR_2026_paper.html) — **CVPR 2026**  
+  **训练无关**全景深度：不确定度引导自适应切透视片 → VGGT 多视图 3D → correlation-weighted 校正 → 反投影回 ERP。见第五节。
+
+- [Depth Any Panoramas (DAP)](https://openaccess.thecvf.com/content/CVPR2026/html/Lin_Depth_Any_Panoramas_A_Foundation_Model_for_Panoramic_Depth_Estimation_CVPR_2026_paper.html) — **CVPR 2026**  
+  全景 **metric depth 基础模型**；DINOv3-Large；range mask head + 几何一致性优化；大规模伪标签管线；评测 Stanford2D3D / Matterport3D / Deep360 等。Insta360 Research。  
+  [project](https://insta360-research-team.github.io/DAP_website/)
+
+- [PFGS360](https://openaccess.thecvf.com/content/CVPR2026/html/Zhuang_Pose-Free_Omnidirectional_Gaussian_Splatting_for_360-Degree_Videos_with_Consistent_Depth_CVPR_2026_paper.html) — **CVPR 2026**  
+  **无 pose** 全景视频 → omnidirectional 3DGS；球一致 2D–3D 对应估位姿 + depth-inlier densification。  
+  [code](https://github.com/zcq15/PFGS360)
+
+- [ODGS-SLAM](https://openaccess.thecvf.com/content/CVPR2026/papers/Spiss_ODGS-SLAM_Omnidirectional_Gaussian_Splatting_SLAM_CVPR_2026_paper.pdf) — **CVPR 2026**  
+  **首个**以 omnidirectional 3DGS 统一跟踪+建图的全景 SLAM（RGB/RGBD）；ERP 投影闭式梯度；图分析删关键帧降内存；自建室内外评测集。  
+  [code](https://github.com/odgs-slam/odgs-slam)
+
+- [ORBIT](https://openaccess.thecvf.com/content/CVPR2026/html/Sabour_ORBIT_Benchmarking_SfM_in_the_Wild_with_360deg_Video_CVPR_2026_paper.html) — **CVPR 2026**  
+  野外 **360° 视频 SfM** 基准（Google/相关团队）；评测 wild 条件下结构恢复。
+
+- [Pano3DComposer](https://openaccess.thecvf.com/content/CVPR2026/html/Qiu_Pano3DComposer_Feed-Forward_Compositional_3D_Scene_Generation_from_Single_Panoramic_Image_CVPR_2026_paper.html) — **CVPR 2026**  
+  单张全景 → 组合式 3D 场景生成；Alignment-VGGT 预测物体→世界变换；~20s/场景。
+
+- [Pantheon360](https://koi953215.github.io/pantheon360_page/) — **CVPR 2026**  
+  稀疏 360 输入 → 显式 3D Cache（π3/VGGT）条件化 360 视频扩散，做数字孪生/可控轨迹；偏生成，几何 scaffold 可参考。
+
+- [AirSim360](https://openaccess.thecvf.com/content/CVPR2026/html/Ge_AirSim360_A_Panoramic_Simulation_Platform_within_Drone_View_CVPR_2026_paper.html) — **CVPR 2026**  
+  无人机视角全景仿真平台（深度/几何标注友好，常与 DAP 等配合）。
+
+- [Pano360](https://openaccess.thecvf.com/content/CVPR2026/papers/Zhu_Pano360_Perspective_to_Panoramic_Vision_with_Geometric_Consistency_CVPR_2026_paper.pdf) — **CVPR 2026**  
+  多张透视 → 几何一致全景拼接；VGGT 式 3D 对齐；新真实大规模全景数据集。
+
+### 0.2 ECCV / ICLR / IROS 2025–2026
+
+- [Holo360D](https://arxiv.org/abs/2604.22482) — **ECCV 2026**  
+  真实大规模连续轨迹全景 3D 数据集：109,495 张全景 + LiDAR mesh/点云/深度/位姿；室内外；用于微调 Pi3 等 feed-forward。  
+  [HF](https://huggingface.co/datasets/ouou123/Holo360D) · [code](https://github.com/Jou719/Holo360D)
+
+- [CylinderSplat](https://arxiv.org/abs/2603.05882) — **ICLR 2026**  
+  圆柱 Triplane + 双分支（像素重建 / 体积补全）feed-forward 全景 3DGS；可变视角数（单张→多张）；相对 Splatter-360 / PanSplat 更强遮挡补全。  
+  [code](https://github.com/wangqww/CylinderSplat)
+
+- [DFI-OmniStereo](https://vita-epfl.github.io/DFI-OmniStereo-website/) — **IROS 2025**  
+  预训练相对深度基础模型注入迭代式 OSM；Helvipad 上 disparity MAE 约降 16%。
+
+### 0.3 arXiv 2025–2026（尚未确认会议或预印）
+
+| 工作 | 时间 | 要点 |
+|------|------|------|
+| [TPGS / Transition Plane](https://arxiv.org/abs/2504.09062) | 2025.04 | cubemap 面间加 Transition Plane；intra→inter face 优化；单张/多张全景 3DGS |
+| [360-GeoGS](https://arxiv.org/abs/2601.02102) | 2026.01 | feed-forward 360 3DGS + Depth-Normal 正则，强化几何一致性 |
+| [Spherical-GOF](https://arxiv.org/abs/2603.08503) | 2026.03 | 单位球上 ray-Gaussian（GOF）；深度重投影误差大降，利于 mesh |
+| [Underwater360](https://arxiv.org/abs/2605.26447) | 2026.05 | 水下全景物理介质建模 + 球空间 omni-GS；新水下 360 基准 |
+| [FastPano3D](https://arxiv.org/abs/2606.30352) | 2026.06 | 单张室内全景秒级 feed-forward GS；宣称相对 Pano2Room ~156× |
+| [HALO-SLAM](https://arxiv.org/abs/2608.00925) | 2026.08 | 冻结全景几何基础模型读重力 + attention 回环；多真实全景基准 ATE 优 |
+| [PanoWorld](https://arxiv.org/html/2605.17916) | 2026.05 | 整屋 VR tour：楼层平面 + 全景 LRM → 渐进 3DGS 缓存（生成向） |
+
+> **ICCV / AAAI / NeurIPS / ICML / ICRA / 3DV 2026**：截至整理时，除 CVPR’26 / ECCV’26 / ICLR’26 / IROS’25 外，**其余 2026 届次上“全景相机原生 3D/4D”公开清单仍稀疏**；ICCV’25 已有 Seam360GS、MDP-Omni（见后文）；后续可继续扫 openaccess / OpenReview。
 
 
 ## 二、静态 / 慢动场景三维重建与新视角合成
@@ -108,6 +181,9 @@
 - [MDP-Omni](https://openaccess.thecvf.com/content/ICCV2025/html/Son_MDP-Omni_Parameter-free_Multimodal_Depth_Prior-based_Sampling_for_Omnidirectional_Stereo_Matching_ICCV_2025_paper.html) — **ICCV 2025**  
   无参多峰深度先验采样，改善边界过平滑；方位角多视角 volume fusion。
 
+- [DFI-OmniStereo](https://vita-epfl.github.io/DFI-OmniStereo-website/) — **IROS 2025**  
+  相对深度基础模型特征 → 迭代 OSM；Helvipad SOTA。
+
 - [Helvipad](https://github.com/vita-epfl/Helvipad) — **CVPR 2025**  
   真实 OSM 数据集：上下双 360° + LiDAR，约 40K 帧，室内外拥挤场景；配套 360-IGEV 等基准。
 
@@ -132,40 +208,7 @@
 
 ## 五、Feed-forward 几何基础模型（全景版）
 
-- [PanoVGGT](https://arxiv.org/abs/2603.17571)  
-  全景版 VGGT；球感位置编码 + SO(3) 增强；PanoCity 等。静态、离线。上科大。
-
-- [VGGT-360](https://arxiv.org/abs/2603.18943)  
-  （待补读）
-
-
-## 六、按会议速查（2023–2025，不完全表）
-
-| 会议 | 代表工作 |
-|------|----------|
-| **CVPR’23** | EgoNeRF；HRDFuse；OmniVidar |
-| **CVPR’24** | **OmniLocalRF（动态）**；OmniSDF |
-| **CVPR’25** | Scene4U；Splatter-360；OmniSplat；PanSplat；Helvipad |
-| **ICCV’25** | Seam360GS；MDP-Omni |
-| **ECCV** | 近三年核心全景 3D/4D 偏少（需持续扫）；透视 3DGS 误差分析等工作有间接价值 |
-| **NeurIPS’23** | PanoGRF |
-| **NeurIPS’24** | ODGS |
-| **NeurIPS’25** | Omni3D |
-| **ICLR’25** | SC-OmniGS；**4K4DGen（全景 4D 生成）** |
-| **AAAI’24** | Pano-NeRF |
-| **TPAMI’24** | PERF |
-| **ICRA’24** | Omnidirectional Dense SLAM（双鱼眼） |
-| **IROS’23** | 360FusionNeRF |
-| **3DV’25** | 360-GS |
-| **RA-L’24** | RomniStereo |
-| **ICML** | 近三年几乎未见“全景相机原生 3D/4D”主力论文 |
-
-**ECCV / ICML**：该时间窗内“全景相机做 3D/4D 重建”的一线论文密度明显低于 CVPR/NeurIPS/ICLR；很多相关工作在 WACV、RA-L 或 arXiv。
-
-
-## 七、相关工作（原笔记）
-
-- [PanoVGGT](https://arxiv.org/abs/2603.17571)
+- [PanoVGGT](https://arxiv.org/abs/2603.17571) — **CVPR 2026**
   
   全景相机版本 VGGT，上海科大。静态场景，离线。
 
@@ -177,14 +220,50 @@
 
   2. 从标准的 2D 网格编码改为球感位置编码 (Spherical-aware PE)
 
-  3. 数据增强改用了 SO(3) 旋转增强，并随机定 target frame。
+  3. 数据增强改用了 SO(3) 旋转增强，并随机定 target frame（stochastic anchoring）。
   
-  8 张 A100 训练 10 天。用的数据集：PanoCity、Matterport3D、Stanford2D3D 和 Structured3D。
+  8 张 A100 训练 10 天。用的数据集：PanoCity、Matterport3D、Stanford2D3D 和 Structured3D。  
+  [code](https://github.com/YijingGuo-June/PanoVGGT) · [weights](https://huggingface.co/YijingGuo/PanoVGGT)
 
-- [VGGT-360](https://arxiv.org/abs/2603.18943)
+- [VGGT-360](https://arxiv.org/abs/2603.18943) — **CVPR 2026**
   
+  **训练无关**零样本全景深度：不确定度引导切透视片 → VGGT 多视图重建 → structure-saliency attention → correlation-weighted 3D 校正 → 全景反投影。  
+  [code](https://github.com/Yuanjiayii/VGGT-360)
 
-## 八、数据集
+- [Depth Any Panoramas](https://insta360-research-team.github.io/DAP_website/) — **CVPR 2026**  
+  监督式全景 metric depth 基础模型（与 VGGT-360 路线互补：训大模型 vs 训无关）。
+
+
+## 六、按会议速查（2023–2026，不完全表）
+
+| 会议 | 代表工作 |
+|------|----------|
+| **CVPR’23** | EgoNeRF；HRDFuse；OmniVidar |
+| **CVPR’24** | **OmniLocalRF（动态）**；OmniSDF |
+| **CVPR’25** | Scene4U；Splatter-360；OmniSplat；PanSplat；Helvipad |
+| **CVPR’26** | **PanoVGGT；VGGT-360；DAP；PFGS360；ODGS-SLAM；ORBIT；Pano3DComposer；Pantheon360；AirSim360** |
+| **ICCV’25** | Seam360GS；MDP-Omni |
+| **ECCV’26** | **Holo360D（数据集+基准）** |
+| **ECCV’24–25** | 核心全景 3D/4D 仍偏少 |
+| **NeurIPS’23** | PanoGRF |
+| **NeurIPS’24** | ODGS |
+| **NeurIPS’25** | Omni3D |
+| **ICLR’25** | SC-OmniGS；**4K4DGen（全景 4D 生成）** |
+| **ICLR’26** | **CylinderSplat** |
+| **AAAI’24** | Pano-NeRF |
+| **TPAMI’24** | PERF |
+| **ICRA’24** | Omnidirectional Dense SLAM（双鱼眼） |
+| **IROS’23** | 360FusionNeRF |
+| **IROS’25** | **DFI-OmniStereo** |
+| **3DV’25** | 360-GS |
+| **RA-L’24** | RomniStereo |
+| **ICML** | 近三年几乎未见“全景相机原生 3D/4D”主力论文 |
+| **arXiv’25–26** | TPGS；360-GeoGS；Spherical-GOF；4DGS360；Underwater360；FastPano3D；HALO-SLAM；TiP4GEN；HoloTime |
+
+> 说明：AAAI / NeurIPS / ICML / ICRA / 3DV **2026** 届次上，公开可确认的“全景相机原生 3D/4D”仍少；持续扫 OpenReview / openaccess。
+
+
+## 七、数据集
 
 - [360+x](https://x360dataset.github.io/)
 
@@ -212,10 +291,6 @@
 
   静态场景。benchmark。
 
-- [Holo360D](https://huggingface.co/datasets/ouou123/Holo360D)
-
-  静态场景。室内外。真实数据集。有 depth，camera poses。2.66T。ECCV2026。
-
 - [OmniHorizon](https://omnihorizon.github.io/)
 
   暂未开源。
@@ -224,14 +299,28 @@
 
 - [Stanford 2D-3D-S](https://github.com/alexsax/2D-3D-Semantics)
 
+- [Holo360D](https://huggingface.co/datasets/ouou123/Holo360D)
+
+  **ECCV 2026**。静态为主、连续轨迹。室内外。真实。有 depth、camera poses、mesh/点云。约 10.9 万张全景。2.66T 量级。
+
+- [PanoCity](https://huggingface.co/datasets/YijingGuo/PanoCity)
+
+  **CVPR 2026 / PanoVGGT**。合成室外城市，>12 万帧，dense depth + 6-DoF pose，连续轨迹。
+
 - [Helvipad](https://github.com/vita-epfl/Helvipad) — CVPR 2025，真实 OSM（双 360 + LiDAR）
+
+- [AirSim360](https://openaccess.thecvf.com/content/CVPR2026/html/Ge_AirSim360_A_Panoramic_Simulation_Platform_within_Drone_View_CVPR_2026_paper.html) — CVPR 2026，无人机全景仿真
 
 - EgoNeRF 配套：OmniBlender（合成）、Ricoh360（真实）
 
 - ODGS 评测常用：OmniPhotos、360Roam、OmniScenes、360VO 等
 
+- ORBIT — CVPR 2026，野外 360 视频 SfM 基准
 
-## 九、方法方案
+- iPhone360 — 4DGS360 配套（透视环视动态，非 ERP）
+
+
+## 八、方法方案
 
 ### 实验
 
