@@ -1377,3 +1377,11 @@ pano4dr
 - [x] pano_point_odyssey: done, indoor/outdoor, dynamic
 
 已将以上数据集加入训练。
+
+
+### 0809
+
+让agent帮我整理了以下近几年的panorama数据集，请看pano_3drecon。
+
+正在下载：3DVOTS，Helvipad。
+
