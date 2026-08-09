@@ -263,61 +263,73 @@
 > 说明：AAAI / NeurIPS / ICML / ICRA / 3DV **2026** 届次上，公开可确认的“全景相机原生 3D/4D”仍少；持续扫 OpenReview / openaccess。
 
 
-## 七、数据集
+## 七、全景（ERP）数据集整理
 
-- [360+x](https://x360dataset.github.io/)
+> 范围：近几年常用 / 新发布的 **ERP 全景**数据集（含“鱼眼→ERP 参考全景”的 OSM 数据）。  
+> 维度：**静态/动态**、**合成/真实**、**深度真值**、**相机位姿**。  
+> 符号：✓ 有官方/可靠 GT；△ 部分/弱（仅位置、仅立体外参、SfM 估计、稀疏投影等）；✗ 无或未发布。
 
-  动态场景。无 3D 标注。室内室外。
+### 7.1 总表（按任务优先级粗排）
 
-- [Pano3D](https://vcl3d.github.io/Pano3D/)
+| 数据集 | 年份/出处 | 静/动 | 合成/真实 | 深度 GT | 位姿 GT | 规模/场景要点 | 链接 |
+|--------|-----------|-------|-----------|---------|---------|---------------|------|
+| **Holo360D** | ECCV 2026 | 静（连续扫） | 真实 | ✓ LiDAR mesh/点云深度 | ✓ 6-DoF | ~10.9 万 ERP；75 场景；室内+室外；连续轨迹 | [HF](https://huggingface.co/datasets/ouou123/Holo360D) |
+| **PanoCity** | CVPR 2026 | 静（连续轨） | 合成 | ✓ dense | ✓ 6-DoF（pinhole+pano） | ~12.0 万 ERP；京/济/甬城市场景；UE 级室外 | [HF](https://huggingface.co/datasets/YijingGuo/PanoCity) |
+| **AirSim360 / Omni360-Scene** | CVPR 2026 | 静为主 | 合成 | ✓ 度量深度 | ✓ 6-DoF | 无人机/航拍 ERP；语义/实例 | [GitHub](https://github.com/Insta360-Research-Team/AirSim360) |
+| **Helvipad** | CVPR 2025 | 动（人群/交通） | 真实 | ✓ LiDAR→ERP（+补全版） | △ 立体外参/标定 ✓，序列绝对轨迹弱 | ~4 万帧；上下双 Theta ERP；室内外 | [site](https://vita-epfl.github.io/Helvipad/) |
+| **PanoHK360** | 2025–26 HF | 静/慢动驾驶 | 真实 | ✓ LiDAR metric | ✓ 6-DoF | 8K ERP；港城驾驶连续序列 | [HF](https://huggingface.co/datasets/adadai3132/PanoHK360) |
+| **360Loc** | 近年定位基准 | 静/序列 | 真实 | ✓ | ✓ | 室内+室外；mapping/query 序列 | 论文常用基准 |
+| **Matterport3D**（ERP） | 2017 / 常用 | 静 | 真实 | ✓（mesh/扫描，完整度有限） | ✓ | ~1.08 万全景；90 建筑；**离散站位**宽基线 | [site](https://niessner.github.io/Matterport/) |
+| **Stanford 2D-3D-S** | 2017 | 静 | 真实 | ✓ | ✓ | ~1.3k ERP；6 区域室内；语义/XYZ | [GitHub](https://github.com/alexsax/2D-3D-Semantics) |
+| **Structured3D** | ECCV 2020 | 静 | 合成 | ✓ | △ 全景多仅 `camera_xyz`（朝向约定固定） | 3.5k 户型；全景 depth/normal/layout | [GitHub](https://github.com/bertjiazheng/Structured3D) |
+| **Pano3D**（GibsonV2 渲染） | OmniCV@CVPR21 | 静 | 合成（基于真实扫描） | ✓ | △/✓ 渲染位姿 | 深度 benchmark；M3D/GV2 渲染 ERP | [site](https://vcl3d.github.io/Pano3D/) |
+| **OmniBlender** | CVPR 2023 EgoNeRF | 静（小圆轨） | 合成 | ✓ | ✓ | 11 场景室内外；2000×1000 | [EgoNeRF data](https://github.com/changwoonchoi/EgoNeRF) |
+| **Ricoh360** | CVPR 2023 EgoNeRF | 静（小圆轨） | 真实 | ✗ | △ SfM | 11 场景；Theta V；1920×960 | 同上 |
+| **OmniPhotos** | SIGGRAPH Asia 2020 | 静（自拍棒圆轨） | 真实 | △ proxy mesh / 无 dense depth | △ SfM | Insta360 圆扫；NVS/漫游 | [Bath](https://researchdata.bath.ac.uk/948/) |
+| **Deep360** | ECCV 2022 MODE | 静/慢动 | 合成 | ✓ depth+disp | △/✓ 多机位渲染 | 户外多视角 OSM；含污损版 | [MODE](https://github.com/nju-ee/MODE-2022) |
+| **OmniHorizon** | 2022–23 | 含动态元素 | 合成 | ✓ depth+normal | △ 路径渲染（立体 top-bottom） | 2.4 万户外 ERP；行人/车/光照变化 | [site](https://omnihorizon.github.io/) |
+| **OmniStereo / OmniHouse / OmniThings / Urban** | ICCV/ICRA 系 | 静～慢动 | 合成 | ✓ 全景 depth | △ 固定四鱼眼 rig 外参 | 四鱼眼+参考 ERP depth；城市场景等 | [SNU](https://rvlab.snu.ac.kr/research/omnistereo) |
+| **360VO**（合成集） | ICRA 2022 | 动（相机运动） | 合成 | △/视渲染而定 | ✓ dense pose | UE 城市场景；VO 评测 | [page](https://huajianup.github.io/research/360VO/) |
+| **360Roam** | 室内漫游 NeRF | 静 | 真实 | ✗（常用 SfM 点） | △ SfM | 大场景室内；分发受限 | [page](https://huajianup.github.io/research/360Roam/) |
+| **OmniScenes** | 室内定位 | 静 | 真实 | △/视版本 | ✓ | 室内场景变化定位常用 | [PICCOLO](https://github.com/82magnolia/piccolo) |
+| **360+x** | CVPR 2024 | **动**（活动） | 真实 | ✗ | ✗ | 2152 多模态视频；动作标签；无 3D GT | [site](https://x360dataset.github.io/) |
+| **ORBIT** | CVPR 2026 | 动（相机） | 真实 | ✗ | △ SfM 评测基准 | 野外 360 视频 SfM | CVPR’26 |
+| **SUN360** | 2012 | 静 | 真实 | ✗ | ✗ | 经典分类/场景；无几何 GT | [Princeton](https://3dvision.princeton.edu/projects/2012/SUN360/) |
+| **H-OmniStereo** | 笔记/未开源 | **动** | 合成 | ✓（宣称） | △ rig | 双全景；室内外；**暂未开源** | [GitHub](https://github.com/JIANG-CX/H-OmniStereo) |
+| **pano_point_odyssey** | 自研/内部 | **动** | 合成 | ✓（按 PointOdyssey 管线） | ✓ | 室内外动态；本仓库训练用 | 见 `research_diary` |
+| **Panorama_498** | 社区集 | 静为主 | 混合/视来源 | △ | △ | 小规模集合，标注不统一 | [GitHub](https://github.com/CrazyPhilip/Panorama_498) |
 
-  静态场景。有 3D 标注。室内。
+**非原生 ERP、仅作对比：**  
+- **KITTI-360**：真实驾驶、动、有 pose+LiDAR；原生是透视+鱼眼环视，**非标准双目拼接 ERP**（Holo360D 等文中会拿来比深度完整度）。  
+- **iPhone360**（4DGS360）：透视环视动态，**非 ERP 全景相机**。
 
-- [Panorama_498](https://github.com/CrazyPhilip/Panorama_498)
+### 7.2 按维度速查
 
-- [H-OmniStereo](https://github.com/JIANG-CX/H-OmniStereo)
+**同时具备 depth ✓ + pose ✓（重建/训练首选）**  
+Holo360D，PanoCity，AirSim360，PanoHK360，360Loc，Matterport3D，Stanford2D3D，OmniBlender，Deep360（多视），pano_point_odyssey。
 
-  合成数据集。双全景相机。动态场景。室内外。暂未开源。
+**有 depth、位姿弱/仅标定**  
+Helvipad（立体外参+LiDAR 深度），Structured3D（xyz），OmniHorizon，OmniStereo 系，Pano3D。
 
-- [OmniStereo](https://sites.google.com/view/snu-rvlab/research/omnistereo)
+**有 pose、无 dense depth**  
+Ricoh360，OmniPhotos，360Roam，360VO（以 pose 为主），ORBIT（SfM）。
 
-  合成数据集。动态场景。有 depth 标注，室外驾驶场景。
+**动态场景且含几何标注（稀缺）**  
+- 真实：Helvipad（场景动态强，几何为 depth/disp）、360+x（动态但**无** depth/pose）。  
+- 合成：OmniHorizon（行人/车），pano_point_odyssey，H-OmniStereo（未开源），360VO（相机运动）。
 
-- [SUN360](https://3dvision.princeton.edu/projects/2012/SUN360/)
+**连续轨迹（利于多视图/SLAM/feed-forward）**  
+Holo360D，PanoCity，PanoHK360，Helvipad，AirSim360，360VO，ORBIT；Matterport3D / Stanford 偏**离散站位**。
 
-  静态场景。
+### 7.3 简注（常用集）
 
-- [Matterport3D](https://huggingface.co/datasets/Gen3DF/Matterport3d/tree/main/matterport3d)
-
-  静态场景。benchmark。
-
-- [OmniHorizon](https://omnihorizon.github.io/)
-
-  暂未开源。
-
-- [Structured3D](https://huggingface.co/datasets/Gen3DF/Structured3D)
-
-- [Stanford 2D-3D-S](https://github.com/alexsax/2D-3D-Semantics)
-
-- [Holo360D](https://huggingface.co/datasets/ouou123/Holo360D)
-
-  **ECCV 2026**。静态为主、连续轨迹。室内外。真实。有 depth、camera poses、mesh/点云。约 10.9 万张全景。2.66T 量级。
-
-- [PanoCity](https://huggingface.co/datasets/YijingGuo/PanoCity)
-
-  **CVPR 2026 / PanoVGGT**。合成室外城市，>12 万帧，dense depth + 6-DoF pose，连续轨迹。
-
-- [Helvipad](https://github.com/vita-epfl/Helvipad) — CVPR 2025，真实 OSM（双 360 + LiDAR）
-
-- [AirSim360](https://openaccess.thecvf.com/content/CVPR2026/html/Ge_AirSim360_A_Panoramic_Simulation_Platform_within_Drone_View_CVPR_2026_paper.html) — CVPR 2026，无人机全景仿真
-
-- EgoNeRF 配套：OmniBlender（合成）、Ricoh360（真实）
-
-- ODGS 评测常用：OmniPhotos、360Roam、OmniScenes、360VO 等
-
-- ORBIT — CVPR 2026，野外 360 视频 SfM 基准
-
-- iPhone360 — 4DGS360 配套（透视环视动态，非 ERP）
+- **Holo360D**：当前最大规模真实连续轨迹 ERP+高完整度深度；feed-forward 微调主数据之一。  
+- **PanoCity**：大规模合成室外连续轨；与 PanoVGGT 配套。  
+- **Helvipad**：真实 OSM（上下双 360）标杆；深度来自 LiDAR 投影，标签偏稀疏→有 completion 增强集。  
+- **Matterport3D / Stanford2D3D / Structured3D / Pano3D**：深度估计经典；M3D 站距大、深度洞多。  
+- **OmniBlender / Ricoh360 / OmniPhotos**：EgoNeRF / ODGS 等 NVS 常用；真实侧深度弱。  
+- **360+x**：动态真实视频丰富，**不适合**直接做有监督 3D/4D 几何。  
+- **pano_point_odyssey**：本仓库动态全景几何训练用合成集（对应 PointOdyssey 管线）。
 
 
 ## 八、方法方案
