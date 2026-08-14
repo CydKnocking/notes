@@ -336,6 +336,16 @@ Holo360D，PanoCity，PanoHK360，Helvipad，AirSim360，360VO，ORBIT；Matterp
 
 ### 实验
 
+训练数据集
+
+- PanoCity
+- Matterport3D
+- Stanford2D3DS
+- PanoPointOdyssey, 自造，合成，动态，深度+位姿gt
+- 360DVO, 真实，动态，位姿gt
+- helvipad, 真实，动态，深度gt
+- OmniStereo, 合成，动态，深度gt
+
 评测数据集
 
 - [PanoCity]
