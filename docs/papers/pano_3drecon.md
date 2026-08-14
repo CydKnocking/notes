@@ -388,8 +388,9 @@ Holo360D，PanoCity，Matrix-Pano，PanoHK360，360VO，360DVO，TartanAir V2，
 - helvipad, 真实，动态，深度gt，绝对轨迹弱
 - OmniStereo, 合成，动态，深度gt
 - 360+x, 真实，动态，相机不动，没有深度gt
-- Omni360-Human（可选）, 合成，行人动态，位姿+keypoints
+- AirSim360——Omni360_Scene, 室外，合成，静止，深度+位姿gt
 - TartanAir V2 Pano（可选）, 合成，挑战轨迹，深度+位姿gt
+- Deep360, 合成，室外，自动驾驶，深度gt
 
 评测数据集
 
