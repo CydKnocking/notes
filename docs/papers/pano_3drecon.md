@@ -384,7 +384,6 @@ Holo360D，PanoCity，Matrix-Pano，PanoHK360，360VO，360DVO，TartanAir V2，
 - Matterport3D
 - Stanford2D3DS
 - PanoPointOdyssey, 自造，合成，动态，深度+位姿gt
-- 360VO, **合成**，相机运动，位姿gt（depth 视导出）
 - 360DVO Dataset, **真实**，动态（Hard），位姿△ SfM 伪 GT，无 depth
 - helvipad, 真实，动态，深度gt，绝对轨迹弱
 - OmniStereo, 合成，动态，深度gt
@@ -418,7 +417,7 @@ Holo360D，PanoCity，Matrix-Pano，PanoHK360，360VO，360DVO，TartanAir V2，
 
 - pano_point_odyssey（见 research_diary）：indoor/outdoor，**dynamic**
 
-- 360VO
+- 360DVO
 
   有位姿gt
 
