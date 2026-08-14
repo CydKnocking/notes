@@ -1383,13 +1383,19 @@ pano4dr
 
 让agent帮我整理了以下近几年的panorama数据集，请看pano_3drecon。
 
-下载好了：3DVO，Helvipad。
+下载好了：360VO
+
+正在下载：Helvipad。
 
 
 ### 0812
 
 看看新的数据集。可能可以用的有：
 
-- PanoHK360：https://huggingface.co/datasets/adadai3132/PanoHK360，4.72TB
+- PanoHK360：https://huggingface.co/datasets/adadai3132/PanoHK360，4.72TB，HF上还未通过申请
+
 - OmniStereo：https://rvlab.snu.ac.kr/research/omnistereo，有urban和things(?)两个动态子集，以及house静态子集。它们都有training和test的划分。有深度，没相机位姿。
 
+- Deep360：
+
+正在下载：OmniStereo (urban, things两个子集)
