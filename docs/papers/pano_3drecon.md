@@ -386,10 +386,10 @@ Holo360D，PanoCity，Matrix-Pano，PanoHK360，360VO，360DVO，TartanAir V2，
 - PanoPointOdyssey, 自造，合成，动态，深度+位姿gt
 - 360DVO Dataset, **真实**，动态（Hard），位姿△ SfM 伪 GT，无 depth
 - helvipad, 真实，动态，深度gt，绝对轨迹弱
-- OmniStereo, 合成，动态，深度gt
+- OmniStereo, urban和things子集，合成，动态，深度gt
 - 360+x, 真实，动态，相机不动，没有深度gt
 - AirSim360——Omni360_Scene, 室外，合成，静止，深度+位姿gt
-- TartanAir V2 Pano（可选）, 合成，挑战轨迹，深度+位姿gt
+- TartanAir V2 Pano（可选）, 合成，挑战轨迹，深度+位姿gt。https://github.com/colmap/colmap/releases/tag/datasets-tartanair-v2-v1
 - Deep360, 合成，室外，自动驾驶，深度gt
 
 评测数据集

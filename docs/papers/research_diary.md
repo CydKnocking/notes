@@ -1399,3 +1399,30 @@ pano4dr
 - Deep360：
 
 正在下载：OmniStereo (urban, things两个子集)
+
+
+### 0815
+
+准备的数据集：
+
+- PanoCity, 合成，静态室外，深度+位姿gt，有train/val/test split
+
+- Matterport3D, 真实，静态室内，深度+位姿gt，有全split
+
+- Stanford2D3DS, 真实，静态室内，深度+位姿gt，有全split
+
+- PanoPointOdyssey, 合成，动态室内外，深度+位姿gt，split待造
+
+- 360DVO Dataset, 真实网络视频，动态，位姿△ SfM 伪 GT，无 depth，是个benchmark/split待造。
+
+- helvipad, 真实，动态，深度gt，绝对轨迹弱
+
+- OmniStereo, urban和things子集，合成，动态，深度gt，urban前700帧训练后600帧测试，things前9216场景训练后1024场景测试，待转换成panorama
+
+- 360+x, 真实，动态，相机不动，没有深度gt
+
+- AirSim360——Omni360_Scene, 室外，合成，静止，深度+位姿gt
+
+- TartanAir V2 Pano（可选）, 合成，挑战轨迹，深度+位姿gt。https://github.com/colmap/colmap/releases/tag/datasets-tartanair-v2-v1
+
+- Deep360, 合成，室外，自动驾驶，深度gt
