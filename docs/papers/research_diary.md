@@ -1419,10 +1419,10 @@ pano4dr
 
 - 360DVO Dataset, 真实网络视频，动态，位姿△ SfM 伪 GT，无 depth，是个benchmark/split待造。
 
-- helvipad, 真实，动态，深度gt，绝对轨迹弱，有全split。
+- helvipad, 真实，动态，深度gt，绝对轨迹弱，有全split。**深度并没有和rgb对齐，考虑不用这个数据集**
 
-- OmniStereo, urban和things子集，合成，动态，深度gt，urban前700帧训练后600帧测试，things前9216场景训练后1024场景测试，待转换成panorama
+- OmniStereo, urban和things子集，合成，动态，深度gt，urban前700帧训练后600帧测试，things前9216场景训练后1024场景测试，待转换成panorama。**things并不是在同一场景里序列采集的，它的每一帧都是一个独立场景，不能用。**把剩下的子集omnihouse给下载了。
 
-- Deep360, 合成，室外，自动驾驶，深度gt，有全split
+- Deep360, 合成，室外，自动驾驶，深度gt，有全split。已检查格式。
 
 - 360+x, 真实，动态，相机不动，没有深度gt，split待造（用于自蒸馏训练？）
