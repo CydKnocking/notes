@@ -1,0 +1,2875 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../tools/">
+      
+      
+        <link rel="next" href="../../python/rosbag/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../_assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>VGGT 类几何基础模型 × MAE / Masked Modeling - Knocking's notebook</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="brown" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#vggt-mae-masked-modeling" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Knocking&#39;s notebook" class="md-header__button md-logo" aria-label="Knocking's notebook" data-md-component="logo">
+      
+  <img src="../../_assets/icon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Knocking's notebook
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              VGGT 类几何基础模型 × MAE / Masked Modeling
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/CydKnocking/notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Knocking&#39;s notebook" class="md-nav__button md-logo" aria-label="Knocking's notebook" data-md-component="logo">
+      
+  <img src="../../_assets/icon.png" alt="logo">
+
+    </a>
+    Knocking's notebook
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/CydKnocking/notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Knocking's personal notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about_this_notebook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About this notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Vis Info Processing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    3D Vis Info Processing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/00_Introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    00 Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/01_Part%20One%20Acquisition%20of%203D%20Data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 Part One Acquisition of 3D Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/02_Part%20Two%20Integration%20of%203D%20data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 Part Two Integration of 3D data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/03_Part%20Three%20Descriptions%20of%203D%20Objects%20and%20Scenes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 Part Three Descriptions of 3D Objects and Scenes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/Full%20notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ML
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ML
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ML/great_links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Great links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Web
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Web/clash/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clash
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Web/domains/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Domains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Conference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../conference/china3dv_2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    China3dv 2026
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Datasets
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Datasets
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/TUM_RGBD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TUM RGBD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/TartanAir/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TartanAir
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/proxy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proxy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Github
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Github
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../github/Deploy%20repo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Create a new github repository
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../github/verify%20domain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verify domain
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux and ubuntu
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Linux and ubuntu
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/chmod/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chmod
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/chown/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chown
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/cmatrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cmatrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/crontab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crontab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/dns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/softlink/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Softlink
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/ssh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ssh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/tmux/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/zsh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zsh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Math
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Math
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/great_links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Great links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/quaternion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quaternion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Papers
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Papers
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3dgs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3dgs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4drecon_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4drecon tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../discussions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Discussions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pano_3drecon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pano 3drecon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paper_notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paper notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../point_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Point tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research_diary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [Protected] Research diary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VGGT 类几何基础模型 × MAE / Masked Modeling
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VGGT 类几何基础模型 × MAE / Masked Modeling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 问题拆分：两条路线
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 技术谱系（推荐阅读顺序）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心论文
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心论文">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-vggt-mae" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 最接近「VGGT + MAE」
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.1 最接近「VGGT + MAE」">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mum-multi-view-masked-image-modeling-for-3d-vision-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MuM: Multi-View Masked Image Modeling for 3D Vision — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#muskie-multi-view-masked-image-modeling-for-3d-vision-pre-training-arxiv-2025" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Muskie: Multi-view Masked Image Modeling for 3D Vision Pre-training — arXiv 2025
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-mae" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 源头：跨视角 MAE
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2 源头：跨视角 MAE">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#croco-neurips-2022" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CroCo — NeurIPS 2022
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#croco-v2-iccv-2023" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CroCo v2 — ICCV 2023
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-mae" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 几何预测系（对照，非 MAE 主目标）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3 几何预测系（对照，非 MAE 主目标）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dust3r-cvpr-2024" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DUSt3R — CVPR 2024
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mast3r-eccv-2024" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MASt3R — ECCV 2024
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vggt-cvpr-2025" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VGGT — CVPR 2025
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-mim" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 相关但任务不同的 MIM + 几何
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 对比表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 研究空白（可做方向）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 研究空白（可做方向）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-geometry-aware-masked-modeling-on-vggt-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Geometry-aware masked modeling on VGGT outputs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-4d-streaming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 4D / streaming 版
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 速读清单
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 与本仓库兴趣的衔接
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Python
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/rosbag/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rosbag
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/send_email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Send email
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/torch_tips/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Torch tips
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/tqdm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tqdm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 问题拆分：两条路线
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 技术谱系（推荐阅读顺序）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 核心论文
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 核心论文">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-vggt-mae" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 最接近「VGGT + MAE」
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.1 最接近「VGGT + MAE」">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mum-multi-view-masked-image-modeling-for-3d-vision-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MuM: Multi-View Masked Image Modeling for 3D Vision — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#muskie-multi-view-masked-image-modeling-for-3d-vision-pre-training-arxiv-2025" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Muskie: Multi-view Masked Image Modeling for 3D Vision Pre-training — arXiv 2025
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-mae" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 源头：跨视角 MAE
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2 源头：跨视角 MAE">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#croco-neurips-2022" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CroCo — NeurIPS 2022
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#croco-v2-iccv-2023" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CroCo v2 — ICCV 2023
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-mae" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 几何预测系（对照，非 MAE 主目标）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3 几何预测系（对照，非 MAE 主目标）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dust3r-cvpr-2024" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DUSt3R — CVPR 2024
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mast3r-eccv-2024" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MASt3R — ECCV 2024
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vggt-cvpr-2025" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VGGT — CVPR 2025
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-mim" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 相关但任务不同的 MIM + 几何
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 对比表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 研究空白（可做方向）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 研究空白（可做方向）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-geometry-aware-masked-modeling-on-vggt-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Geometry-aware masked modeling on VGGT outputs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-4d-streaming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 4D / streaming 版
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 速读清单
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 与本仓库兴趣的衔接
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="vggt-mae-masked-modeling">VGGT 类几何基础模型 × MAE / Masked Modeling</h1>
+<p>整理「三维几何基础模型（VGGT / DUSt3R 系）」与「MAE / Masked Image Modeling」交叉相关的工作。<br />
+结论先说清：</p>
+<blockquote>
+<p><strong>截至目前，未检索到一篇论文把完整 VGGT 架构直接加上标准 MAE 预训练目标做端到端训练。</strong><br />
+但已有清晰谱系：<strong>MAE → CroCo（跨视角 completion）→ DUSt3R/MASt3R（CroCo 初始化 + 几何监督）→ VGGT（多视图几何预测）→ MuM / Muskie（多视图 MAE 学几何表征）</strong>。<br />
+其中 <strong>MuM (CVPR 2026)</strong>、<strong>Muskie (arXiv 2025)</strong> 是最接近「MAE 版 VGGT 思想」的工作。</p>
+</blockquote>
+<h2 id="1">1. 问题拆分：两条路线</h2>
+<table>
+<thead>
+<tr>
+<th>路线</th>
+<th>目标形式</th>
+<th>代表</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A. 几何预测 foundation</strong></td>
+<td><span class="arithmatex">\(I_{1:N}\rightarrow\{\text{camera},\,D,\,P,\,\text{tracks}\}\)</span></td>
+<td>DUSt3R, MASt3R, <strong>VGGT</strong></td>
+</tr>
+<tr>
+<td><strong>B. Masked modeling 预训练</strong></td>
+<td><span class="arithmatex">\(I_{1:N}^{\text{masked}}\rightarrow I_{1:N}^{\text{orig}}\)</span>（或 depth/BEV/Gaussian）</td>
+<td>MAE, CroCo, <strong>MuM</strong>, <strong>Muskie</strong>, GeoMIM, Video-GMAE</td>
+</tr>
+</tbody>
+</table>
+<p>交叉点：</p>
+<ol>
+<li><strong>用 B 预训练，再接 A 下游</strong>（CroCo→DUSt3R；MuM frozen encoder + VGGT-style heads）  </li>
+<li><strong>A 的架构 + B 的 pretext</strong>（Muskie：交替注意力多视图 backbone + multi-view MIM）  </li>
+<li><strong>A 产出几何，再对几何做 mask 学习</strong>（POMA-3D：对 pointmap 做 JEPA；依赖 VGGT 生成数据）</li>
+</ol>
+<h2 id="2">2. 技术谱系（推荐阅读顺序）</h2>
+<div class="highlight"><pre><span></span><code>MAE (He+ 2022)
+  │  单图 patch mask → 像素重建（偏语义）
+  ▼
+CroCo / CroCo v2 (NeurIPS 2022 / ICCV 2023)
+  │  跨视角 completion：用 view B 补 view A 的 mask
+  │  （强制学对应 / 相对位姿 / 场景几何）
+  ▼
+DUSt3R (CVPR 2024)  ← 权重常从 CroCo 初始化
+  │  监督回归 pointmap
+  ▼
+MASt3R (ECCV 2024) / VGGT (CVPR 2025)
+  │  匹配增强 / 任意多视图一次前向几何预测
+  ▼
+MuM (CVPR 2026) · Muskie (2025)
+     多视图 MAE：任意 N 视图 mask 重建 → 几何感知 backbone
+     MuM 下游显式训「VGGT-inspired」feed-forward recon
+</code></pre></div>
+<h2 id="3">3. 核心论文</h2>
+<h3 id="31-vggt-mae">3.1 最接近「VGGT + MAE」</h3>
+<h4 id="mum-multi-view-masked-image-modeling-for-3d-vision-cvpr-2026">MuM: Multi-View Masked Image Modeling for 3D Vision — <strong>CVPR 2026</strong></h4>
+<ul>
+<li>链接：<a href="https://arxiv.org/abs/2511.17309">arXiv:2511.17309</a> · <a href="https://www.davnords.com/mum">project</a> · <a href="https://github.com/davnords/MuM">code</a></li>
+<li>作者：David Nordström, Johan Edstedt, Fredrik Kahl, Georg Bökman</li>
+<li><strong>做法</strong>：把 MAE 扩到<strong>任意多视图</strong>；各 view 均匀 mask；轻量 decoder + <strong>inter-frame attention</strong> 重建 mask patch。</li>
+<li><strong>定位</strong>：自述延续 CroCo；比 CroCo 更简单可扩展（对称目标、不强制严格 covisibility）。</li>
+<li><strong>与 VGGT 关系</strong>：下游用 <strong>frozen MuM encoder + VGGT/MapAnything 风格</strong> 的 camera/DPT heads 做 feed-forward 重建；并训 RoMa 式匹配。报告在重建 / matching / relative pose 上超过 <strong>DINOv3、CroCo v2</strong>。</li>
+<li><strong>数据</strong>：约 20M 帧混合（ScanNet++、MegaScenes、DL3DV、CO3D、MegaDepth 等）+ 10% ImageNet。</li>
+<li><strong>一句话</strong>：目前最像「用 multi-view MAE 训出几何 backbone，再接到 VGGT 式几何头」的工作。</li>
+</ul>
+<h4 id="muskie-multi-view-masked-image-modeling-for-3d-vision-pre-training-arxiv-2025">Muskie: Multi-view Masked Image Modeling for 3D Vision Pre-training — arXiv 2025</h4>
+<ul>
+<li>链接：<a href="https://arxiv.org/abs/2511.18115">arXiv:2511.18115</a> · <a href="https://leo-frank.github.io/Muskie/">project</a> · <a href="https://github.com/leo-frank/Muskie">code</a></li>
+<li>作者：Wenyu Li, Sidun Liu, Peng Qiao, Yong Dou, Tongrui Hu</li>
+<li><strong>做法</strong>：<strong>原生多视图</strong> backbone（非逐帧再融合）；高 mask 率 + 空间集中 mask；用其他 view 的几何对应补当前 view；<strong>无 3D 监督</strong>。</li>
+<li><strong>架构</strong>：交替注意力等设计，与 VGGT 系「frame/global attention」思路接近。</li>
+<li><strong>下游</strong>：camera pose、pointmap reconstruction、multi-view correspondence；相对 DINO 等 frame-wise VFM 多视图一致性更强。</li>
+<li><strong>一句话</strong>：比 MuM 更强调「native multi-view encoder」；是另一条「MAE → 3D foundation backbone」直通车。</li>
+</ul>
+<h3 id="32-mae">3.2 源头：跨视角 MAE</h3>
+<h4 id="croco-neurips-2022">CroCo — <strong>NeurIPS 2022</strong></h4>
+<ul>
+<li>链接：<a href="https://croco.europe.naverlabs.com/">project</a> · <a href="https://proceedings.neurips.cc/paper_files/paper/2022/file/16e71d1a24b98a02c17b1be1f634f979-Paper-Conference.pdf">NeurIPS PDF</a></li>
+<li><strong>做法</strong>：mask view A；用 A 可见部分 + <strong>完整 view B</strong> 重建 A。<br />
+  单图 MAE 靠语义先验；跨视角 completion 必须理解相对几何与对应。</li>
+<li><strong>意义</strong>：MuM 明确称 CroCo 为「面向 3D 的 MAE 形态」。</li>
+</ul>
+<h4 id="croco-v2-iccv-2023">CroCo v2 — <strong>ICCV 2023</strong></h4>
+<ul>
+<li>链接：<a href="https://arxiv.org/abs/2211.10408">arXiv:2211.10408</a></li>
+<li>强化相对位置编码与规模；面向 stereo / optical flow；DUSt3R 常用其预训练权重初始化。</li>
+</ul>
+<h3 id="33-mae">3.3 几何预测系（对照，非 MAE 主目标）</h3>
+<h4 id="dust3r-cvpr-2024">DUSt3R — <strong>CVPR 2024</strong></h4>
+<ul>
+<li><a href="https://arxiv.org/abs/2312.14132">arXiv:2312.14132</a></li>
+<li><strong>监督</strong> pointmap 回归；<strong>预训练</strong>：CroCo 初始化（MAE 系 → 几何监督）。</li>
+</ul>
+<h4 id="mast3r-eccv-2024">MASt3R — <strong>ECCV 2024</strong></h4>
+<ul>
+<li>在 DUSt3R 上增强匹配 / metric 能力。</li>
+</ul>
+<h4 id="vggt-cvpr-2025">VGGT — <strong>CVPR 2025</strong></h4>
+<ul>
+<li><a href="https://arxiv.org/abs/2503.11651">arXiv:2503.11651</a> · <a href="https://openaccess.thecvf.com/content/CVPR2025/html/Wang_VGGT_Visual_Geometry_Grounded_Transformer_CVPR_2025_paper.html">CVPR OA</a></li>
+<li>任意多视图一次前向预测 camera / depth / pointmap / tracks；<strong>主目标是几何监督预测，不是 mask 重建</strong>。</li>
+<li>架构：标准大 Transformer + frame-wise / global 交替注意力；无强 3D inductive bias。</li>
+</ul>
+<h3 id="34-mim">3.4 相关但任务不同的 MIM + 几何</h3>
+<table>
+<thead>
+<tr>
+<th>工作</th>
+<th>会议/年份</th>
+<th>与 VGGT+MAE 的关系</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://openaccess.thecvf.com/content/ICCV2023/html/Liu_GeoMIM_Towards_Better_3D_Knowledge_Transfer_via_Masked_Image_Modeling_ICCV_2023_paper.html">GeoMIM</a></td>
+<td>ICCV 2023</td>
+<td>多相机 MIM；语义特征 + <strong>depth</strong> 分支；LiDAR BEV 知识蒸馏；面向 <strong>BEV 检测</strong>，非 feed-forward scene recon foundation</td>
+</tr>
+<tr>
+<td><a href="https://europe.naverlabs.com/research/3d-foundation-models/">CroCo-Man</a></td>
+<td>CVPR 2024</td>
+<td>CroCo 扩展到人体跨视角/跨姿态 completion</td>
+</tr>
+<tr>
+<td><a href="https://arxiv.org/abs/2511.16567">POMA-3D</a></td>
+<td>arXiv 2025</td>
+<td>在 <strong>pointmap</strong> 上做 JEPA 式 mask 表征学习；用 <strong>VGGT</strong> 从图像造单视图 pointmap 数据；偏 3D scene understanding / VL，不是 RGB multi-view MAE→VGGT</td>
+</tr>
+<tr>
+<td><a href="https://videogmae.org/">Video-GMAE</a></td>
+<td>CVPR 2026</td>
+<td>视频 MAE：解码 <strong>运动 3D Gaussian</strong>，渲染重建；零样本 tracking；偏 video SSL / 4D 对应，非 VGGT 式多视图几何头</td>
+</tr>
+<tr>
+<td><a href="https://arxiv.org/abs/2309.15313">M³3D</a></td>
+<td>2023</td>
+<td>RGB-D 多模态 MAE，学 3D prior 服务 2D/视频理解</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4">4. 对比表</h2>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>Pretrain 目标</th>
+<th>直接预测 3D？</th>
+<th>视图数</th>
+<th>角色</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MAE</td>
+<td>单图 RGB 重建</td>
+<td>✗</td>
+<td>1</td>
+<td>语义 VFM</td>
+</tr>
+<tr>
+<td>CroCo / v2</td>
+<td>跨视角 RGB 重建</td>
+<td>间接</td>
+<td>2</td>
+<td>3D 友好预训练</td>
+</tr>
+<tr>
+<td>GeoMIM</td>
+<td>特征 + depth（+BEV）</td>
+<td>部分</td>
+<td>多相机</td>
+<td>检测预训练</td>
+</tr>
+<tr>
+<td><strong>Muskie</strong></td>
+<td>多视图 RGB 重建</td>
+<td>间接</td>
+<td>多视图</td>
+<td><strong>3D backbone</strong></td>
+</tr>
+<tr>
+<td><strong>MuM</strong></td>
+<td>任意视图 RGB 重建</td>
+<td>间接（下游可接几何头）</td>
+<td><strong>任意 N</strong></td>
+<td><strong>3D backbone</strong>；下游 VGGT-style</td>
+</tr>
+<tr>
+<td>DUSt3R / MASt3R</td>
+<td>pointmap（监督）</td>
+<td>✓</td>
+<td>2（+后处理）</td>
+<td>几何预测</td>
+</tr>
+<tr>
+<td><strong>VGGT</strong></td>
+<td>camera/D/P/tracks（监督）</td>
+<td>✓</td>
+<td><strong>任意 N</strong></td>
+<td>几何预测 foundation</td>
+</tr>
+<tr>
+<td>POMA-3D</td>
+<td>pointmap JEPA + VL</td>
+<td>表征层</td>
+<td>—</td>
+<td>理解；用 VGGT 造数据</td>
+</tr>
+<tr>
+<td>Video-GMAE</td>
+<td>掩码视频→运动 Gaussian</td>
+<td>隐式 4D</td>
+<td>时序</td>
+<td>跟踪 / video SSL</td>
+</tr>
+</tbody>
+</table>
+<p><strong>严格「VGGT 架构 + MAE loss」一体模型：未见公开论文。</strong></p>
+<h2 id="5">5. 研究空白（可做方向）</h2>
+<p>当前缺口不是「再做一个 multi-view MAE」，而是：</p>
+<h3 id="51-geometry-aware-masked-modeling-on-vggt-outputs">5.1 Geometry-aware masked modeling on VGGT outputs</h3>
+<p>不只重建 RGB，还重建被 mask 的 <strong>depth / pointmap / correspondence / camera</strong>：</p>
+<div class="highlight"><pre><span></span><code>I_{1:T}  --spatio-temporal mask--&gt;  VGGT-like encoder
+                                      │
+                    ┌─────────────────┼─────────────────┐
+                    ▼                 ▼                 ▼
+               RGB decoder      Depth decoder    Pointmap / Track decoder
+</code></pre></div>
+<p>目标从「补图像洞」变成「补 3D world state」。</p>
+<h3 id="52-4d-streaming">5.2 4D / streaming 版</h3>
+<p>结合动态重建（见 <code>4drecon_tracking.md</code>）：</p>
+<ul>
+<li>mask：空间 patch / 整帧 / 时间段 / 特定轨迹点  </li>
+<li>恢复：<span class="arithmatex">\(\hat D_t,\,\hat P_t,\,\hat T_t\)</span> 甚至 <span class="arithmatex">\(\hat P_{t+\Delta}\)</span><br />
+≈ <strong>VideoMAE + VGGT + 4D recon / world model</strong></li>
+</ul>
+<p>MuM/Muskie 已把「多视图 + MAE + 几何」做扎实；<strong>动态时空 masked geometric foundation</strong> 仍空。</p>
+<h2 id="6">6. 速读清单</h2>
+<ol>
+<li><strong>CroCo</strong> — 为何跨视角 mask 能学 3D  </li>
+<li><strong>CroCo v2 / DUSt3R</strong> — MAE 预训练如何接到几何监督  </li>
+<li><strong>VGGT</strong> — 多视图几何预测 foundation 的架构与监督  </li>
+<li><strong>Muskie</strong> — native multi-view + MIM → pose / pointmap  </li>
+<li><strong>MuM</strong> — 任意视图 MAE；下游 VGGT-inspired recon（<strong>优先</strong>）  </li>
+<li><strong>GeoMIM / POMA-3D / Video-GMAE</strong> — 旁支对照（检测 / pointmap JEPA / 4D Gaussian MAE）</li>
+</ol>
+<h2 id="7">7. 与本仓库兴趣的衔接</h2>
+<table>
+<thead>
+<tr>
+<th>兴趣</th>
+<th>可挂钩工作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>静态多视图 feed-forward 重建</td>
+<td>MuM encoder → VGGT-style heads；对照 VGGT 全监督</td>
+</tr>
+<tr>
+<td>动态 / streaming 4D</td>
+<td>Muskie/MuM 仍偏静态多视图；Video-GMAE 偏 tracking；<strong>时空 mask + pointmap/track 重建仍缺</strong></td>
+</tr>
+<tr>
+<td>全景 ERP</td>
+<td>上述工作几乎都是透视；全景版 multi-view MAE / VGGT 见 <code>pano_3drecon.md</code>（PanoVGGT 等），<strong>尚无「Pano-MuM」公开工作</strong></td>
+</tr>
+</tbody>
+</table>
+<p>相关笔记：<code>4drecon_tracking.md</code>（DUSt3R 系动态）、<code>pano_3drecon.md</code>（全景几何基础模型）。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "header.autohide", "search.suggest", "search.highlight", "search.share"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../_js/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
