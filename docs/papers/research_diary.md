@@ -1411,18 +1411,27 @@ pano4dr
 
 - Stanford2D3DS, 真实，静态室内，深度+位姿gt，有全split
 
-- AirSim360——Omni360_Scene, 室外，合成，静止，深度+位姿gt
+- AirSim360——Omni360_Scene, 室外，合成，静止，深度+位姿gt。**只用于训练。已检查。**
 
-- TartanAir V2 Pano（可选）, 合成，静态，挑战轨迹，深度+位姿gt。https://github.com/colmap/colmap/releases/tag/datasets-tartanair-v2-v1，split待造。
+- TartanAir V2 / TartanGround, 合成，静态，挑战轨迹，深度+位姿gt。https://github.com/colmap/colmap/releases/tag/datasets-tartanair-v2-v1，split待造。**这是一个benchmark，深度无法正确读取？它的原版是https://huggingface.co/datasets/theairlabcmu/tartanair2，完整的有54.3T，可以用于训练。另外一个是tartanground。全部omni的数据需要3.6T。正在下载部分用于训练。是否用一个就行了？**
 
-- PanoPointOdyssey, 合成，动态室内外，深度+位姿gt，split待造
+- PanoPointOdyssey, 合成，动态室内外，深度+位姿gt，indoor最后10个序列测试，outdoor最后20个序列测试。**已检查。**
 
-- 360DVO Dataset, 真实网络视频，动态，位姿△ SfM 伪 GT，无 depth，是个benchmark/split待造。
+- 360DVO Dataset, 真实网络视频，动态，位姿△ SfM 伪 GT，无 depth，是个benchmark/split待造。**考虑只用这个数据集做测试？**
 
 - helvipad, 真实，动态，深度gt，绝对轨迹弱，有全split。**深度并没有和rgb对齐，考虑不用这个数据集**
 
-- OmniStereo, urban和things子集，合成，动态，深度gt，urban前700帧训练后600帧测试，things前9216场景训练后1024场景测试，待转换成panorama。**things并不是在同一场景里序列采集的，它的每一帧都是一个独立场景，不能用。**把剩下的子集omnihouse给下载了。
+- OmniStereo, urban、omnithings和omnihouse子集，合成，动态，深度gt，urban前700帧训练后600帧测试，things前9216场景训练后1024场景测试，已转成panorama。**things和house并不是在同一场景里序列采集的，它的每一帧都是一个独立场景，不能用。只用urban训练+测试。**
 
-- Deep360, 合成，室外，自动驾驶，深度gt，有全split。已检查格式。
+- Deep360, 合成，室外，自动驾驶，深度gt，有全split。**已检查格式。**
 
-- 360+x, 真实，动态，相机不动，没有深度gt，split待造（用于自蒸馏训练？）
+- 360+x, 真实，动态，相机不动，没有深度gt，split待造。**只用于自蒸馏训练？**
+
+
+### 0820
+
+表1：位姿
+PanoCity, Matterport3D, Stanford2d3ds，PPO, 360DVO
+
+表2：深度
+PanoCity, Matterport3D, Stanford2d3ds, PPO, OmniStereo-urban, deep360
