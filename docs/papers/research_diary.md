@@ -1435,3 +1435,54 @@ PanoCity, Matterport3D, Stanford2d3ds，PPO, 360DVO
 
 表2：深度
 PanoCity, Matterport3D, Stanford2d3ds, PPO, OmniStereo-urban, deep360
+
+
+### 0824
+
+今日todo:
+
+- [x] 在开哥的节点上把docker conda环境配好
+
+- [x] 下载并准备表1 表2需要evaluation的方法
+
+- [x] 准备好pano4dr对表1 表2新增数据集的evaluation
+
+  - [x] 现在还差360DVO。
+
+- [x] 把我们的方法进行表1 表2的evaluation
+
+- [x] 老颜之前说，可以让vggt、pi3这种来试一试 erp->multi-view pinhole 的效果？在panovggt中，试过pi3 erp->12-view pinhole。现在正在跑 vggt-omega 的 12-view pinhole。只在我们新造的数据集pano_point_odyssey上很差，那就只比这个吧。
+
+- [x] 把**其他方法**在表1 表2上运行
+
+  - [x] UniFuse，测毕
+
+  - [x] BiFuse++, BiFusev2，测毕
+
+  - [ ] HoHoNet，缺失pretrained model。
+
+  - [x] EGFormer，测毕
+
+  - [ ] Elite360D，未测，pretrained model已经包含在github repo里了？
+
+  - [x] PanoFormer，测毕
+
+  - [x] OmniFusion，测毕
+
+- [x] 可视化实验。
+
+- [x] teaser 图
+
+- [x] pipeline 图
+
+- [x] 准备论文
+
+  - [x] abstract
+
+  - [x] Intro 逻辑重新理一下
+
+  - [x] 实验表中的数据，能从PanoVGGT中抄的就抄
+
+  - [x] 实验章节，无关细节太多，如测试集有多少个clips，
+
+  - [x] 图注、表注废话太多
