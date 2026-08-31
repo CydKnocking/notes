@@ -1,6 +1,6 @@
 # 三维视觉基础模型的长序列、低开销与新场景适配
 
-> 检索截止：**2026-08-31**。范围以 CVPR / ICCV / ECCV / ICLR / NeurIPS / ICRA / IROS / WACV / 3DV 与 TPAMI 为主，并补充少量尚未正式发表、但直接命中问题的 2026 年预印本。正式录用论文与预印本分开标注；速度和显存数字只能在各论文自己的硬件、分辨率和输入设置下理解，**不宜跨论文直接横比**。
+> 检索截止：**2026-08-31**。三维范围以 CVPR / ICCV / ECCV / ICLR / NeurIPS / ICRA / IROS / WACV / 3DV 与 TPAMI 为主；跨领域补充覆盖 ACL / TACL / ICML / NeurIPS / ICLR / COLM / ECCV / CVPR / MLSys / RSS 等 LLM、长视频 VLM 与 VLA 工作，并收入少量直接命中问题的预印本。正式录用论文与预印本分开标注；速度和显存数字只能在各论文自己的硬件、分辨率和输入设置下理解，**不宜跨论文直接横比**。
 
 **纳入标准。** 核心表只收录至少直接解决以下一个问题的工作：长上下文复杂度、在线/有界记忆、跨窗口全局一致性、运行时加速，或新场景自适应。泛化的 SLAM、NeRF/3DGS 增量建图和只在短多视图上提升精度的模型没有展开。本次严格口径下的正式论文集中在 CVPR、ICCV、ICLR、ICRA、NeurIPS 与 3DV；没有检索到 ECCV、WACV、IROS、ICML 或 TPAMI 中**直接扩展上述四类新基础模型以满足长序列目标**的正式论文。这不表示这些 venue 没有广义的长序列 SLAM/重建工作。
 
@@ -456,7 +456,194 @@ Online3R、DyFN、Self-Geometry 的共同启示是：新场景适配未必需要
 9. [Online3R, CVPR 2026](https://openaccess.thecvf.com/content/CVPR2026/papers/Zhou_Online3R_Online_Learning_for_Consistent_Sequential_Reconstruction_Based_on_Geometry_CVPR_2026_paper.pdf)：真正的新场景在线适配。
 10. [LoGeR, arXiv 2026](https://arxiv.org/abs/2603.03269)：当前最值得追踪的混合记忆方向。
 
-## 9. 最终判断
+## 9. 跨领域参照：LLM、长视频大模型与 VLA 能提供什么
+
+这里讨论的是**技术关系**，不等同于逐篇论文的引用或思想归属。部分三维工作明确复用了 LLM 的 KV cache、FlashAttention、TTT layer、LoRA 或 token merging；另一些则是在相同约束下独立收敛到相似设计。更准确的划分是：
+
+1. **直接迁移**：因果 KV cache、TTT/fast weights、量化、LoRA/prompt、稀疏注意力；
+2. **结构同构**：短期无损记忆 + 长期压缩记忆、检索式外部存储、surprise/confidence 控制写入；
+3. **三维特有**：SE(3)/Sim(3) gauge、metric scale、共视几何、回环、BA 和跨窗口非刚性对齐。
+
+### 9.1 一个统一的“短模型变长”视角
+
+语言 token、视频 frame、机器人 observation 和多视图 image 的共同问题都是：模型只在长度 $L_{\mathrm{train}}$ 上训练，却要在 $L_{\mathrm{test}}\gg L_{\mathrm{train}}$ 时继续工作。跨领域方案实际上都在回答四个问题：
+
+\[
+\text{读什么}
+\;+\;
+\text{记什么}
+\;+\;
+\text{何时遗忘/更新}
+\;+\;
+\text{怎样保持坐标或任务状态一致}.
+\]
+
+LLM 的长期记忆通常只需保持语义可检索；三维重建还必须保持可配准、可度量、可闭环。因此，LLM/VLM 技术最适合提供**记忆组织和系统实现**，而不能取代显式几何约束。
+
+### 9.2 LLM 长上下文技术与三维方法的对应关系
+
+| LLM / 通用大模型路线 | 代表工作 | 三维中的对应工作 | 关系强度 | 对三维最值得借鉴的点 |
+|---|---|---|---|---|
+| IO-aware exact attention / sequence parallelism | [FlashAttention, NeurIPS 2022](https://proceedings.neurips.cc/paper/2022/hash/67d57c32e20fd0a7a302cb81d36e40d5-Abstract-Conference.html)、[RingAttention, ICLR 2024](https://proceedings.iclr.cc/paper_files/paper/2024/hash/1119587863e78451f080da2a768c4935-Abstract-Conference.html) | 可用于 VGGT/VGGT-$\Omega$ 的 exact attention；Scal3R 采用多 GPU chunk，StreamVGGT 明确兼容 FlashAttention | 直接系统迁移 | 先减少 HBM 读写并把序列分布到多卡；但它们**不降低 full attention 的总计算阶数**，不能冒充定长流式算法 |
+| 稀疏注意力、token pruning / merging | [BigBird, NeurIPS 2020](https://proceedings.neurips.cc/paper/2020/hash/c8512d142a2d849725f31a9a7a361ab9-Abstract.html)、[ToMe, ICLR 2023](https://openreview.net/pdf?id=JroZRaRw7Eu)、[FastV, ECCV 2024](https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/10478.pdf)、[VisionZip, CVPR 2025](https://openaccess.thecvf.com/content/CVPR2025/html/Yang_VisionZip_Longer_is_Better_but_Not_Necessary_in_Vision_Language_CVPR_2025_paper.html) | FastVGGT、AVGGT、HTTM、LiteVGGT | 基本直接迁移 | 保留少量 global/anchor token，其余局部连接或合并；三维版的重要升级应是按**视差、共视、尺度可观测性和回环价值**选择，而不只是 feature similarity |
+| segment recurrence / 因果 KV cache | [Transformer-XL, ACL 2019](https://aclanthology.org/P19-1285/)、[StreamingLLM, ICLR 2024](https://openreview.net/pdf?id=NG7sS51zVF) | StreamVGGT、STream3R、LongStream | 直接迁移 | 重用历史表示并保持因果低延迟；StreamingLLM 保留 attention sink + 最近窗口，对应 LongStream 的 cache refresh 与 anchor 管理 |
+| 固定预算 KV 淘汰 | [H$_2$O, NeurIPS 2023](https://proceedings.neurips.cc/paper_files/paper/2023/hash/6ceefa7b15572587b78ecfcebb2827f8-Abstract-Conference.html)、[Scissorhands, NeurIPS 2023](https://papers.neurips.cc/paper_files/paper/2023/file/a452a7c6c463e4ae8fbdc614c6e983e6-Paper-Conference.pdf) | IncVGGT、InfiniteVGGT、RetrieveVGGT、FrameVGGT | 直接算法类比 | “recent + important”优于纯 FIFO；但三维 heavy hitter 应是关键帧/子图/平面等完整证据单元，逐 token 淘汰可能破坏一组对应关系 |
+| 压缩记忆与外部检索 | [Compressive Transformer, ICLR 2020](https://openreview.net/forum?id=SylKikSYDH)、[Memorizing Transformer, ICLR 2022](https://openreview.net/pdf?id=TrjbxzRcnf-)、[RAG, NeurIPS 2020](https://proceedings.neurips.cc/paper_files/paper/2020/hash/6b493230205f780e1bc26945df7481e5-Abstract.html)、[RETRO, ICML 2022](https://proceedings.mlr.press/v162/borgeaud22a.html) | LoGeR、VGGT-Long/AMB3R 的关键帧库、MERG3R、RetrieveVGGT、传统 place recognition | 结构同构 | 把“全部历史参与 attention”改成“查询相关历史”；三维 RAG 的返回值不能只是 feature，还应携带相机、局部点云、协方差和可验证的几何约束 |
+| 固定规模 recurrent / state-space state | [Mamba, COLM 2024](https://openreview.net/pdf?id=tEYskw1VY2)、[Gated DeltaNet, ICLR 2025](https://proceedings.iclr.cc/paper_files/paper/2025/hash/4904fad153f6434a7bcf04465d4be2cc-Abstract-Conference.html) | Spann3R、CUT3R、LONG3R、TTT3R | 结构同构 | gating 负责快速遗忘，delta rule 负责定向改写；这比对所有历史做均匀 EMA 更适合处理遮挡、动态物体和场景切换 |
+| 神经网络作为长期记忆 / fast weights | [TTT layers](https://arxiv.org/abs/2407.04620)、[Titans, NeurIPS 2025](https://proceedings.neurips.cc/paper_files/paper/2025/hash/a4ca07aa108036f80cbb5b82285fd4b1-Abstract-Conference.html) | VGG-T$^3$、ZipMap、Scal3R、tttLRM、LoGeR | 明确而直接的技术血缘 | 用小 MLP 参数压缩历史，attention 保留短期精确依赖；Titans 以 surprise 控制记忆写入，提示三维模型可用几何 innovation / residual / uncertainty 决定更新强度 |
+| 位置表示与 train-short-test-long | [ALiBi, ICLR 2022](https://openreview.net/pdf?id=R8sQPpGCv0)、[YaRN, ICLR 2024](https://openreview.net/pdf?id=wHBfxhZu1u)、[LongLoRA, ICLR 2024](https://proceedings.iclr.cc/paper_files/paper/2024/hash/211ab571cc9f3802afa6ffff52ae3e5b-Abstract-Conference.html) | $\pi^3$、LongStream、R$^3$、LASER；长序列 curriculum/cache-consistent training | 原理类比，不可直接照搬 | LLM 说明“长度外失败”既是算力问题也是表示/训练分布问题；三维应训练相对 pose、随机时间跨度和跨块 gauge，而不是简单插值帧位置编码 |
+| 权重与 KV 低比特化 | [SmoothQuant, ICML 2023](https://proceedings.mlr.press/v202/xiao23c.html)、[AWQ, MLSys 2024](https://proceedings.mlsys.org/paper_files/paper/2024/hash/42a452cbafa9dd64e9ba4aa95cc1ef21-Abstract-Conference.html)、[KIVI, ICML 2024](https://proceedings.mlr.press/v235/liu24bz.html) | QuantVGGT；未来的 StreamVGGT/IncVGGT cache quantization | 直接系统迁移 | 不只量化 backbone 权重，还应分别研究历史 K、V、point/depth token 的异常值分布；近期局部几何保持高精度，远期语义/回环描述子可更低比特 |
+
+这张表也解释了一个常见误区：**FlashAttention、RingAttention、量化和 token merging 让“给定长度更便宜”，但只有有界 cache、固定神经状态或外部检索才真正改变无限序列的资源增长方式。**
+
+### 9.3 长视频 VLM 与视频分割：比纯 LLM 更接近三维问题
+
+视觉领域的历史信息具有空间密度、遮挡和重复观测，因此其经验比纯文本更可直接迁移。
+
+- [XMem, ECCV 2022](https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136880633.pdf) 将记忆拆成快速 sensory memory、高分辨率 working memory 和压缩 long-term memory，并把反复被读取的工作记忆 consolidation 到长期库。它与 LoGeR 的“局部未压缩 + 全局压缩”几乎是同一设计哲学；三维版还应增加永久 loop-anchor memory。
+- [SAM 2, ICLR 2025](https://proceedings.iclr.cc/paper_files/paper/2025/hash/45c1f6a8cbf2da59ebf2c802b4f742cd-Abstract-Conference.html) 用 streaming memory 把图像基础模型推广到实时视频；当 memory 为空时退化回图像模型。这是很好的兼容性原则：长序列模块应作为可插拔层，不破坏 VGGT/$\pi^3$/DA3 的短序列能力。
+- [Cutie, CVPR 2024](https://openaccess.thecvf.com/content/CVPR2024/html/Cheng_Putting_the_Object_Back_into_Video_Object_Segmentation_CVPR_2024_paper.html) 说明逐像素 memory matching 容易被干扰物污染，少量 object query + 高分辨率局部特征更稳。对应到三维，长期记忆的基本单位应逐渐从 pixel token 升级为 object、plane、keyframe 和 submap。
+- [MovieChat, CVPR 2024](https://openaccess.thecvf.com/content/CVPR2024/papers/Song_MovieChat_From_Dense_Token_to_Sparse_Memory_for_Long_Video_CVPR_2024_paper.pdf) 与 [MA-LMM, CVPR 2024](https://openaccess.thecvf.com/content/CVPR2024/html/He_MA-LMM_Memory-Augmented_Large_Multimodal_Model_for_Long-Term_Video_Understanding_CVPR_2024_paper.html) 都采用固定短期 buffer + 合并后的长期 memory bank。MA-LMM 的实验还显示，相似片段合并优于简单 FIFO；这直接支持三维中的 composite view 和 submap consolidation。
+- [LLaMA-VID, ECCV 2024](https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/06290.pdf) 把每帧压成一个 text-conditioned context token 和一个 content token；[VisionZip](https://openaccess.thecvf.com/content/CVPR2025/html/Yang_VisionZip_Longer_is_Better_but_Not_Necessary_in_Vision_Language_CVPR_2025_paper.html) 进一步选择少量 informative visual token。三维不能压到“两 token/帧”，但可以采用“少量全局姿态/场景 token + 局部稠密 patch token”的非对称预算。
+- [VideoLLM-online, CVPR 2024](https://openaccess.thecvf.com/content/CVPR2024/html/Chen_VideoLLM-online_Online_Video_Large_Language_Model_for_Streaming_Video_CVPR_2024_paper.html) 不只改变网络，还改变训练序列格式：冗余帧保持沉默，只在关键事件输出，并仅保存关键帧上下文。对三维最有价值的启发是**事件驱动几何推理**：普通帧只做廉价 tracking/depth propagation，视差、残差或不确定性超过阈值时才调用完整 foundation model。
+- [LongVILA, ICLR 2025](https://proceedings.iclr.cc/paper_files/paper/2025/hash/2e163450c1ae3167832971e6da29f38d-Abstract-Conference.html) 采用“先扩 context，再做长视频 SFT”的分阶段训练，并以 multimodal sequence parallelism 处理 2M context。它说明只改推理 cache 不够，训练中必须真正出现远距离依赖；对应三维应加入跨越数百/数千帧的回环、尺度和场景切换监督。
+
+### 9.4 VLA / 具身智能：长期记忆必须服务于动作和任务进度
+
+VLA 与三维在线建图共享严格因果、传感器流和新环境适配，但 VLA 还要维持任务阶段与动作一致性。
+
+| VLA 工作 | 关键思想 | 对长序列三维的启发 |
+|---|---|---|
+| [Octo, RSS 2024](https://www.roboticsproceedings.org/rss20/p090.pdf) | 以 800k 机器人轨迹预训练，支持新相机、proprioception、action space 和 embodiment 的快速微调 | 像 MapAnything 一样把标定、IMU、深度等作为可选条件；预训练接口必须允许部署时新增传感器，而不是固定 RGB-only |
+| [MemoryVLA, ICLR 2026](https://openreview.net/pdf?id=54U3XHf7qq) | working memory 保留当前 perceptual/cognitive token，长期库同时保存低层细节与高层语义，并检索、合并冗余 | 对应“raw local geometry + semantic/topological long-term map”；说明长期地图最好同时保存可配准细节和任务语义 |
+| [OptimusVLA, CVPR 2026](https://openaccess.thecvf.com/content/CVPR2026/html/Li_Global_Prior_Meets_Local_Consistency_Dual-Memory_Augmented_Vision-Language-Action_Model_for_CVPR_2026_paper.html) | Global Prior Memory 检索相似轨迹以缩短动作生成路径，Local Consistency Memory 表示已执行动作和任务进度；报告 2.9× 推理加速 | 三维可把“历史相似轨迹先验”和“当前局部几何一致性”分成两套 memory，前者提供先验/回环候选，后者负责严谨配准 |
+| [Towards Long-Horizon VLA, ICCV 2025](https://openaccess.thecvf.com/content/ICCV2025/papers/Li_Towards_Long-Horizon_Vision-Language-Action_System_Reasoning_Acting_and_Memory_ICCV_2025_paper.pdf) | 高层 reasoning 拆 meta-action，底层 policy expert 执行，并用 action stack/memory 维持阶段 | 对机器人三维系统，应让低频 foundation model 管全局子图/回环，高频轻量 VO/depth 管局部；不要让一个大模型以同一频率处理所有帧 |
+
+关系上，VLA 的 dual-memory 与 LoGeR/XMem/Titans 非常接近：**高分辨率短期状态保证即时控制，压缩或检索式长期状态保证任务不失忆。** 不同的是，三维长期状态需要通过重投影、共视和回环验证，不能仅凭语义相似写入。
+
+### 9.5 “测试时学习”其实有三种，必须分开
+
+1. **TTT sequence layer**：TTT layers、Titans、VGG-T$^3$/ZipMap/Scal3R 把小网络参数当作 sequence state，目标是压缩上下文；
+2. **test-time adaptation / domain adaptation**：[经典 TTT, ICML 2020](https://proceedings.mlr.press/v119/sun20b.html)、[TENT, ICLR 2021](https://arxiv.org/abs/2006.10726) 在无标签测试数据上更新模型，目标是适应分布偏移；
+3. **parameter-efficient adaptation**：[Adapter, ICML 2019](https://proceedings.mlr.press/v97/houlsby19a)、[LoRA, ICLR 2022](https://openreview.net/pdf?id=nZeVKeeFYf9)、[Visual Prompt Tuning, ECCV 2022](https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136930696.pdf) 冻结 backbone，只开放少量参数。
+
+Online3R 属于第 2+3 类，VGG-T$^3$ 主要属于第 1 类，Scal3R 同时具有第 1 类的记忆作用和第 2 类的场景自适应潜力。把它们都简称 TTT 会掩盖最重要的差别：**模型到底是在“记住当前序列”，还是在“修正对新域的系统偏差”。**
+
+长期在线适配还应直接借鉴：
+
+- [CoTTA, CVPR 2022](https://openaccess.thecvf.com/content/CVPR2022/html/Wang_Continual_Test-Time_Domain_Adaptation_CVPR_2022_paper.html)：EMA/augmentation-averaged teacher 减少伪标签错误，并随机恢复部分 source weights 防止灾难性遗忘；
+- [EATA, ICML 2022](https://proceedings.mlr.press/v162/niu22a.html)：跳过无信息或不可靠样本，减少 backward 次数，并保护重要权重。
+
+对应三维系统的实践准则是：只用高置信、多基线且跨时一致的几何残差更新 prompt/LoRA；保留 source checkpoint 和稳定 teacher；检测场景切换；若回环/重投影误差突然恶化则回滚。这比无条件逐帧反向传播可靠得多。
+
+### 9.6 不能从 LLM 直接照搬的三维特殊性
+
+1. **一维位置不等于三维 gauge。** ALiBi/YaRN 解决 token index 外推；相机 pose 位于 SE(3)/Sim(3)，还含尺度不可观与坐标规范问题。LongStream/$\pi^3$/R$^3$ 的相对表示不是简单“3D 版 RoPE”。
+2. **语义召回不等于几何可配准。** RAG 找到相关段落即可使用；三维检索到外观相似关键帧后还必须通过特征对应、PnP/essential matrix、重投影或点云一致性验证。
+3. **token 独立性假设更危险。** 删除一句话可能损失语义，删除一个小 patch 可能直接让尺度、旋转或薄结构不可观。几何 memory 应以 frame/object/plane/submap 等约束闭包为单位。
+4. **误差会进入坐标并永久积累。** LLM 丢失旧 token 通常影响未来答案；三维早期错误会改变后续所有坐标。必须保留显式 factor graph、loop closure 或可回滚 map state。
+5. **“无限流畅”不代表“无限记忆”。** StreamingLLM 可以在数百万 token 后继续稳定生成，但不保证准确回忆中间事实；同理，模型能跑 10k 帧不代表它还能利用第 300 帧的回环。
+6. **动态世界不是纯 context shift。** 三维要区分 camera motion、object motion 与地图变化，不能把所有新信息写入单一静态 state；至少需要 static map / dynamic object / appearance statistics 三类状态。
+
+### 9.7 从跨领域经验推导出的下一步研究路线
+
+按科研价值与可实现性排序，最值得尝试的是：
+
+#### A. 三层几何记忆，而不是单一 cache
+
+\[
+\underbrace{\text{sensory: 最近若干帧的稠密 token}}_{\text{最高精度、快速淘汰}}
+\rightarrow
+\underbrace{\text{working: keyframe/object/submap}}_{\text{可配准、固定预算}}
+\rightarrow
+\underbrace{\text{long-term: neural state + topology/loop index}}_{\text{压缩、可检索}}.
+\]
+
+这综合了 XMem、MovieChat、Titans、MemoryVLA 与 LoGeR。长期库应保留少量不可压缩的 loop anchor，避免 neural memory 把精确闭环证据“平均掉”。
+
+#### B. Geometry-RAG：检索后必须验证
+
+为每个 keyframe/submap 同时建立：
+
+- appearance/semantic 向量索引；
+- covisibility/topological 图；
+- 相机、局部点云、尺度与不确定性；
+- 可快速运行的几何 verification。
+
+当前帧先用外观和拓扑召回候选，再用几何验证产生 pose factor。它对应 RAG/RETRO，但输出是**可优化的约束**，不是直接拼接的上下文。
+
+#### C. 用 gated delta / surprise 更新地图状态
+
+把 Titans 的 surprise 和 Gated DeltaNet 的 erase/write 分离改成几何量：
+
+\[
+s_t =
+\alpha\,e_{\mathrm{reproj}}
++\beta\,e_{\mathrm{depth}}
++\gamma\,u_t
++\delta\,d_{\mathrm{view}},
+\]
+
+其中重投影残差、深度残差、不确定性和视角新颖度共同决定是否写入；动态/冲突证据触发局部擦除或分支，而不是污染整个全局 state。
+
+#### D. 事件驱动的多频率系统
+
+借鉴 VideoLLM-online 和 hierarchical VLA：
+
+- 每帧：轻量特征、光流/track、depth propagation；
+- 关键帧：运行 VGGT/$\pi^3$/DA3 局部几何；
+- 子图完成或不确定性升高：更新 TTT/global memory；
+- 检测到地点召回：启动 loop verification 与局部 BA。
+
+这通常比强行让 foundation model 达到相机原始 FPS 更有系统价值。
+
+#### E. 对历史 memory 做分级量化
+
+结合 KIVI/QuantVGGT：最近窗口保留 BF16/FP16，较旧 key/value 使用 INT8/INT4，长期检索描述子甚至可二值化；pose、尺度和协方差保持较高精度。评价时必须把反量化 IO 和真实 kernel 延迟计入，而不只报告理论显存。
+
+#### F. “短训长测”的几何课程
+
+结合 ALiBi/YaRN/LongVILA/LongLoRA 的经验，在有限训练长度下合成长程困难：
+
+- positional skip：相邻输入在原视频中随机跨越不同时间间隔；
+- trajectory stretch：保持局部块长度不变，扩大块间基线和里程；
+- delayed loop：回环证据故意延迟到数百帧之后；
+- memory corruption：训练时随机删改历史 cache，迫使模型学习 refresh 与恢复；
+- scene boundary：把多个场景串联，监督 reset/branch。
+
+#### G. 为在线适配增加安全机制
+
+Online3R/Self-Geometry 应补上 CoTTA/EATA 式 teacher、样本筛选、source-weight restoration、场景切换和 rollback。更新自由度优先级仍应是 statistics → prompt/register → LoRA → 少量 head，最后才是 backbone。
+
+#### H. 评价“有效上下文”，而不是最大可运行帧数
+
+[Lost in the Middle, TACL 2024](https://aclanthology.org/2024.tacl-1.9/) 与 [RULER, COLM 2024](https://openreview.net/pdf?id=kIoBbc76Sy) 说明 nominal context length 不等于有效利用长度。三维版 benchmark 应加入：
+
+- 把唯一回环帧放在序列开头、中间、结尾，检查位置偏置；
+- 在 1k/5k/10k 帧后重新定位到早期地点；
+- 多个相似地点中只保留一个几何正确候选，检查 retrieval false positive；
+- 删除某个关键 submap 后测轨迹/尺度变化，评估真实记忆贡献；
+- 同时报告 memory recall、geometric verification precision、ATE 随长度曲线和 map consistency。
+
+### 9.8 跨领域后的核心研究判断
+
+当前三维方向与 LLM/VLM/VLA 的关系，可以压缩成一句话：
+
+> **LLM 提供长上下文算子和检索范式，视频模型提供多层视觉记忆，VLA 提供任务驱动的因果更新；三维研究必须在此之上加入可验证的空间约束。**
+
+因此，下一阶段最可能胜出的并非单纯“3D Mamba”“3D RAG”或“把 context 拉到 100k”，而是：
+
+\[
+\boxed{\text{dense local geometry}}
++
+\boxed{\text{multi-level bounded memory}}
++
+\boxed{\text{retrieval + geometric verification}}
++
+\boxed{\text{safe online adaptation}}.
+\]
+
+## 10. 最终判断
 
 如果研究问题是“让 VGGT / $\pi^3$ / DA3 / VGGT-$\Omega$ 在更长视频上低开销、快速并适应新场景”，最有含金量的切入点不是孤立地做 token pruning，而是同时处理三件事：
 
