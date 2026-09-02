@@ -1,0 +1,4996 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../discussions/">
+      
+      
+        <link rel="next" href="../pano_3drecon/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../_assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>三维视觉基础模型的长序列、低开销与新场景适配 - Knocking's notebook</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="brown" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Knocking&#39;s notebook" class="md-header__button md-logo" aria-label="Knocking's notebook" data-md-component="logo">
+      
+  <img src="../../_assets/icon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Knocking's notebook
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              三维视觉基础模型的长序列、低开销与新场景适配
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/CydKnocking/notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Knocking&#39;s notebook" class="md-nav__button md-logo" aria-label="Knocking's notebook" data-md-component="logo">
+      
+  <img src="../../_assets/icon.png" alt="logo">
+
+    </a>
+    Knocking's notebook
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/CydKnocking/notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Knocking's personal notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about_this_notebook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About this notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Vis Info Processing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    3D Vis Info Processing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/00_Introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    00 Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/01_Part%20One%20Acquisition%20of%203D%20Data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 Part One Acquisition of 3D Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/02_Part%20Two%20Integration%20of%203D%20data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 Part Two Integration of 3D data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/03_Part%20Three%20Descriptions%20of%203D%20Objects%20and%20Scenes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 Part Three Descriptions of 3D Objects and Scenes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/Full%20notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ML
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ML
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ML/great_links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Great links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Web
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Web/clash/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clash
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Web/domains/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Domains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Conference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../conference/china3dv_2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    China3dv 2026
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Datasets
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Datasets
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/TUM_RGBD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TUM RGBD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/TartanAir/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TartanAir
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/proxy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proxy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Github
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Github
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../github/Deploy%20repo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Create a new github repository
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../github/verify%20domain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verify domain
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux and ubuntu
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Linux and ubuntu
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/chmod/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chmod
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/chown/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chown
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/cmatrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cmatrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/crontab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crontab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/dns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/softlink/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Softlink
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/ssh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ssh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/tmux/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/zsh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zsh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Math
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Math
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/great_links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Great links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/quaternion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quaternion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Papers
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Papers
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3dgs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3dgs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4drecon_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4drecon tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../croco_and_crocov2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CroCo 与 CroCo v2：从跨视角补全到通用几何视觉骨干
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../discussions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Discussions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    三维视觉基础模型的长序列、低开销与新场景适配
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    三维视觉基础模型的长序列、低开销与新场景适配
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 结论先行
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 四个基础模型：强项与长序列短板
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 四个基础模型：强项与长序列短板">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键辨析
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 方法谱系：六类长序列解法
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 顶会核心论文
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 顶会核心论文">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-vggt-pi3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 直接加速 VGGT / \(\pi^3\)：低改造成本
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.1 直接加速 VGGT / \(\pi^3\)：低改造成本">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fastvggt-iclr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FastVGGT — ICLR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#avggt-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AVGGT — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#httm-litevggt-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTTM / LiteVGGT — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quantvggt-iclr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        QuantVGGT — ICLR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fast3r-cvpr-2025" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fast3R — CVPR 2025（早期大规模前馈基线）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 真正的流式/递归几何模型
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2 真正的流式/递归几何模型">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#spann3r-3dv-2025cut3r-cvpr-2025-oral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Spann3R — 3DV 2025；CUT3R — CVPR 2025 Oral
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#long3r-iccv-2025" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LONG3R — ICCV 2025
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#streamvggt-iclr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StreamVGGT — ICLR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#incvggt-iclr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IncVGGT — ICLR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stream3r-iclr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        STream3R — ICLR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ttt3r-iclr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TTT3R — ICLR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#longstream-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LongStream — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-ttt-fast-weights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 TTT / fast weights：线性时间的场景记忆
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3 TTT / fast weights：线性时间的场景记忆">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vgg-t3-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VGG-T\(^3\) — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zipmap-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ZipMap — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scal3r-cvpr-2026-highlight" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scal3R — CVPR 2026 Highlight
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tttlrm-cvpr-2026-highlight" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tttLRM — CVPR 2026 Highlight
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 窗口、显式几何后端与可插拔系统
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.4 窗口、显式几何后端与可插拔系统">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vggt-long-icra-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VGGT-Long — ICRA 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pi-long-da3-streaming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pi-Long / DA3-Streaming — 官方工程扩展，无独立论文
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#laser-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LASER — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#merg3r-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MERG3R — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#talo-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TALO — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#amb3r-amb3r-vo-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AMB3R / AMB3R-VO — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mast3r-slam-slam3r-cvpr-2025" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MASt3R-SLAM / SLAM3R — CVPR 2025
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-depth-anything" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 Depth Anything 路线：长视频深度与低算力
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.5 Depth Anything 路线：长视频深度与低算力">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#video-depth-anything-cvpr-2025-highlight" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Video Depth Anything — CVPR 2025 Highlight
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flashdepth-iccv-2025" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FlashDepth — ICCV 2025
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dyfn-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DyFN — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 新场景泛化与测试时适配
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.6 新场景泛化与测试时适配">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#online3r-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Online3R — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vggt-omega-da3-depth-anything" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VGGT-\(\Omega\) / DA3 / Depth Anything：数据规模带来的零样本适配
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapanything-3dv-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MapAnything — 3DV 2026（相关补充）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 一张表看懂选型
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 2026 年重要预印本：值得跟踪，但不要当作已录用论文
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 2026 年重要预印本：值得跟踪，但不要当作已录用论文">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#loger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LoGeR：目前最完整的“局部无损 + 全局压缩”方案
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#infinitevggt-retrievevggt-framevggt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        InfiniteVGGT / RetrieveVGGT / FrameVGGT：固定预算的历史选择
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#r3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        R\(^3\)：用相对回归消除无限增长坐标
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vigeo-full-sequence-streaming-long-video" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ViGeo：同一模型统一 full-sequence / streaming / long-video
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sage-self-geometry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SAGE / Self-Geometry：专门面向适配
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vggt-align" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VGGT-Align：切块法的尺度漂移修正
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ovdavideo-depth-anything" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        oVDA：Video Depth Anything 的在线化
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 研究品味：哪些方向更可能继续有效
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 研究品味：哪些方向更可能继续有效">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-vggt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 最有前景的组合不是“再做一个更大 VGGT”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 新场景适配应是“受控的小更新”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-feature-similarity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 记忆淘汰必须尊重几何，而不是只看 feature similarity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 评价协议应专门检查“长度外泛化”
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 面向不同目标的推荐阅读与复现顺序
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. 面向不同目标的推荐阅读与复现顺序">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a24-gb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        目标 A：24 GB 内做长视频相机轨迹 + 稠密点云
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        目标 B：最高吞吐的大规模离线图像集
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        目标 C：机器人严格在线与新环境适配
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        目标 D：只需长视频稳定深度
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 精选阅读顺序
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-llm-vla" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 跨领域参照：LLM、长视频大模型与 VLA 能提供什么
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. 跨领域参照：LLM、长视频大模型与 VLA 能提供什么">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 一个统一的“短模型变长”视角
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 LLM 长上下文技术与三维方法的对应关系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-vlm-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 长视频 VLM 与视频分割：比纯 LLM 更接近三维问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-vla" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 VLA / 具身智能：长期记忆必须服务于动作和任务进度
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5 “测试时学习”其实有三种，必须分开
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#96-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.6 不能从 LLM 直接照搬的三维特殊性
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#97" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.7 从跨领域经验推导出的下一步研究路线
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9.7 从跨领域经验推导出的下一步研究路线">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A. 三层几何记忆，而不是单一 cache
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-geometry-rag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B. Geometry-RAG：检索后必须验证
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-gated-delta-surprise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C. 用 gated delta / surprise 更新地图状态
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#d_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        D. 事件驱动的多频率系统
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#e-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        E. 对历史 memory 做分级量化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#f" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F. “短训长测”的几何课程
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#g" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        G. 为在线适配增加安全机制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H. 评价“有效上下文”，而不是最大可运行帧数
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#98" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.8 跨领域后的核心研究判断
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. 最终判断
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pano_3drecon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pano 3drecon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paper_notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paper notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../point_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Point tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research_diary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research diary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vggt_mae/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VGGT 类几何基础模型 × MAE / Masked Modeling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Python
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/rosbag/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rosbag
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/send_email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Send email
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/torch_tips/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Torch tips
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/tqdm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tqdm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 结论先行
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 四个基础模型：强项与长序列短板
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 四个基础模型：强项与长序列短板">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        关键辨析
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 方法谱系：六类长序列解法
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 顶会核心论文
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 顶会核心论文">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-vggt-pi3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 直接加速 VGGT / \(\pi^3\)：低改造成本
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.1 直接加速 VGGT / \(\pi^3\)：低改造成本">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fastvggt-iclr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FastVGGT — ICLR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#avggt-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AVGGT — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#httm-litevggt-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTTM / LiteVGGT — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quantvggt-iclr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        QuantVGGT — ICLR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fast3r-cvpr-2025" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fast3R — CVPR 2025（早期大规模前馈基线）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 真正的流式/递归几何模型
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2 真正的流式/递归几何模型">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#spann3r-3dv-2025cut3r-cvpr-2025-oral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Spann3R — 3DV 2025；CUT3R — CVPR 2025 Oral
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#long3r-iccv-2025" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LONG3R — ICCV 2025
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#streamvggt-iclr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StreamVGGT — ICLR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#incvggt-iclr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IncVGGT — ICLR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stream3r-iclr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        STream3R — ICLR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ttt3r-iclr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TTT3R — ICLR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#longstream-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LongStream — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-ttt-fast-weights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 TTT / fast weights：线性时间的场景记忆
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3 TTT / fast weights：线性时间的场景记忆">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vgg-t3-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VGG-T\(^3\) — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zipmap-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ZipMap — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scal3r-cvpr-2026-highlight" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scal3R — CVPR 2026 Highlight
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tttlrm-cvpr-2026-highlight" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tttLRM — CVPR 2026 Highlight
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 窗口、显式几何后端与可插拔系统
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.4 窗口、显式几何后端与可插拔系统">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vggt-long-icra-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VGGT-Long — ICRA 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pi-long-da3-streaming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pi-Long / DA3-Streaming — 官方工程扩展，无独立论文
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#laser-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LASER — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#merg3r-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MERG3R — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#talo-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TALO — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#amb3r-amb3r-vo-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AMB3R / AMB3R-VO — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mast3r-slam-slam3r-cvpr-2025" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MASt3R-SLAM / SLAM3R — CVPR 2025
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-depth-anything" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 Depth Anything 路线：长视频深度与低算力
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.5 Depth Anything 路线：长视频深度与低算力">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#video-depth-anything-cvpr-2025-highlight" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Video Depth Anything — CVPR 2025 Highlight
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flashdepth-iccv-2025" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FlashDepth — ICCV 2025
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dyfn-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DyFN — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 新场景泛化与测试时适配
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.6 新场景泛化与测试时适配">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#online3r-cvpr-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Online3R — CVPR 2026
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vggt-omega-da3-depth-anything" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VGGT-\(\Omega\) / DA3 / Depth Anything：数据规模带来的零样本适配
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapanything-3dv-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MapAnything — 3DV 2026（相关补充）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 一张表看懂选型
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 2026 年重要预印本：值得跟踪，但不要当作已录用论文
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 2026 年重要预印本：值得跟踪，但不要当作已录用论文">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#loger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LoGeR：目前最完整的“局部无损 + 全局压缩”方案
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#infinitevggt-retrievevggt-framevggt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        InfiniteVGGT / RetrieveVGGT / FrameVGGT：固定预算的历史选择
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#r3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        R\(^3\)：用相对回归消除无限增长坐标
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vigeo-full-sequence-streaming-long-video" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ViGeo：同一模型统一 full-sequence / streaming / long-video
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sage-self-geometry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SAGE / Self-Geometry：专门面向适配
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vggt-align" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VGGT-Align：切块法的尺度漂移修正
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ovdavideo-depth-anything" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        oVDA：Video Depth Anything 的在线化
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 研究品味：哪些方向更可能继续有效
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 研究品味：哪些方向更可能继续有效">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-vggt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 最有前景的组合不是“再做一个更大 VGGT”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 新场景适配应是“受控的小更新”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-feature-similarity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 记忆淘汰必须尊重几何，而不是只看 feature similarity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 评价协议应专门检查“长度外泛化”
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 面向不同目标的推荐阅读与复现顺序
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. 面向不同目标的推荐阅读与复现顺序">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a24-gb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        目标 A：24 GB 内做长视频相机轨迹 + 稠密点云
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        目标 B：最高吞吐的大规模离线图像集
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        目标 C：机器人严格在线与新环境适配
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        目标 D：只需长视频稳定深度
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 精选阅读顺序
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-llm-vla" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 跨领域参照：LLM、长视频大模型与 VLA 能提供什么
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. 跨领域参照：LLM、长视频大模型与 VLA 能提供什么">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 一个统一的“短模型变长”视角
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 LLM 长上下文技术与三维方法的对应关系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-vlm-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 长视频 VLM 与视频分割：比纯 LLM 更接近三维问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-vla" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 VLA / 具身智能：长期记忆必须服务于动作和任务进度
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5 “测试时学习”其实有三种，必须分开
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#96-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.6 不能从 LLM 直接照搬的三维特殊性
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#97" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.7 从跨领域经验推导出的下一步研究路线
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9.7 从跨领域经验推导出的下一步研究路线">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A. 三层几何记忆，而不是单一 cache
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-geometry-rag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B. Geometry-RAG：检索后必须验证
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-gated-delta-surprise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        C. 用 gated delta / surprise 更新地图状态
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#d_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        D. 事件驱动的多频率系统
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#e-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        E. 对历史 memory 做分级量化
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#f" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F. “短训长测”的几何课程
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#g" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        G. 为在线适配增加安全机制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        H. 评价“有效上下文”，而不是最大可运行帧数
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#98" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.8 跨领域后的核心研究判断
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. 最终判断
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="_1">三维视觉基础模型的长序列、低开销与新场景适配</h1>
+<blockquote>
+<p>检索截止：<strong>2026-08-31</strong>。三维范围以 CVPR / ICCV / ECCV / ICLR / NeurIPS / ICRA / IROS / WACV / 3DV 与 TPAMI 为主；跨领域补充覆盖 ACL / TACL / ICML / NeurIPS / ICLR / COLM / ECCV / CVPR / MLSys / RSS 等 LLM、长视频 VLM 与 VLA 工作，并收入少量直接命中问题的预印本。正式录用论文与预印本分开标注；速度和显存数字只能在各论文自己的硬件、分辨率和输入设置下理解，<strong>不宜跨论文直接横比</strong>。</p>
+</blockquote>
+<p><strong>纳入标准。</strong> 核心表只收录至少直接解决以下一个问题的工作：长上下文复杂度、在线/有界记忆、跨窗口全局一致性、运行时加速，或新场景自适应。泛化的 SLAM、NeRF/3DGS 增量建图和只在短多视图上提升精度的模型没有展开。本次严格口径下的正式论文集中在 CVPR、ICCV、ICLR、ICRA、NeurIPS 与 3DV；没有检索到 ECCV、WACV、IROS、ICML 或 TPAMI 中<strong>直接扩展上述四类新基础模型以满足长序列目标</strong>的正式论文。这不表示这些 venue 没有广义的长序列 SLAM/重建工作。</p>
+<h2 id="0">0. 结论先行</h2>
+<p>VGGT、<span class="arithmatex">\(\pi^3\)</span>、Depth Anything 3（DA3）和 VGGT-<span class="arithmatex">\(\Omega\)</span> 已经把短序列的前馈多视图几何做得很强，但“短序列精度高”并不等于“长视频可用”。它们的主要瓶颈是跨帧全局注意力：若每帧有 <span class="arithmatex">\(P\)</span> 个 token、共有 <span class="arithmatex">\(T\)</span> 帧，朴素全局注意力的时间复杂度为</p>
+<div class="arithmatex">\[
+\mathcal{O}((TP)^2),
+\]</div>
+<p>并且需要一次看到完整序列。长视频研究真正竞争的是：<strong>怎样在有限显存中保留局部精确几何、长期全局坐标和新场景信息</strong>。</p>
+<p>截至检索日，最值得关注的判断是：</p>
+<ol>
+<li><strong>只想无训练加速现有 VGGT / <span class="arithmatex">\(\pi^3\)</span></strong>：FastVGGT、AVGGT、HTTM、LiteVGGT 很实用；但 token merging / pruning 只是降低常数，通常没有从根本上消除长序列全局注意力或长期漂移。</li>
+<li><strong>要真正在线、定长显存</strong>：IncVGGT、TTT3R、LongStream、LASER，以及 2026 年预印本 LoGeR 更接近正确方向。单纯的因果 KV cache（StreamVGGT、STream3R）降低了重复计算，但若历史 cache 不压缩，显存和单帧延迟仍会随序列增长。</li>
+<li><strong>要离线处理上千张图，同时保留全局双向推理</strong>：VGG-T<span class="arithmatex">\(^3\)</span>、ZipMap、Scal3R 是比“切块后硬拼”更有研究价值的路线；它们用 Test-Time Training（TTT）/ fast weights 把可变长 KV 记忆压缩成固定规模神经状态。</li>
+<li><strong>要最快落地到已有权重</strong>：VGGT-Long、Pi-Long、DA3-Streaming、LASER、MERG3R 的工程门槛最低。它们以窗口/子图为单位运行基础模型，再做显式对齐、回环或 BA。优点是模型无关、无需重训；弱点是窗口接缝和累积尺度漂移。</li>
+<li><strong>要提升新场景适配</strong>：必须区分“更多数据带来的零样本泛化”和“测试时真正适配”。VGGT-<span class="arithmatex">\(\Omega\)</span>、DA3、Depth Anything 系主要属于前者；Online3R、Scal3R、TTT3R、Self-Geometry 才在测试时更新 prompt、fast weights、状态或 LoRA。</li>
+<li><strong>只需要视频深度而非相机轨迹/统一点云</strong>：Video Depth Anything 和 FlashDepth 比完整 3D 几何模型轻得多，分别适合超长离线视频和高分辨率在线流。</li>
+<li><strong>期刊现状</strong>：本次检索未发现已经正式刊于 TPAMI、且直接针对 VGGT / <span class="arithmatex">\(\pi^3\)</span> / DA3 / VGGT-<span class="arithmatex">\(\Omega\)</span> 长序列扩展的论文。该方向从 2024 年才快速形成，核心成果目前高度集中在 2025–2026 年顶会与最新预印本；不能把 arXiv 投稿误写成 TPAMI 论文。</li>
+</ol>
+<h2 id="1">1. 四个基础模型：强项与长序列短板</h2>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>会议</th>
+<th>核心设计</th>
+<th>泛化来源</th>
+<th>对长视频的实际含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2024/html/Yang_Depth_Anything_Unleashing_the_Power_of_Large-Scale_Unlabeled_Data_CVPR_2024_paper.html">Depth Anything</a></td>
+<td>CVPR 2024</td>
+<td>单图相对深度；约 62M 无标注图像的数据引擎</td>
+<td>大规模伪标注与语义先验</td>
+<td>单帧很稳，但逐帧推理会闪烁，且不提供相机轨迹与跨帧统一坐标</td>
+</tr>
+<tr>
+<td><a href="https://proceedings.neurips.cc/paper_files/paper/2024/file/26cfdcd8fe6fd75cc53e92963a656c58-Paper-Conference.pdf">Depth Anything V2</a></td>
+<td>NeurIPS 2024</td>
+<td>更强 teacher、合成真值、真实图像伪标签；多种模型尺寸</td>
+<td>teacher-student 与数据覆盖</td>
+<td>是 Video Depth Anything、FlashDepth 的强单图 backbone；本身仍无视频记忆</td>
+</tr>
+<tr>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2025/html/Wang_VGGT_Visual_Geometry_Grounded_Transformer_CVPR_2025_paper.html">VGGT</a></td>
+<td>CVPR 2025，Best Paper</td>
+<td>交替 frame/global attention，一次预测相机、深度、pointmap、track</td>
+<td>大规模多任务 3D 监督</td>
+<td>短序列精度强；全局注意力随帧数二次增长，且参考帧选择会影响稳定性</td>
+</tr>
+<tr>
+<td><a href="https://proceedings.iclr.cc/paper_files/paper/2026/hash/11a09e0aaa74867c6b0719c639fc09f8-Abstract-Conference.html"><span class="arithmatex">\(\pi^3\)</span></a></td>
+<td>ICLR 2026</td>
+<td>去掉固定参考视图；预测仿射不变相机与尺度不变局部 pointmap；排列等变</td>
+<td>更好的坐标规范化与输入顺序鲁棒性</td>
+<td>解决“参考帧偏置”，<strong>没有解决全局注意力的二次复杂度</strong>；很适合作为长序列方法的局部 backbone</td>
+</tr>
+<tr>
+<td><a href="https://proceedings.iclr.cc/paper_files/paper/2026/hash/e4cd50120b6d7e8daff1749d6bbaa889-Abstract-Conference.html">Depth Anything 3</a></td>
+<td>ICLR 2026</td>
+<td>plain DINO Transformer + 单一 depth-ray 目标；可输入任意视图与可选相机</td>
+<td>DA2 teacher-student、统一目标、公开多源数据</td>
+<td>细节与零样本几何很强；原生模型仍更适合有界多视图，超长视频需 DA3-Streaming 或新的相对/流式头</td>
+</tr>
+<tr>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Wang_VGGT-ohm_CVPR_2026_paper.html">VGGT-<span class="arithmatex">\(\Omega\)</span></a></td>
+<td>CVPR 2026，Best Paper Finalist</td>
+<td>单一稠密头、MLP+pixel shuffle、scene/register token attention；静态+动态</td>
+<td>15× 更多监督数据、约 18M 无标注视频、自监督</td>
+<td>训练内存约为 VGGT 的 30%，鲁棒性显著提高；但它不是定长显存流式模型，官方 500 帧示例仍约需 43.15 GB 峰值显存</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_2">关键辨析</h3>
+<ul>
+<li><strong>VGGT-<span class="arithmatex">\(\Omega\)</span> 的“省内存”主要指训练可扩展性</strong>。它用少量 register 聚合场景信息，并仅以 register 参与部分跨帧交换；这为长上下文提供了好结构，但官方推理显存仍随帧数增长。</li>
+<li><strong><span class="arithmatex">\(\pi^3\)</span> 的“scalable”主要体现在任务、视图数与无参考帧鲁棒性</strong>，并不意味着无限长、常数显存。</li>
+<li><strong>DA3 与 Video Depth Anything 是不同目标</strong>：DA3恢复相机和空间一致几何；Video Depth Anything专注长视频的仿射不变深度与时间一致性。</li>
+<li>对真实长视频，误差通常不只来自注意力复杂度，还来自参考坐标外推、尺度/shift 漂移、动态物体、窗口间非刚性畸变和回环缺失。</li>
+</ul>
+<h2 id="2">2. 方法谱系：六类长序列解法</h2>
+<table>
+<thead>
+<tr>
+<th>路线</th>
+<th>代表工作</th>
+<th>总复杂度/显存趋势</th>
+<th>优点</th>
+<th>主要风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>减 token / 稀疏全局注意力</td>
+<td>FastVGGT、AVGGT、HTTM、LiteVGGT</td>
+<td>有效 token 变少，但一般仍非严格线性/定长</td>
+<td>无训练或轻量微调；最大程度保留原模型</td>
+<td>极长序列仍受全局上下文长度制约；过度合并损伤稠密几何</td>
+</tr>
+<tr>
+<td>因果注意力 + KV cache</td>
+<td>StreamVGGT、STream3R</td>
+<td>增量计算方便；未压缩 cache 时历史长度仍增长</td>
+<td>在线低延迟；可直接复用 FlashAttention 生态</td>
+<td>cache 饱和、attention sink、单帧延迟随历史增长</td>
+</tr>
+<tr>
+<td>固定状态递归/压缩记忆</td>
+<td>Spann3R、CUT3R、LONG3R、TTT3R、IncVGGT</td>
+<td>可做到 <span class="arithmatex">\(\mathcal{O}(T)\)</span> 与有界显存</td>
+<td>真正在线；适合机器人与边缘部署</td>
+<td>单一状态会遗忘细节，长程回环和全局尺度容易漂移</td>
+</tr>
+<tr>
+<td>TTT / fast-weight 记忆</td>
+<td>VGG-T<span class="arithmatex">\(^3\)</span>、ZipMap、Scal3R、tttLRM</td>
+<td>以固定规模 MLP/子网络压缩 KV；近线性</td>
+<td>比普通 RNN 状态容量高；可查询场景记忆</td>
+<td>训练和内循环设计复杂；“TTT”不一定等价于域适配</td>
+</tr>
+<tr>
+<td>窗口/子图 + 显式对齐</td>
+<td>VGGT-Long、LASER、MERG3R、TALO、MASt3R-SLAM</td>
+<td>固定窗口时 GPU 峰值有界；CPU/地图/图优化随场景增长</td>
+<td>模型无关、无需重训、回环可解释</td>
+<td>对齐退化、窗口接缝、动态区污染、后端不再是纯前馈</td>
+</tr>
+<tr>
+<td>局部无损 + 全局压缩混合记忆</td>
+<td>LoGeR</td>
+<td>固定局部窗口 + 固定 fast weights，整体线性</td>
+<td>同时保留邻域精度和全局坐标</td>
+<td>仍是 2026 预印本；需要较大规模重新训练与更充分复现</td>
+</tr>
+</tbody>
+</table>
+<p>最重要的结构性结论是：</p>
+<blockquote>
+<p><strong>长视频不应只保留一种记忆。</strong> 相邻帧配准需要未压缩的局部 token；公里级坐标一致性需要压缩的全局状态；真正闭环还需要可检索的关键帧/拓扑图。只用全注意力太贵，只用单一 RNN 状态又太容易遗忘。</p>
+</blockquote>
+<h2 id="3">3. 顶会核心论文</h2>
+<h3 id="31-vggt-pi3">3.1 直接加速 VGGT / <span class="arithmatex">\(\pi^3\)</span>：低改造成本</h3>
+<h4 id="fastvggt-iclr-2026">FastVGGT — ICLR 2026</h4>
+<ul>
+<li>链接：<a href="https://proceedings.iclr.cc/paper_files/paper/2026/hash/9f5b159f2c1d216d73bc0c289763dbfc-Abstract-Conference.html">ICLR proceedings</a> · <a href="https://github.com/mystorm16/FastVGGT">code</a></li>
+<li>发现 VGGT global attention 中大量 token 的注意力图趋同，即 “token collapse”。</li>
+<li>在 global attention 前做三类 token 划分：保留第一帧锚点、保护显著 token、按图像区域均匀选代表 token；注意力后 unmerge，以兼容原稠密输出头。</li>
+<li>无需训练；1000 张图报告约 <strong>4×</strong> 加速，并降低长序列误差累积。</li>
+<li>评价：很好的工程基线，但对第一帧锚定的依赖与 VGGT 本身相同；它压缩计算，不建立持久全局地图。</li>
+</ul>
+<h4 id="avggt-cvpr-2026">AVGGT — CVPR 2026</h4>
+<ul>
+<li>链接：<a href="https://openaccess.thecvf.com/content/CVPR2026/html/Sun_AVGGT_Rethinking_Global_Attention_for_Accelerating_VGGT_CVPR_2026_paper.html">CVF</a> · <a href="https://arxiv.org/abs/2512.02541">arXiv</a></li>
+<li>对 VGGT 和 <span class="arithmatex">\(\pi^3\)</span> 的 global layer 逐层解剖：早层跨视图对应尚未形成，中层负责对齐，末层多为小幅修正。</li>
+<li>将早期 global attention 改为 frame attention；对中间 global attention 的 K/V 做保对角线的子采样与均值填充。</li>
+<li>无训练，报告 <strong>8–10×</strong> 加速，且可同时作用于 VGGT 与 <span class="arithmatex">\(\pi^3\)</span>。</li>
+<li>评价：比“统一 token merging”更有结构解释，适合成为任何新长序列架构的层级稀疏先验。</li>
+</ul>
+<h4 id="httm-litevggt-cvpr-2026">HTTM / LiteVGGT — CVPR 2026</h4>
+<ul>
+<li><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Wang_HTTM_Head-wise_Temporal_Token_Merging_for_Faster_VGGT_CVPR_2026_paper.html">HTTM</a>：按 attention head 独立做时间 token merging，利用不同 head 的空间局部性和时间对应；最高报告 <strong>7×</strong> 加速且性能下降很小。</li>
+<li><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Shu_LiteVGGT_Boosting_Vanilla_VGGT_via_Geometry-aware_Cached_Token_Merging_CVPR_2026_paper.html">LiteVGGT</a>：按几何重要性选择 anchor，并跨层缓存 merge index；支持 FP8 微调，1000 图场景最高报告 <strong>10×</strong> 加速和显存下降。</li>
+<li>评价：二者都适合已有 VGGT 部署。HTTM更偏运行时稀疏；LiteVGGT更像“稀疏 + 缓存 + 低精度”的整套加速方案。</li>
+</ul>
+<h4 id="quantvggt-iclr-2026">QuantVGGT — ICLR 2026</h4>
+<ul>
+<li>链接：<a href="https://proceedings.iclr.cc/paper_files/paper/2026/hash/618c8af8efd19b4ce90b8864a764d0fa-Abstract-Conference.html">ICLR proceedings</a> · <a href="https://github.com/wlfeng0509/QuantVGGT">code</a></li>
+<li>针对 VGGT 特殊 token 的重尾激活和多视图校准不稳定，设计专用 PTQ。</li>
+<li>4-bit 版本报告 <strong>3.7×</strong> 内存下降、真实硬件 <strong>2.5×</strong> 加速，并保留超过 98% 的重建精度。</li>
+<li>评价：量化与长上下文记忆是正交方向；它能让给定 GPU 容纳更多帧，但不会自动消除时序漂移。</li>
+</ul>
+<h4 id="fast3r-cvpr-2025">Fast3R — CVPR 2025（早期大规模前馈基线）</h4>
+<ul>
+<li>链接：<a href="https://openaccess.thecvf.com/content/CVPR2025/html/Yang_Fast3R_Towards_3D_Reconstruction_of_1000_Images_in_One_Forward_CVPR_2025_paper.html">CVF</a> · <a href="https://fast3r-3d.github.io/">project</a></li>
+<li>将 DUSt3R 从成对处理推广为 <span class="arithmatex">\(N\)</span> 视图并行前向，直接输入 1000+ 张无序、无位姿图像，省掉逐对推理和昂贵的后续全局对齐；论文首页设置报告约 <strong>251.1 FPS</strong>。</li>
+<li>评价：它比 VGGT 更早证明“大视图集合一次前向”可行，是重要速度基线；但“一次能吞 1000 图”不等于在线、有界显存或公里级稳定，后来的流式状态、分块对齐和 TTT 路线针对的正是这些缺口。</li>
+</ul>
+<h3 id="32">3.2 真正的流式/递归几何模型</h3>
+<h4 id="spann3r-3dv-2025cut3r-cvpr-2025-oral">Spann3R — 3DV 2025；CUT3R — CVPR 2025 Oral</h4>
+<ul>
+<li><a href="https://hengyiwang.github.io/projects/spanner">Spann3R</a> 用外部 spatial memory 保存过去相关 3D 信息，并让新帧查询该记忆。</li>
+<li><a href="https://openaccess.thecvf.com/content/CVPR2025/html/Wang_Continuous_3D_Perception_Model_with_Persistent_State_CVPR_2025_paper.html">CUT3R</a> 用持续更新的 recurrent state 输出统一坐标下的 metric pointmap，可处理视频、稀疏无序照片、静态与动态场景，还能查询未观测视角。</li>
+<li>评价：它们证明“单一持久状态”可替代全局全注意力，是后续 LONG3R / TTT3R 的重要起点；缺点是把所有历史压进单一状态后会出现遗忘和长度外泛化下降。</li>
+</ul>
+<h4 id="long3r-iccv-2025">LONG3R — ICCV 2025</h4>
+<ul>
+<li>链接：<a href="https://openaccess.thecvf.com/content/ICCV2025/html/Chen_LONG3R_Long_Sequence_Streaming_3D_Reconstruction_ICCV_2025_paper.html">CVF</a> · <a href="https://github.com/zgchen33/LONG3R">code</a></li>
+<li>memory gating 先筛相关记忆，再以 dual-source refined decoder 做粗到细交互。</li>
+<li>3D 时空记忆动态裁剪冗余空间信息，并随场景调整分辨率；两阶段 curriculum 专门学习长序列能力。</li>
+<li>报告在长序列上优于已有 streaming 方法，并维持实时推理。</li>
+<li>评价：比固定大小、无结构的 recurrent token 更重视“记什么、以何种 3D 分辨率记”，但训练成本和公开复现成熟度需检查。</li>
+</ul>
+<h4 id="streamvggt-iclr-2026">StreamVGGT — ICLR 2026</h4>
+<ul>
+<li>链接：<a href="https://proceedings.iclr.cc/paper_files/paper/2026/hash/8da04a60948be713dc766f0c7e3a5b1f-Abstract-Conference.html">ICLR proceedings</a> · <a href="https://github.com/wzzheng/streamvggt">code</a></li>
+<li>把 VGGT 的双向 global attention 改成时间因果注意力；缓存历史 K/V 作为隐式记忆，并从 VGGT teacher 蒸馏。</li>
+<li>优点是在线、低首帧延迟、容易迁移 FlashAttention 等 LLM 算子。</li>
+<li>关键限制：<strong>KV cache 本身会随时间增长</strong>。因此 StreamVGGT 是“可流式”，不等价于“无限长、常数显存”。</li>
+</ul>
+<h4 id="incvggt-iclr-2026">IncVGGT — ICLR 2026</h4>
+<ul>
+<li>链接：<a href="https://proceedings.iclr.cc/paper_files/paper/2026/hash/0a4096f09ab230082df548f901d4f79e-Abstract-Conference.html">ICLR proceedings</a></li>
+<li>输入侧：把高度重叠的相邻帧注册并融合为 composite view，减少重复 token。</li>
+<li>历史侧：只保留 top-<span class="arithmatex">\(k\)</span> 相关 slot 和最新 slot，以固定 cache 长度。</li>
+<li>无需训练；相对 StreamVGGT，在 500 帧上报告 <strong>58.5× 更少算子、9× 更低内存、25.7× 更少能耗、4.9× 更快</strong>，80 GB GPU 可继续运行到 10k 帧。</li>
+<li>评价：这是“定长显存 + 训练免费”里最直接的一篇，但激进帧融合与 top-<span class="arithmatex">\(k\)</span> 裁剪会牺牲重复纹理、细小结构和迟到回环所需的证据。</li>
+</ul>
+<h4 id="stream3r-iclr-2026">STream3R — ICLR 2026</h4>
+<ul>
+<li>链接：<a href="https://nirvanalan.github.io/projects/stream3r/">paper/project</a> · <a href="https://openreview.net/pdf?id=RTTYGeC2Io">ICLR PDF</a></li>
+<li>把 pointmap 预测重写为 decoder-only causal Transformer；每层先做 frame self-attention，再用历史 cache 做因果跨帧注册。</li>
+<li>直接输出世界/相机坐标 pointmap、置信度与相机姿态；兼容 LLM 式训练基础设施，在动态场景上也有较强泛化。</li>
+<li>评价：结构简洁、易扩规模；与 StreamVGGT 一样，需要继续解决历史 cache 的选择、压缩和回环检索。</li>
+</ul>
+<h4 id="ttt3r-iclr-2026">TTT3R — ICLR 2026</h4>
+<ul>
+<li>链接：<a href="https://iclr.cc/virtual/2026/poster/10008709">ICLR poster</a> · <a href="https://arxiv.org/abs/2509.26645">arXiv</a></li>
+<li>将 CUT3R 类 recurrent state update 解释为在线学习；根据“旧记忆—新观测”的对齐置信度推导每 token 的闭式自适应学习率。</li>
+<li>无新增参数和重训；报告全局 pose 提升约 <strong>2×</strong>，并以 <strong>20 FPS、6 GB 显存</strong>处理数千图像。</li>
+<li>评价：真正解决的是 recurrent model 的 <strong>length generalization / 稳定-可塑性平衡</strong>。它不是传统意义上通过反向传播微调 backbone 的 TTA。</li>
+</ul>
+<h4 id="longstream-cvpr-2026">LongStream — CVPR 2026</h4>
+<ul>
+<li>链接：<a href="https://openaccess.thecvf.com/content/CVPR2026/html/Cheng_LongStream_Long-Sequence_Streaming_Autoregressive_Visual_Geometry_CVPR_2026_paper.html">CVF</a> · <a href="https://arxiv.org/abs/2602.13172">arXiv</a></li>
+<li>不再把所有 pose 锚定第一帧，而预测关键帧相对 pose，把无限增长的外推问题改为固定难度的局部估计。</li>
+<li>用 orthogonal scale learning 把几何与尺度估计解耦；用 cache-consistent training 和周期 cache refresh 抑制 attention sink 与历史污染。</li>
+<li>报告在公里级、数千帧严格在线场景达到 <strong>18 FPS</strong>。</li>
+<li>评价：它同时处理了计算、坐标 gauge、尺度漂移和训练—推理 cache 不一致，研究完整性高；比“只换注意力”更值得作为新架构基线。</li>
+</ul>
+<h3 id="33-ttt-fast-weights">3.3 TTT / fast weights：线性时间的场景记忆</h3>
+<p>这里的 TTT 有两种含义，不能混淆：</p>
+<ul>
+<li><strong>序列建模型 TTT</strong>：在推理时快速更新一个小 MLP，把历史 K/V 写入 fast weights；主要目标是用线性复杂度替代 softmax attention。</li>
+<li><strong>域/场景适配型 TTA</strong>：用当前场景的自监督几何损失更新 prompt、LoRA 或部分网络；主要目标是修正分布偏移。</li>
+</ul>
+<h4 id="vgg-t3-cvpr-2026">VGG-T<span class="arithmatex">\(^3\)</span> — CVPR 2026</h4>
+<ul>
+<li>链接：<a href="https://openaccess.thecvf.com/content/CVPR2026/html/Elflein_VGG-T3_Offline_Feed-Forward_3D_Reconstruction_at_Scale_CVPR_2026_paper.html">CVF</a> · <a href="https://research.nvidia.com/labs/dvl/projects/vgg-ttt/">project/code</a></li>
+<li>用固定大小 MLP 取代 VGGT global attention 的变长 KV 空间，把一个图像集合写入 fast weights。</li>
+<li>保留离线双向全局聚合，并能用新图像查询冻结后的场景状态做 relocalization。</li>
+<li>复杂度对视图数近线性；1000 图报告约 <strong>54 秒、11.6× 加速</strong>。</li>
+<li>评价：适合大规模离线图像集和“建图后多次定位”；不以逐帧最低延迟为首要目标。</li>
+</ul>
+<h4 id="zipmap-cvpr-2026">ZipMap — CVPR 2026</h4>
+<ul>
+<li>链接：<a href="https://openaccess.thecvf.com/content/CVPR2026/html/Jin_ZipMap_Linear-Time_Stateful_3D_Reconstruction_via_Test-Time_Training_CVPR_2026_paper.html">CVF</a> · <a href="https://github.com/Haian-Jin/ZipMap">code</a></li>
+<li>TTT layer 将整个集合压缩进紧凑 hidden scene state；支持双向离线重建、状态查询和流式扩展。</li>
+<li>单张 H100 上报告 <strong>700+ 帧低于 10 秒、超过 VGGT 20×</strong>。</li>
+<li>评价：速度/状态查询很亮眼；官方说明 streaming 分支训练仍较初步，长程流式结论应与离线结果分开看。</li>
+</ul>
+<h4 id="scal3r-cvpr-2026-highlight">Scal3R — CVPR 2026 Highlight</h4>
+<ul>
+<li>链接：<a href="https://openaccess.thecvf.com/CVPR2026?day=2026-06-06">CVF 条目</a> · <a href="https://zju3dv.github.io/scal3r/">project/code</a> · <a href="https://arxiv.org/abs/2604.08542">arXiv</a></li>
+<li>在 VGGT 多个 global layer 后加入 Global Context Memory；若干轻量神经子网络以自监督目标在测试时快速更新，形成比固定 token state 容量更高的全局上下文。</li>
+<li>支持多 GPU chunk 并行，也可退化为单 GPU 顺序处理；在 KITTI（最长 4661 帧）和 Oxford Spires 等大场景测试。</li>
+<li>评价：它把“长序列状态压缩”和“测试时场景适配”放在同一系统内，是很有潜力的结合；代价是训练、内循环和分布式实现都较复杂。</li>
+</ul>
+<h4 id="tttlrm-cvpr-2026-highlight">tttLRM — CVPR 2026 Highlight</h4>
+<ul>
+<li>链接：<a href="https://openaccess.thecvf.com/content/CVPR2026/html/Wang_tttLRM_Test-Time_Training_for_Long_Context_and_Autoregressive_3D_Reconstruction_CVPR_2026_paper.html">CVF</a> · <a href="https://cwchenwang.github.io/tttLRM/">project</a></li>
+<li>以 TTT fast weights 形成隐式 3D 表征，再解码为 Gaussian Splats；同时支持长上下文离线和渐进在线重建。</li>
+<li>评价：如果最终输出目标是可渲染 3DGS 而非纯点云/相机，它比 VGGT 点云后接 3DGS 更原生；但评价任务与 pose/pointmap 系工作并不完全同构。</li>
+</ul>
+<h3 id="34">3.4 窗口、显式几何后端与可插拔系统</h3>
+<h4 id="vggt-long-icra-2026">VGGT-Long — ICRA 2026</h4>
+<ul>
+<li>链接：<a href="https://arxiv.org/abs/2507.16443">arXiv</a> · <a href="https://github.com/DengKaiCQ/VGGT-Long">code</a></li>
+<li>固定大小 overlapping chunks 独立运行 VGGT；以重叠点云做置信度加权 Sim(3) 对齐，再用轻量回环优化修正长期漂移。</li>
+<li>无需相机标定、深度监督或模型重训；面向 KITTI、Waymo 等公里级场景。</li>
+<li>评价：是最强的“简单、可插拔、今天能用”基线之一。它把 GPU 显存固定在 chunk 大小，但中间地图、CPU/磁盘和图优化仍随轨迹增长。</li>
+</ul>
+<h4 id="pi-long-da3-streaming">Pi-Long / DA3-Streaming — 官方工程扩展，无独立论文</h4>
+<ul>
+<li><a href="https://github.com/DengKaiCQ/Pi-Long">Pi-Long</a> 将 VGGT-Long 的 chunk/align/loop 框架迁到 <span class="arithmatex">\(\pi^3\)</span> / Pi3X；官方明确说明<strong>没有独立论文</strong>，KITTI 504×154 设置下更新版约 8 FPS。</li>
+<li><a href="https://github.com/ByteDance-Seed/Depth-Anything-3/blob/main/da3_streaming/README.md">DA3-Streaming</a> 将同一思想迁到 DA3，滑窗和跨块状态管理可在少于 12 GB GPU 显存下处理超长视频。</li>
+<li>评价：它们说明长序列后端应与 backbone 解耦。<span class="arithmatex">\(\pi^3\)</span> 的无参考帧局部几何、DA3 的 detail/metric 能力都可直接替换 VGGT。</li>
+</ul>
+<h4 id="laser-cvpr-2026">LASER — CVPR 2026</h4>
+<ul>
+<li>链接：<a href="https://openaccess.thecvf.com/content/CVPR2026/html/Ding_LASER_Layer-wise_Scale_Alignment_for_Training-Free_Streaming_4D_Reconstruction_CVPR_2026_paper.html">CVF</a> · <a href="https://arxiv.org/abs/2512.13680">arXiv</a></li>
+<li>指出简单 Sim(3) 不能修复不同深度层在相邻窗口中的非一致尺度；将深度离散成 layer，逐层估计 scale 并跨窗口、跨时间传播。</li>
+<li>无训练地把 VGGT / <span class="arithmatex">\(\pi^3\)</span> 等离线模型改造成流式 4D 系统；在 RTX A6000 上报告 <strong>14 FPS、6 GB 峰值显存</strong>和公里级视频。</li>
+<li>评价：相比 VGGT-Long，它直接建模“单个 Sim(3) 对局部非刚性误差无能为力”的核心失败模式，部署价值很高。</li>
+</ul>
+<h4 id="merg3r-cvpr-2026">MERG3R — CVPR 2026</h4>
+<ul>
+<li>链接：<a href="https://openaccess.thecvf.com/content/CVPR2026/html/Cheng_MERG3R_A_Divide-and-Conquer_Approach_to_Large-Scale_Neural_Visual_Geometry_CVPR_2026_paper.html">CVF</a> · <a href="https://github.com/LeoChengKX/MERG3R">code</a></li>
+<li>面向<strong>无序大图集</strong>：先以视觉相似图生成伪顺序，再切成有几何多样性的重叠子集；用任意 VGGT / <span class="arithmatex">\(\pi^3\)</span> backbone 重建局部子图，最后全局对齐和置信度加权 BA。</li>
+<li>评价：视频可直接用顺序窗口，但它最有价值的地方是把“超显存无序图集”也纳入统一 divide-and-conquer 框架。</li>
+</ul>
+<h4 id="talo-cvpr-2026">TALO — CVPR 2026</h4>
+<ul>
+<li>链接：<a href="https://openaccess.thecvf.com/content/CVPR2026/papers/Zhang_TALO_Pushing_3D_Vision_Foundation_Models_Towards_Globally_Consistent_Online_CVPR_2026_paper.pdf">CVF PDF</a> · <a href="https://github.com/Xian-Bei/TALO">code</a></li>
+<li>认为 VGGT-Long 的 Sim(3) 与 VGGT-SLAM 的 SL(4) 都是假设“整块共享同一种误差场”，在多相机、噪声点云和局部畸变下不成立。</li>
+<li>用 Thin Plate Spline 和全局传播 control points 做高自由度、长时程对齐；point-agnostic submap registration 增强对噪声的鲁棒性。</li>
+<li>评价：TALO解决的是<strong>子图拼接的模型误差</strong>而非 backbone 推理成本；与 token/TTT 加速互补。</li>
+</ul>
+<h4 id="amb3r-amb3r-vo-cvpr-2026">AMB3R / AMB3R-VO — CVPR 2026</h4>
+<ul>
+<li>链接：<a href="https://openaccess.thecvf.com/content/CVPR2026/html/Wang_AMB3R_Accurate_Feed-forward_Metric-scale_3D_Reconstruction_with_Backend_CVPR_2026_paper.html">CVF</a> · <a href="https://hengyiwang.github.io/projects/amber">project</a></li>
+<li>AMB3R 在多视图前馈模型后加入稀疏、紧凑的 volumetric backend，把多次观测融合到同一 metric-scale 空间位置；AMB3R-VO 再用<strong>固定容量 active keyframe memory + 可增长 global keyframe memory</strong>处理任意长度在线序列。</li>
+<li>VO/SfM 扩展无需重新训练基础模型，也无需 test-time optimization；补充材料在 RTX 4090、392×518 输入上报告 VO 平均约 <strong>4.2 FPS</strong>。</li>
+<li>评价：它的贡献不是极致 FPS，而是把 metric scale、显式空间紧致性和关键帧后端合在一起。GPU 工作集可控，但全局关键帧地图仍随场景增长；这比声称“整体常数内存”更准确。</li>
+</ul>
+<h4 id="mast3r-slam-slam3r-cvpr-2025">MASt3R-SLAM / SLAM3R — CVPR 2025</h4>
+<ul>
+<li><a href="https://openaccess.thecvf.com/content/CVPR2025/html/Murai_MASt3R-SLAM_Real-Time_Dense_SLAM_with_3D_Reconstruction_Priors_CVPR_2025_paper.html">MASt3R-SLAM</a>：以 MASt3R 两视图先验统一 tracking、local fusion、图构建、回环与二阶全局优化，约 <strong>15 FPS</strong>；对野外视频和时变中心相机模型更务实。</li>
+<li><a href="https://openaccess.thecvf.com/content/CVPR2025/papers/Liu_SLAM3R_Real-Time_Dense_Scene_Reconstruction_from_Monocular_RGB_Videos_CVPR_2025_paper.pdf">SLAM3R</a>：窗口内直接回归 pointmap，窗口间用网络完成注册与形变，<strong>20+ FPS</strong>，不显式求相机参数。</li>
+<li>评价：如果目标是可靠机器人建图，而不是纯粹的“一次前向”，含回环与稀疏图优化的混合系统目前仍更可控。</li>
+</ul>
+<h3 id="35-depth-anything">3.5 Depth Anything 路线：长视频深度与低算力</h3>
+<h4 id="video-depth-anything-cvpr-2025-highlight">Video Depth Anything — CVPR 2025 Highlight</h4>
+<ul>
+<li>链接：<a href="https://openaccess.thecvf.com/content/CVPR2025/html/Chen_Video_Depth_Anything_Consistent_Depth_Estimation_for_Super-Long_Videos_CVPR_2025_paper.html">CVF</a> · <a href="https://github.com/DepthAnything/Video-Depth-Anything">code</a></li>
+<li>冻结 DA2 encoder，换成轻量时空 head；以 temporal depth-gradient loss 学一致性，不依赖光流或相机位姿。</li>
+<li>长视频用 overlapping clips + key-frame reference，统一整段视频的 scale/shift；展示 196 秒、4690 帧例子。</li>
+<li>小模型可达 <strong>30 FPS</strong>，并宣称可处理任意长视频。</li>
+<li>评价：若下游只要稳定相对深度，这是性价比最高的起点；若要统一 3D 地图，还需要相机、尺度和回环模块。</li>
+</ul>
+<h4 id="flashdepth-iccv-2025">FlashDepth — ICCV 2025</h4>
+<ul>
+<li>链接：<a href="https://openaccess.thecvf.com/content/ICCV2025/papers/Chou_FlashDepth_Real-time_Streaming_Video_Depth_Estimation_at_2K_Resolution_ICCV_2025_paper.pdf">CVF PDF</a> · <a href="https://github.com/Eyeline-Research/FlashDepth">code</a></li>
+<li>在 DA2 上加入 recurrent feature alignment，使每帧中间深度特征在线对齐到统一 scale。</li>
+<li>在 A100 上以 <strong>2044×1148、24 FPS</strong> 真正流式运行，边界和细结构明显强于低分辨率流式模型。</li>
+<li>评价：适合视频编辑、机器人近场深度和高分辨率传感；它不解决相机 pose 与全局点云。</li>
+</ul>
+<h4 id="dyfn-cvpr-2026">DyFN — CVPR 2026</h4>
+<ul>
+<li>链接：<a href="https://openaccess.thecvf.com/content/CVPR2026/html/Lyu_Stabilizing_Streaming_Video_Geometry_via_Dynamic_Feature_Normalization_CVPR_2026_paper.html">CVF</a> · <a href="https://shawlyu.github.io/DyFN/">project</a></li>
+<li>将视频几何抖动追溯到 latent feature 的均值/方差波动；冻结单图几何 backbone，只训练一个因果 recurrent normalization module。</li>
+<li>仅增加约 <strong>2% 参数</strong>，时间稳定性最高提升约 14%，同时保留单图精度。</li>
+<li>评价：这是极具迁移性的“小适配器”思想：不要重训整套几何模型，只校正决定视频尺度/shift 的统计量。</li>
+</ul>
+<h3 id="36">3.6 新场景泛化与测试时适配</h3>
+<h4 id="online3r-cvpr-2026">Online3R — CVPR 2026</h4>
+<ul>
+<li>链接：<a href="https://openaccess.thecvf.com/content/CVPR2026/papers/Zhou_Online3R_Online_Learning_for_Consistent_Sequential_Reconstruction_Based_on_Geometry_CVPR_2026_paper.pdf">CVF PDF</a> · <a href="https://arxiv.org/abs/2604.09480">arXiv</a></li>
+<li>冻结 MASt3R 等几何基础模型，只在线更新少量 visual prompt，以编码当前环境的 scene-specific prior。</li>
+<li>局部约束从历史融合结果产生伪真值；全局约束只在稀疏远距离关键帧上计算，降低在线更新开销。</li>
+<li>评价：这是最直接回答“怎样适应从未见过的新场景”的顶会工作。风险是在线伪标签错误会自我强化，需要置信度、回滚和场景切换检测。</li>
+</ul>
+<h4 id="vggt-omega-da3-depth-anything">VGGT-<span class="arithmatex">\(\Omega\)</span> / DA3 / Depth Anything：数据规模带来的零样本适配</h4>
+<ul>
+<li>VGGT-<span class="arithmatex">\(\Omega\)</span> 用 15× 监督数据、18M 无标注视频和自监督协议扩展静态/动态覆盖。</li>
+<li>DA3 用更简洁的 depth-ray 目标和 DA2 teacher 保留细节与跨域鲁棒性。</li>
+<li>Depth Anything V1/V2 证明海量无标注图像、强 teacher 与伪标签是降低新域误差的有效方式。</li>
+<li>评价：这是<strong>训练前扩大支持域</strong>，不是测试时适配。它通常稳定、零额外延迟，但无法针对单个新场景纠正系统性 bias。</li>
+</ul>
+<h4 id="mapanything-3dv-2026">MapAnything — 3DV 2026（相关补充）</h4>
+<ul>
+<li>链接：<a href="https://map-anything.github.io/">project</a> · <a href="https://arxiv.org/abs/2509.13414">arXiv</a></li>
+<li>同一模型可接收图像及可选 intrinsics、pose、depth、partial reconstruction，输出 metric depth、ray、pose 与尺度。</li>
+<li>评价：把已有传感器/先验当作输入提示，比纯 RGB 模型测试时“猜 metric scale”稳得多。它非常适合与 VGGT-Long 的 SE(3) 对齐结合，减少 Sim(3) 尺度自由度。</li>
+</ul>
+<h2 id="4">4. 一张表看懂选型</h2>
+<table>
+<thead>
+<tr>
+<th>工作</th>
+<th>正式发表</th>
+<th>输入/输出</th>
+<th style="text-align: right;">在线</th>
+<th style="text-align: right;">GPU 峰值能否与序列长度解耦</th>
+<th style="text-align: right;">需要重训</th>
+<th>新场景机制</th>
+<th>最适合</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VGGT / <span class="arithmatex">\(\pi^3\)</span> / DA3</td>
+<td>CVPR 2025 / ICLR 2026</td>
+<td>pose + depth + pointmap</td>
+<td style="text-align: right;">否</td>
+<td style="text-align: right;">否</td>
+<td style="text-align: right;">—</td>
+<td>大规模预训练</td>
+<td>短/中等多视图，最高局部精度</td>
+</tr>
+<tr>
+<td>VGGT-<span class="arithmatex">\(\Omega\)</span></td>
+<td>CVPR 2026</td>
+<td>pose + depth，静态/动态</td>
+<td style="text-align: right;">否</td>
+<td style="text-align: right;">否</td>
+<td style="text-align: right;">—</td>
+<td>大规模无标注视频自监督</td>
+<td>更鲁棒的通用 backbone</td>
+</tr>
+<tr>
+<td>FastVGGT / AVGGT / HTTM / LiteVGGT</td>
+<td>ICLR/CVPR 2026</td>
+<td>保持 VGGT 输出</td>
+<td style="text-align: right;">否</td>
+<td style="text-align: right;">通常否，只显著降低常数</td>
+<td style="text-align: right;">否或轻微</td>
+<td>无</td>
+<td>现有 VGGT 推理加速</td>
+</tr>
+<tr>
+<td>Fast3R</td>
+<td>CVPR 2025</td>
+<td>大规模无序图集 pose + pointmap</td>
+<td style="text-align: right;">否</td>
+<td style="text-align: right;">否</td>
+<td style="text-align: right;">是</td>
+<td>大规模多视图训练</td>
+<td>1000+ 图单次前向速度基线</td>
+</tr>
+<tr>
+<td>QuantVGGT</td>
+<td>ICLR 2026</td>
+<td>保持 VGGT 输出</td>
+<td style="text-align: right;">否</td>
+<td style="text-align: right;">否，降低模型/激活成本</td>
+<td style="text-align: right;">PTQ</td>
+<td>无</td>
+<td>小显存、低精度部署</td>
+</tr>
+<tr>
+<td>CUT3R / LONG3R</td>
+<td>CVPR/ICCV 2025</td>
+<td>流式 pose + pointmap</td>
+<td style="text-align: right;">是</td>
+<td style="text-align: right;">近似是</td>
+<td style="text-align: right;">是</td>
+<td>learned recurrent state</td>
+<td>通用实时流式重建</td>
+</tr>
+<tr>
+<td>StreamVGGT / STream3R</td>
+<td>ICLR 2026</td>
+<td>流式 3D/4D geometry</td>
+<td style="text-align: right;">是</td>
+<td style="text-align: right;">否，普通 KV cache 会增长</td>
+<td style="text-align: right;">是</td>
+<td>蒸馏/大规模训练</td>
+<td>中长序列、低增量延迟</td>
+</tr>
+<tr>
+<td>IncVGGT</td>
+<td>ICLR 2026</td>
+<td>流式 VGGT geometry</td>
+<td style="text-align: right;">是</td>
+<td style="text-align: right;"><strong>是</strong></td>
+<td style="text-align: right;">否</td>
+<td>相关性 top-<span class="arithmatex">\(k\)</span> cache</td>
+<td>训练免费、超长序列</td>
+</tr>
+<tr>
+<td>TTT3R</td>
+<td>ICLR 2026</td>
+<td>流式 pointmap/pose</td>
+<td style="text-align: right;">是</td>
+<td style="text-align: right;"><strong>是</strong></td>
+<td style="text-align: right;">否</td>
+<td>置信度控制状态更新</td>
+<td>数千帧、6 GB 级部署</td>
+</tr>
+<tr>
+<td>LongStream</td>
+<td>CVPR 2026</td>
+<td>metric streaming geometry</td>
+<td style="text-align: right;">是</td>
+<td style="text-align: right;">设计目标为有界/周期 cache</td>
+<td style="text-align: right;">是</td>
+<td>keyframe-relative gauge + scale 解耦</td>
+<td>公里级严格在线</td>
+</tr>
+<tr>
+<td>VGG-T<span class="arithmatex">\(^3\)</span></td>
+<td>CVPR 2026</td>
+<td>离线全局 geometry + query localization</td>
+<td style="text-align: right;">否</td>
+<td style="text-align: right;"><strong>是</strong></td>
+<td style="text-align: right;">是</td>
+<td>fast-weight scene state</td>
+<td>大图集、建图后定位</td>
+</tr>
+<tr>
+<td>ZipMap</td>
+<td>CVPR 2026</td>
+<td>双向 geometry + state query</td>
+<td style="text-align: right;">可扩展</td>
+<td style="text-align: right;"><strong>是</strong></td>
+<td style="text-align: right;">是</td>
+<td>TTT hidden scene state</td>
+<td>极快大图集重建</td>
+</tr>
+<tr>
+<td>Scal3R</td>
+<td>CVPR 2026</td>
+<td>长视频 geometry</td>
+<td style="text-align: right;">可顺序/并行</td>
+<td style="text-align: right;"><strong>是/近似是</strong></td>
+<td style="text-align: right;">是</td>
+<td>自监督更新全局神经记忆</td>
+<td>大场景 + 场景适配</td>
+</tr>
+<tr>
+<td>VGGT-Long / Pi-Long / DA3-Streaming</td>
+<td>ICRA 2026 / 工程扩展</td>
+<td>chunk pose/depth/pointmap</td>
+<td style="text-align: right;">准在线</td>
+<td style="text-align: right;"><strong>GPU 是</strong></td>
+<td style="text-align: right;">否</td>
+<td>显式对齐与回环</td>
+<td>最快落地、backbone 可替换</td>
+</tr>
+<tr>
+<td>LASER</td>
+<td>CVPR 2026</td>
+<td>streaming 4D pointmap/pose</td>
+<td style="text-align: right;">是</td>
+<td style="text-align: right;"><strong>是</strong></td>
+<td style="text-align: right;">否</td>
+<td>layer-wise scale alignment</td>
+<td>6 GB、公里级、动态视频</td>
+</tr>
+<tr>
+<td>AMB3R-VO</td>
+<td>CVPR 2026</td>
+<td>metric-scale VO + dense map</td>
+<td style="text-align: right;">是</td>
+<td style="text-align: right;"><strong>GPU 工作集是</strong></td>
+<td style="text-align: right;">VO 扩展否</td>
+<td>active/global keyframe memory</td>
+<td>未标定长序列与 metric scale</td>
+</tr>
+<tr>
+<td>MERG3R</td>
+<td>CVPR 2026</td>
+<td>大规模无序图集</td>
+<td style="text-align: right;">否</td>
+<td style="text-align: right;"><strong>局部 GPU 是</strong></td>
+<td style="text-align: right;">否</td>
+<td>全局 BA</td>
+<td>无序照片与超显存集合</td>
+</tr>
+<tr>
+<td>Online3R</td>
+<td>CVPR 2026</td>
+<td>顺序重建</td>
+<td style="text-align: right;">是</td>
+<td style="text-align: right;">取决于基础系统</td>
+<td style="text-align: right;">只更新 prompt</td>
+<td><strong>局部+全局自监督 TTA</strong></td>
+<td>新环境持续适配</td>
+</tr>
+<tr>
+<td>Video Depth Anything</td>
+<td>CVPR 2025</td>
+<td>长视频相对深度</td>
+<td style="text-align: right;">窗口式</td>
+<td style="text-align: right;"><strong>是</strong></td>
+<td style="text-align: right;">是</td>
+<td>DA2 泛化 + keyframe</td>
+<td>只要稳定深度</td>
+</tr>
+<tr>
+<td>FlashDepth / DyFN</td>
+<td>ICCV 2025 / CVPR 2026</td>
+<td>在线视频深度/几何</td>
+<td style="text-align: right;">是</td>
+<td style="text-align: right;"><strong>是</strong></td>
+<td style="text-align: right;">小模块</td>
+<td>recurrent feature/statistics</td>
+<td>高分辨率、低延迟稳定深度</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-2026">5. 2026 年重要预印本：值得跟踪，但不要当作已录用论文</h2>
+<h3 id="loger">LoGeR：目前最完整的“局部无损 + 全局压缩”方案</h3>
+<ul>
+<li>链接：<a href="https://loger-project.github.io/">project</a> · <a href="https://arxiv.org/abs/2603.03269">arXiv</a></li>
+<li>每个 chunk 内做双向几何推理；跨 chunk 同时使用 Sliding Window Attention 保存最近未压缩 token，和 TTT fast weights 压缩全局坐标信息。</li>
+<li>只用 128 帧训练，测试扩展到 19k 帧 VBR；无后端优化，KITTI ATE 相对既有 feed-forward 方法报告下降超过 74%。</li>
+<li>研究判断：它最准确地抓住了长序列的两类信息需求。如果后续复现稳定，混合记忆很可能比“纯 KV cache”或“纯单状态 RNN”更有生命力。</li>
+</ul>
+<h3 id="infinitevggt-retrievevggt-framevggt">InfiniteVGGT / RetrieveVGGT / FrameVGGT：固定预算的历史选择</h3>
+<ul>
+<li><a href="https://arxiv.org/abs/2601.02281">InfiniteVGGT</a>：训练免费 rolling memory，目标是 endless streams，并发布 Long3D benchmark。</li>
+<li><a href="https://arxiv.org/abs/2605.09644">RetrieveVGGT</a>：直接用 attention query-key 相似性检索历史，报告相对 StreamVGGT、TTT3R、InfiniteVGGT更好且内存常数。</li>
+<li><a href="https://arxiv.org/abs/2603.07690">FrameVGGT</a>：将一帧的 KV 增量作为完整 evidence block，以 rolling explicit memory 避免逐 token 裁剪破坏几何证据。</li>
+<li>研究判断：历史压缩不应只追求 top-<span class="arithmatex">\(k\)</span> token；以 frame / keyframe / submap 为基本记忆单元，通常更符合多视图几何的可观测性结构。</li>
+</ul>
+<h3 id="r3">R<span class="arithmatex">\(^3\)</span>：用相对回归消除无限增长坐标</h3>
+<ul>
+<li>链接：<a href="https://arxiv.org/abs/2605.26519">arXiv</a> · <a href="https://huggingface.co/KevinXu02/R3">model</a></li>
+<li>基于 DA3 backbone，用轻量 MLP 预测带置信度的相对 pose 约束，而不是相对固定世界原点回归所有绝对 pose。</li>
+<li>同时支持全上下文离线和有界内存因果流式。</li>
+<li>研究判断：与 LongStream 的 keyframe-relative pose 结论相互印证——长视频 pose 表示应当是局部相对/规范自由的，全球坐标交给图或记忆系统聚合。</li>
+</ul>
+<h3 id="vigeo-full-sequence-streaming-long-video">ViGeo：同一模型统一 full-sequence / streaming / long-video</h3>
+<ul>
+<li>链接：<a href="https://pkqbajng.github.io/ViGeo/">project</a> · <a href="https://arxiv.org/abs/2605.30060">arXiv</a></li>
+<li>dynamic chunking attention 让同一训练模型在完整序列、在线和 chunk 模式间切换，输出 depth、point、normal、confidence、pose。</li>
+<li>研究判断：统一训练/推理模式很有吸引力，避免分别维护 offline、streaming 两套模型；仍需等待正式评审与更广泛复现。</li>
+</ul>
+<h3 id="sage-self-geometry">SAGE / Self-Geometry：专门面向适配</h3>
+<ul>
+<li><a href="https://arxiv.org/abs/2602.07891">SAGE</a>：从互联网视频挖训练轨迹，以 SfM 稀疏 anchor + 3DGS 可微渲染一致性构造弱监督，并用 anchor data 防遗忘；在 7Scenes、TUM-RGBD、Matterport3D 等未见基准报告 Chamfer Distance 下降 20–42%。它是<strong>离线扩展训练数据</strong>。</li>
+<li><a href="https://arxiv.org/abs/2608.10708">Self-Geometry</a>：用 2D correspondence 产生显式多视图几何伪真值，以 LoRA 在测试时适配 VGGT、<span class="arithmatex">\(\pi^3\)</span> 与多个 DA3 尺寸；它是<strong>真正的单场景 TTA</strong>。</li>
+<li>研究判断：前者解决数据墙，后者解决部署时域偏移；可以串联，而不是二选一。</li>
+</ul>
+<h3 id="vggt-align">VGGT-Align：切块法的尺度漂移修正</h3>
+<ul>
+<li>链接：<a href="https://arxiv.org/abs/2608.15260">arXiv</a></li>
+<li>从每块点云提取几何不变量，建立独立于点云配准的跨块尺度约束，把 7-DoF Sim(3) 对齐退化为 6-DoF rigid transform，以切断链式尺度误差。</li>
+<li>研究判断：这是对 VGGT-Long / LASER 的又一补充：如果 metric 或几何不变量足够可靠，应尽早消掉 scale 自由度，而不是让每个窗口都重新估尺度。</li>
+</ul>
+<h3 id="ovdavideo-depth-anything">oVDA：Video Depth Anything 的在线化</h3>
+<ul>
+<li>链接：<a href="https://arxiv.org/abs/2510.09182">arXiv</a></li>
+<li>对 Video Depth Anything 使用 latent KV cache 和训练时 frame masking，报告 A100 42 FPS、Jetson 20 FPS，并显著降低 VRAM。</li>
+<li>研究判断：只做 depth 时，它可能比迁移完整 VGGT streaming architecture 更符合边缘设备预算。</li>
+</ul>
+<h2 id="6">6. 研究品味：哪些方向更可能继续有效</h2>
+<h3 id="61-vggt">6.1 最有前景的组合不是“再做一个更大 VGGT”</h3>
+<p>一个合理的下一代长序列几何模型可以组合四个互补思想：</p>
+<div class="highlight"><pre><span></span><code>每帧/每小块高质量局部几何
+  VGGT-Ω / π³ / DA3
+          │
+          ▼
+局部未压缩短期记忆 ── SWA / frame evidence
+          │
+          ▼
+固定规模全局神经记忆 ── TTT / fast weights / register memory
+          │
+          ├── 相对 pose / gauge-free 输出，避免坐标外推
+          │
+          └── 可检索关键帧图 + 显式回环，纠正长期漂移
+</code></pre></div>
+<p>仅增大 backbone 通常会提高单块精度，却不自动解决跨块 gauge、记忆淘汰与 loop closure。</p>
+<h3 id="62">6.2 新场景适配应是“受控的小更新”</h3>
+<p>推荐优先级：</p>
+<ol>
+<li>冻结 backbone，只更新 feature statistics、visual prompts、register memory 或 LoRA；</li>
+<li>用多视图 correspondence、局部/全局闭环和稀疏 sensor anchor 作为自监督；</li>
+<li>以置信度决定是否更新，并维护可回滚的稳定 checkpoint；</li>
+<li>检测场景切换后再清空或分支记忆，避免把旧场景 prompt 污染到新场景；</li>
+<li>最后才考虑全模型在线 fine-tuning。</li>
+</ol>
+<p>Online3R、DyFN、Self-Geometry 的共同启示是：新场景适配未必需要修改十亿参数，<strong>更关键的是选择正确的低维自由度和可靠监督信号</strong>。</p>
+<h3 id="63-feature-similarity">6.3 记忆淘汰必须尊重几何，而不是只看 feature similarity</h3>
+<p>应保留的内容不只是“与当前帧最相似”的 token，还包括：</p>
+<ul>
+<li>提供最大视差、能约束尺度和旋转的关键帧；</li>
+<li>可能形成回环的长期地点描述子；</li>
+<li>低纹理区域的结构线/平面/重力方向；</li>
+<li>动态区的独立运动状态，而不是把它混入静态地图；</li>
+<li>置信度不高但观测稀有的视角。</li>
+</ul>
+<p>因此，frame/submap-level evidence、可观测性评分和拓扑记忆，往往比简单 token top-<span class="arithmatex">\(k\)</span> 更稳。</p>
+<h3 id="64">6.4 评价协议应专门检查“长度外泛化”</h3>
+<p>建议至少报告：</p>
+<ul>
+<li>误差随帧数/里程的曲线，而不是只给整段平均 ATE；</li>
+<li>峰值 GPU 显存、CPU 内存、磁盘增长、单帧延迟 p50/p95、总能耗；</li>
+<li>训练长度 <span class="arithmatex">\(T_{\mathrm{train}}\)</span> 与测试长度 <span class="arithmatex">\(T_{\mathrm{test}}\)</span> 的比例；</li>
+<li>是否严格因果、是否看未来帧、是否使用回环/BA/外部 depth/标定；</li>
+<li>静态、动态、低纹理、重复纹理、曝光变化、焦距变化与场景切换；</li>
+<li>新场景适配前后，以及适配失败时能否回滚；</li>
+<li>关键帧采样率和输入分辨率，因为“1000 帧”在 224p 与 1k/2k 分辨率下不是同一问题。</li>
+</ul>
+<p>目前各论文硬件、分辨率、frame stride、输出类型和是否包含后端的差异很大，单看“FPS”非常容易误判。</p>
+<h2 id="7">7. 面向不同目标的推荐阅读与复现顺序</h2>
+<h3 id="a24-gb">目标 A：24 GB 内做长视频相机轨迹 + 稠密点云</h3>
+<ol>
+<li>VGGT-Long 或 DA3-Streaming：先获得稳定可运行基线；</li>
+<li>LASER：检查 layer-wise scale alignment 是否显著改善窗口接缝；</li>
+<li>IncVGGT / TTT3R：比较固定 cache 与固定 recurrent state；</li>
+<li>加 DINO/几何混合回环，而不是只依赖相邻窗口；</li>
+<li>新场景偏差明显时，再加 Online3R 式 prompt 或 Self-Geometry 式 LoRA。</li>
+</ol>
+<h3 id="b">目标 B：最高吞吐的大规模离线图像集</h3>
+<ol>
+<li>FastVGGT / AVGGT：最小改动 benchmark；</li>
+<li>VGG-T<span class="arithmatex">\(^3\)</span> 与 ZipMap：测试真正线性 fast-weight memory；</li>
+<li>无序图集加入 MERG3R；</li>
+<li>需要 relocalization 时优先 VGG-T<span class="arithmatex">\(^3\)</span> 的 scene-state query。</li>
+</ol>
+<h3 id="c">目标 C：机器人严格在线与新环境适配</h3>
+<ol>
+<li>LongStream：相对 pose、尺度解耦、cache-consistent training；</li>
+<li>TTT3R / IncVGGT：控制显存与历史遗忘；</li>
+<li>Online3R / DyFN：小参数在线适配；</li>
+<li>保留传统稀疏 factor graph / loop closure 作为安全后端；</li>
+<li>需要 metric scale 时加入 AMB3R-VO 式紧凑体素/关键帧后端；若有 intrinsics、稀疏深度或 IMU，则使用 MapAnything 式条件输入并优先 SE(3) 而非 Sim(3) 对齐。</li>
+</ol>
+<h3 id="d">目标 D：只需长视频稳定深度</h3>
+<ol>
+<li>Video Depth Anything：长视频离线/窗口式高质量；</li>
+<li>FlashDepth：2K 分辨率实时流；</li>
+<li>oVDA：Jetson/低显存在线；</li>
+<li>DyFN：给任意单图几何模型增加极小的时序稳定模块。</li>
+</ol>
+<h2 id="8">8. 精选阅读顺序</h2>
+<ol>
+<li><a href="https://openaccess.thecvf.com/content/CVPR2025/html/Wang_VGGT_Visual_Geometry_Grounded_Transformer_CVPR_2025_paper.html">VGGT, CVPR 2025</a>：理解 alternating frame/global attention 和统一几何输出。</li>
+<li><a href="https://proceedings.iclr.cc/paper_files/paper/2026/hash/11a09e0aaa74867c6b0719c639fc09f8-Abstract-Conference.html"><span class="arithmatex">\(\pi^3\)</span>, ICLR 2026</a>：理解 reference-free / permutation-equivariant geometry。</li>
+<li><a href="https://openaccess.thecvf.com/content/CVPR2025/html/Chen_Video_Depth_Anything_Consistent_Depth_Estimation_for_Super-Long_Videos_CVPR_2025_paper.html">Video Depth Anything, CVPR 2025</a>：最干净的长视频深度基线。</li>
+<li><a href="https://arxiv.org/abs/2507.16443">VGGT-Long, ICRA 2026</a>：最简单实用的 chunk-align-loop 系统。</li>
+<li><a href="https://proceedings.iclr.cc/paper_files/paper/2026/hash/8da04a60948be713dc766f0c7e3a5b1f-Abstract-Conference.html">StreamVGGT, ICLR 2026</a> → <a href="https://proceedings.iclr.cc/paper_files/paper/2026/hash/0a4096f09ab230082df548f901d4f79e-Abstract-Conference.html">IncVGGT</a>：看清“因果 cache”到“有界 cache”的差别。</li>
+<li><a href="https://arxiv.org/abs/2509.26645">TTT3R, ICLR 2026</a> → <a href="https://research.nvidia.com/labs/dvl/projects/vgg-ttt/">VGG-T<span class="arithmatex">\(^3\)</span>, CVPR 2026</a> → <a href="https://openaccess.thecvf.com/content/CVPR2026/html/Jin_ZipMap_Linear-Time_Stateful_3D_Reconstruction_via_Test-Time_Training_CVPR_2026_paper.html">ZipMap, CVPR 2026</a>：理解 TTT 在状态更新、全局记忆和场景查询中的三种用法。</li>
+<li><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Cheng_LongStream_Long-Sequence_Streaming_Autoregressive_Visual_Geometry_CVPR_2026_paper.html">LongStream, CVPR 2026</a>：看完整的 gauge、scale、cache 联合设计。</li>
+<li><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Ding_LASER_Layer-wise_Scale_Alignment_for_Training-Free_Streaming_4D_Reconstruction_CVPR_2026_paper.html">LASER, CVPR 2026</a>：理解窗口 Sim(3) 为什么仍会失败。</li>
+<li><a href="https://openaccess.thecvf.com/content/CVPR2026/papers/Zhou_Online3R_Online_Learning_for_Consistent_Sequential_Reconstruction_Based_on_Geometry_CVPR_2026_paper.pdf">Online3R, CVPR 2026</a>：真正的新场景在线适配。</li>
+<li><a href="https://arxiv.org/abs/2603.03269">LoGeR, arXiv 2026</a>：当前最值得追踪的混合记忆方向。</li>
+</ol>
+<h2 id="9-llm-vla">9. 跨领域参照：LLM、长视频大模型与 VLA 能提供什么</h2>
+<p>这里讨论的是<strong>技术关系</strong>，不等同于逐篇论文的引用或思想归属。部分三维工作明确复用了 LLM 的 KV cache、FlashAttention、TTT layer、LoRA 或 token merging；另一些则是在相同约束下独立收敛到相似设计。更准确的划分是：</p>
+<ol>
+<li><strong>直接迁移</strong>：因果 KV cache、TTT/fast weights、量化、LoRA/prompt、稀疏注意力；</li>
+<li><strong>结构同构</strong>：短期无损记忆 + 长期压缩记忆、检索式外部存储、surprise/confidence 控制写入；</li>
+<li><strong>三维特有</strong>：SE(3)/Sim(3) gauge、metric scale、共视几何、回环、BA 和跨窗口非刚性对齐。</li>
+</ol>
+<h3 id="91">9.1 一个统一的“短模型变长”视角</h3>
+<p>语言 token、视频 frame、机器人 observation 和多视图 image 的共同问题都是：模型只在长度 <span class="arithmatex">\(L_{\mathrm{train}}\)</span> 上训练，却要在 <span class="arithmatex">\(L_{\mathrm{test}}\gg L_{\mathrm{train}}\)</span> 时继续工作。跨领域方案实际上都在回答四个问题：</p>
+<div class="arithmatex">\[
+\text{读什么}
+\;+\;
+\text{记什么}
+\;+\;
+\text{何时遗忘/更新}
+\;+\;
+\text{怎样保持坐标或任务状态一致}.
+\]</div>
+<p>LLM 的长期记忆通常只需保持语义可检索；三维重建还必须保持可配准、可度量、可闭环。因此，LLM/VLM 技术最适合提供<strong>记忆组织和系统实现</strong>，而不能取代显式几何约束。</p>
+<h3 id="92-llm">9.2 LLM 长上下文技术与三维方法的对应关系</h3>
+<table>
+<thead>
+<tr>
+<th>LLM / 通用大模型路线</th>
+<th>代表工作</th>
+<th>三维中的对应工作</th>
+<th>关系强度</th>
+<th>对三维最值得借鉴的点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IO-aware exact attention / sequence parallelism</td>
+<td><a href="https://proceedings.neurips.cc/paper/2022/hash/67d57c32e20fd0a7a302cb81d36e40d5-Abstract-Conference.html">FlashAttention, NeurIPS 2022</a>、<a href="https://proceedings.iclr.cc/paper_files/paper/2024/hash/1119587863e78451f080da2a768c4935-Abstract-Conference.html">RingAttention, ICLR 2024</a></td>
+<td>可用于 VGGT/VGGT-<span class="arithmatex">\(\Omega\)</span> 的 exact attention；Scal3R 采用多 GPU chunk，StreamVGGT 明确兼容 FlashAttention</td>
+<td>直接系统迁移</td>
+<td>先减少 HBM 读写并把序列分布到多卡；但它们<strong>不降低 full attention 的总计算阶数</strong>，不能冒充定长流式算法</td>
+</tr>
+<tr>
+<td>稀疏注意力、token pruning / merging</td>
+<td><a href="https://proceedings.neurips.cc/paper/2020/hash/c8512d142a2d849725f31a9a7a361ab9-Abstract.html">BigBird, NeurIPS 2020</a>、<a href="https://openreview.net/pdf?id=JroZRaRw7Eu">ToMe, ICLR 2023</a>、<a href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/10478.pdf">FastV, ECCV 2024</a>、<a href="https://openaccess.thecvf.com/content/CVPR2025/html/Yang_VisionZip_Longer_is_Better_but_Not_Necessary_in_Vision_Language_CVPR_2025_paper.html">VisionZip, CVPR 2025</a></td>
+<td>FastVGGT、AVGGT、HTTM、LiteVGGT</td>
+<td>基本直接迁移</td>
+<td>保留少量 global/anchor token，其余局部连接或合并；三维版的重要升级应是按<strong>视差、共视、尺度可观测性和回环价值</strong>选择，而不只是 feature similarity</td>
+</tr>
+<tr>
+<td>segment recurrence / 因果 KV cache</td>
+<td><a href="https://aclanthology.org/P19-1285/">Transformer-XL, ACL 2019</a>、<a href="https://openreview.net/pdf?id=NG7sS51zVF">StreamingLLM, ICLR 2024</a></td>
+<td>StreamVGGT、STream3R、LongStream</td>
+<td>直接迁移</td>
+<td>重用历史表示并保持因果低延迟；StreamingLLM 保留 attention sink + 最近窗口，对应 LongStream 的 cache refresh 与 anchor 管理</td>
+</tr>
+<tr>
+<td>固定预算 KV 淘汰</td>
+<td><a href="https://proceedings.neurips.cc/paper_files/paper/2023/hash/6ceefa7b15572587b78ecfcebb2827f8-Abstract-Conference.html">H<span class="arithmatex">\(_2\)</span>O, NeurIPS 2023</a>、<a href="https://papers.neurips.cc/paper_files/paper/2023/file/a452a7c6c463e4ae8fbdc614c6e983e6-Paper-Conference.pdf">Scissorhands, NeurIPS 2023</a></td>
+<td>IncVGGT、InfiniteVGGT、RetrieveVGGT、FrameVGGT</td>
+<td>直接算法类比</td>
+<td>“recent + important”优于纯 FIFO；但三维 heavy hitter 应是关键帧/子图/平面等完整证据单元，逐 token 淘汰可能破坏一组对应关系</td>
+</tr>
+<tr>
+<td>压缩记忆与外部检索</td>
+<td><a href="https://openreview.net/forum?id=SylKikSYDH">Compressive Transformer, ICLR 2020</a>、<a href="https://openreview.net/pdf?id=TrjbxzRcnf-">Memorizing Transformer, ICLR 2022</a>、<a href="https://proceedings.neurips.cc/paper_files/paper/2020/hash/6b493230205f780e1bc26945df7481e5-Abstract.html">RAG, NeurIPS 2020</a>、<a href="https://proceedings.mlr.press/v162/borgeaud22a.html">RETRO, ICML 2022</a></td>
+<td>LoGeR、VGGT-Long/AMB3R 的关键帧库、MERG3R、RetrieveVGGT、传统 place recognition</td>
+<td>结构同构</td>
+<td>把“全部历史参与 attention”改成“查询相关历史”；三维 RAG 的返回值不能只是 feature，还应携带相机、局部点云、协方差和可验证的几何约束</td>
+</tr>
+<tr>
+<td>固定规模 recurrent / state-space state</td>
+<td><a href="https://openreview.net/pdf?id=tEYskw1VY2">Mamba, COLM 2024</a>、<a href="https://proceedings.iclr.cc/paper_files/paper/2025/hash/4904fad153f6434a7bcf04465d4be2cc-Abstract-Conference.html">Gated DeltaNet, ICLR 2025</a></td>
+<td>Spann3R、CUT3R、LONG3R、TTT3R</td>
+<td>结构同构</td>
+<td>gating 负责快速遗忘，delta rule 负责定向改写；这比对所有历史做均匀 EMA 更适合处理遮挡、动态物体和场景切换</td>
+</tr>
+<tr>
+<td>神经网络作为长期记忆 / fast weights</td>
+<td><a href="https://arxiv.org/abs/2407.04620">TTT layers</a>、<a href="https://proceedings.neurips.cc/paper_files/paper/2025/hash/a4ca07aa108036f80cbb5b82285fd4b1-Abstract-Conference.html">Titans, NeurIPS 2025</a></td>
+<td>VGG-T<span class="arithmatex">\(^3\)</span>、ZipMap、Scal3R、tttLRM、LoGeR</td>
+<td>明确而直接的技术血缘</td>
+<td>用小 MLP 参数压缩历史，attention 保留短期精确依赖；Titans 以 surprise 控制记忆写入，提示三维模型可用几何 innovation / residual / uncertainty 决定更新强度</td>
+</tr>
+<tr>
+<td>位置表示与 train-short-test-long</td>
+<td><a href="https://openreview.net/pdf?id=R8sQPpGCv0">ALiBi, ICLR 2022</a>、<a href="https://openreview.net/pdf?id=wHBfxhZu1u">YaRN, ICLR 2024</a>、<a href="https://proceedings.iclr.cc/paper_files/paper/2024/hash/211ab571cc9f3802afa6ffff52ae3e5b-Abstract-Conference.html">LongLoRA, ICLR 2024</a></td>
+<td><span class="arithmatex">\(\pi^3\)</span>、LongStream、R<span class="arithmatex">\(^3\)</span>、LASER；长序列 curriculum/cache-consistent training</td>
+<td>原理类比，不可直接照搬</td>
+<td>LLM 说明“长度外失败”既是算力问题也是表示/训练分布问题；三维应训练相对 pose、随机时间跨度和跨块 gauge，而不是简单插值帧位置编码</td>
+</tr>
+<tr>
+<td>权重与 KV 低比特化</td>
+<td><a href="https://proceedings.mlr.press/v202/xiao23c.html">SmoothQuant, ICML 2023</a>、<a href="https://proceedings.mlsys.org/paper_files/paper/2024/hash/42a452cbafa9dd64e9ba4aa95cc1ef21-Abstract-Conference.html">AWQ, MLSys 2024</a>、<a href="https://proceedings.mlr.press/v235/liu24bz.html">KIVI, ICML 2024</a></td>
+<td>QuantVGGT；未来的 StreamVGGT/IncVGGT cache quantization</td>
+<td>直接系统迁移</td>
+<td>不只量化 backbone 权重，还应分别研究历史 K、V、point/depth token 的异常值分布；近期局部几何保持高精度，远期语义/回环描述子可更低比特</td>
+</tr>
+</tbody>
+</table>
+<p>这张表也解释了一个常见误区：<strong>FlashAttention、RingAttention、量化和 token merging 让“给定长度更便宜”，但只有有界 cache、固定神经状态或外部检索才真正改变无限序列的资源增长方式。</strong></p>
+<h3 id="93-vlm-llm">9.3 长视频 VLM 与视频分割：比纯 LLM 更接近三维问题</h3>
+<p>视觉领域的历史信息具有空间密度、遮挡和重复观测，因此其经验比纯文本更可直接迁移。</p>
+<ul>
+<li><a href="https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136880633.pdf">XMem, ECCV 2022</a> 将记忆拆成快速 sensory memory、高分辨率 working memory 和压缩 long-term memory，并把反复被读取的工作记忆 consolidation 到长期库。它与 LoGeR 的“局部未压缩 + 全局压缩”几乎是同一设计哲学；三维版还应增加永久 loop-anchor memory。</li>
+<li><a href="https://proceedings.iclr.cc/paper_files/paper/2025/hash/45c1f6a8cbf2da59ebf2c802b4f742cd-Abstract-Conference.html">SAM 2, ICLR 2025</a> 用 streaming memory 把图像基础模型推广到实时视频；当 memory 为空时退化回图像模型。这是很好的兼容性原则：长序列模块应作为可插拔层，不破坏 VGGT/<span class="arithmatex">\(\pi^3\)</span>/DA3 的短序列能力。</li>
+<li><a href="https://openaccess.thecvf.com/content/CVPR2024/html/Cheng_Putting_the_Object_Back_into_Video_Object_Segmentation_CVPR_2024_paper.html">Cutie, CVPR 2024</a> 说明逐像素 memory matching 容易被干扰物污染，少量 object query + 高分辨率局部特征更稳。对应到三维，长期记忆的基本单位应逐渐从 pixel token 升级为 object、plane、keyframe 和 submap。</li>
+<li><a href="https://openaccess.thecvf.com/content/CVPR2024/papers/Song_MovieChat_From_Dense_Token_to_Sparse_Memory_for_Long_Video_CVPR_2024_paper.pdf">MovieChat, CVPR 2024</a> 与 <a href="https://openaccess.thecvf.com/content/CVPR2024/html/He_MA-LMM_Memory-Augmented_Large_Multimodal_Model_for_Long-Term_Video_Understanding_CVPR_2024_paper.html">MA-LMM, CVPR 2024</a> 都采用固定短期 buffer + 合并后的长期 memory bank。MA-LMM 的实验还显示，相似片段合并优于简单 FIFO；这直接支持三维中的 composite view 和 submap consolidation。</li>
+<li><a href="https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/06290.pdf">LLaMA-VID, ECCV 2024</a> 把每帧压成一个 text-conditioned context token 和一个 content token；<a href="https://openaccess.thecvf.com/content/CVPR2025/html/Yang_VisionZip_Longer_is_Better_but_Not_Necessary_in_Vision_Language_CVPR_2025_paper.html">VisionZip</a> 进一步选择少量 informative visual token。三维不能压到“两 token/帧”，但可以采用“少量全局姿态/场景 token + 局部稠密 patch token”的非对称预算。</li>
+<li><a href="https://openaccess.thecvf.com/content/CVPR2024/html/Chen_VideoLLM-online_Online_Video_Large_Language_Model_for_Streaming_Video_CVPR_2024_paper.html">VideoLLM-online, CVPR 2024</a> 不只改变网络，还改变训练序列格式：冗余帧保持沉默，只在关键事件输出，并仅保存关键帧上下文。对三维最有价值的启发是<strong>事件驱动几何推理</strong>：普通帧只做廉价 tracking/depth propagation，视差、残差或不确定性超过阈值时才调用完整 foundation model。</li>
+<li><a href="https://proceedings.iclr.cc/paper_files/paper/2025/hash/2e163450c1ae3167832971e6da29f38d-Abstract-Conference.html">LongVILA, ICLR 2025</a> 采用“先扩 context，再做长视频 SFT”的分阶段训练，并以 multimodal sequence parallelism 处理 2M context。它说明只改推理 cache 不够，训练中必须真正出现远距离依赖；对应三维应加入跨越数百/数千帧的回环、尺度和场景切换监督。</li>
+</ul>
+<h3 id="94-vla">9.4 VLA / 具身智能：长期记忆必须服务于动作和任务进度</h3>
+<p>VLA 与三维在线建图共享严格因果、传感器流和新环境适配，但 VLA 还要维持任务阶段与动作一致性。</p>
+<table>
+<thead>
+<tr>
+<th>VLA 工作</th>
+<th>关键思想</th>
+<th>对长序列三维的启发</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://www.roboticsproceedings.org/rss20/p090.pdf">Octo, RSS 2024</a></td>
+<td>以 800k 机器人轨迹预训练，支持新相机、proprioception、action space 和 embodiment 的快速微调</td>
+<td>像 MapAnything 一样把标定、IMU、深度等作为可选条件；预训练接口必须允许部署时新增传感器，而不是固定 RGB-only</td>
+</tr>
+<tr>
+<td><a href="https://openreview.net/pdf?id=54U3XHf7qq">MemoryVLA, ICLR 2026</a></td>
+<td>working memory 保留当前 perceptual/cognitive token，长期库同时保存低层细节与高层语义，并检索、合并冗余</td>
+<td>对应“raw local geometry + semantic/topological long-term map”；说明长期地图最好同时保存可配准细节和任务语义</td>
+</tr>
+<tr>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Li_Global_Prior_Meets_Local_Consistency_Dual-Memory_Augmented_Vision-Language-Action_Model_for_CVPR_2026_paper.html">OptimusVLA, CVPR 2026</a></td>
+<td>Global Prior Memory 检索相似轨迹以缩短动作生成路径，Local Consistency Memory 表示已执行动作和任务进度；报告 2.9× 推理加速</td>
+<td>三维可把“历史相似轨迹先验”和“当前局部几何一致性”分成两套 memory，前者提供先验/回环候选，后者负责严谨配准</td>
+</tr>
+<tr>
+<td><a href="https://openaccess.thecvf.com/content/ICCV2025/papers/Li_Towards_Long-Horizon_Vision-Language-Action_System_Reasoning_Acting_and_Memory_ICCV_2025_paper.pdf">Towards Long-Horizon VLA, ICCV 2025</a></td>
+<td>高层 reasoning 拆 meta-action，底层 policy expert 执行，并用 action stack/memory 维持阶段</td>
+<td>对机器人三维系统，应让低频 foundation model 管全局子图/回环，高频轻量 VO/depth 管局部；不要让一个大模型以同一频率处理所有帧</td>
+</tr>
+</tbody>
+</table>
+<p>关系上，VLA 的 dual-memory 与 LoGeR/XMem/Titans 非常接近：<strong>高分辨率短期状态保证即时控制，压缩或检索式长期状态保证任务不失忆。</strong> 不同的是，三维长期状态需要通过重投影、共视和回环验证，不能仅凭语义相似写入。</p>
+<h3 id="95">9.5 “测试时学习”其实有三种，必须分开</h3>
+<ol>
+<li><strong>TTT sequence layer</strong>：TTT layers、Titans、VGG-T<span class="arithmatex">\(^3\)</span>/ZipMap/Scal3R 把小网络参数当作 sequence state，目标是压缩上下文；</li>
+<li><strong>test-time adaptation / domain adaptation</strong>：<a href="https://proceedings.mlr.press/v119/sun20b.html">经典 TTT, ICML 2020</a>、<a href="https://arxiv.org/abs/2006.10726">TENT, ICLR 2021</a> 在无标签测试数据上更新模型，目标是适应分布偏移；</li>
+<li><strong>parameter-efficient adaptation</strong>：<a href="https://proceedings.mlr.press/v97/houlsby19a">Adapter, ICML 2019</a>、<a href="https://openreview.net/pdf?id=nZeVKeeFYf9">LoRA, ICLR 2022</a>、<a href="https://www.ecva.net/papers/eccv_2022/papers_ECCV/papers/136930696.pdf">Visual Prompt Tuning, ECCV 2022</a> 冻结 backbone，只开放少量参数。</li>
+</ol>
+<p>Online3R 属于第 2+3 类，VGG-T<span class="arithmatex">\(^3\)</span> 主要属于第 1 类，Scal3R 同时具有第 1 类的记忆作用和第 2 类的场景自适应潜力。把它们都简称 TTT 会掩盖最重要的差别：<strong>模型到底是在“记住当前序列”，还是在“修正对新域的系统偏差”。</strong></p>
+<p>长期在线适配还应直接借鉴：</p>
+<ul>
+<li><a href="https://openaccess.thecvf.com/content/CVPR2022/html/Wang_Continual_Test-Time_Domain_Adaptation_CVPR_2022_paper.html">CoTTA, CVPR 2022</a>：EMA/augmentation-averaged teacher 减少伪标签错误，并随机恢复部分 source weights 防止灾难性遗忘；</li>
+<li><a href="https://proceedings.mlr.press/v162/niu22a.html">EATA, ICML 2022</a>：跳过无信息或不可靠样本，减少 backward 次数，并保护重要权重。</li>
+</ul>
+<p>对应三维系统的实践准则是：只用高置信、多基线且跨时一致的几何残差更新 prompt/LoRA；保留 source checkpoint 和稳定 teacher；检测场景切换；若回环/重投影误差突然恶化则回滚。这比无条件逐帧反向传播可靠得多。</p>
+<h3 id="96-llm">9.6 不能从 LLM 直接照搬的三维特殊性</h3>
+<ol>
+<li><strong>一维位置不等于三维 gauge。</strong> ALiBi/YaRN 解决 token index 外推；相机 pose 位于 SE(3)/Sim(3)，还含尺度不可观与坐标规范问题。LongStream/<span class="arithmatex">\(\pi^3\)</span>/R<span class="arithmatex">\(^3\)</span> 的相对表示不是简单“3D 版 RoPE”。</li>
+<li><strong>语义召回不等于几何可配准。</strong> RAG 找到相关段落即可使用；三维检索到外观相似关键帧后还必须通过特征对应、PnP/essential matrix、重投影或点云一致性验证。</li>
+<li><strong>token 独立性假设更危险。</strong> 删除一句话可能损失语义，删除一个小 patch 可能直接让尺度、旋转或薄结构不可观。几何 memory 应以 frame/object/plane/submap 等约束闭包为单位。</li>
+<li><strong>误差会进入坐标并永久积累。</strong> LLM 丢失旧 token 通常影响未来答案；三维早期错误会改变后续所有坐标。必须保留显式 factor graph、loop closure 或可回滚 map state。</li>
+<li><strong>“无限流畅”不代表“无限记忆”。</strong> StreamingLLM 可以在数百万 token 后继续稳定生成，但不保证准确回忆中间事实；同理，模型能跑 10k 帧不代表它还能利用第 300 帧的回环。</li>
+<li><strong>动态世界不是纯 context shift。</strong> 三维要区分 camera motion、object motion 与地图变化，不能把所有新信息写入单一静态 state；至少需要 static map / dynamic object / appearance statistics 三类状态。</li>
+</ol>
+<h3 id="97">9.7 从跨领域经验推导出的下一步研究路线</h3>
+<p>按科研价值与可实现性排序，最值得尝试的是：</p>
+<h4 id="a-cache">A. 三层几何记忆，而不是单一 cache</h4>
+<div class="arithmatex">\[
+\underbrace{\text{sensory: 最近若干帧的稠密 token}}_{\text{最高精度、快速淘汰}}
+\rightarrow
+\underbrace{\text{working: keyframe/object/submap}}_{\text{可配准、固定预算}}
+\rightarrow
+\underbrace{\text{long-term: neural state + topology/loop index}}_{\text{压缩、可检索}}.
+\]</div>
+<p>这综合了 XMem、MovieChat、Titans、MemoryVLA 与 LoGeR。长期库应保留少量不可压缩的 loop anchor，避免 neural memory 把精确闭环证据“平均掉”。</p>
+<h4 id="b-geometry-rag">B. Geometry-RAG：检索后必须验证</h4>
+<p>为每个 keyframe/submap 同时建立：</p>
+<ul>
+<li>appearance/semantic 向量索引；</li>
+<li>covisibility/topological 图；</li>
+<li>相机、局部点云、尺度与不确定性；</li>
+<li>可快速运行的几何 verification。</li>
+</ul>
+<p>当前帧先用外观和拓扑召回候选，再用几何验证产生 pose factor。它对应 RAG/RETRO，但输出是<strong>可优化的约束</strong>，不是直接拼接的上下文。</p>
+<h4 id="c-gated-delta-surprise">C. 用 gated delta / surprise 更新地图状态</h4>
+<p>把 Titans 的 surprise 和 Gated DeltaNet 的 erase/write 分离改成几何量：</p>
+<div class="arithmatex">\[
+s_t =
+\alpha\,e_{\mathrm{reproj}}
++\beta\,e_{\mathrm{depth}}
++\gamma\,u_t
++\delta\,d_{\mathrm{view}},
+\]</div>
+<p>其中重投影残差、深度残差、不确定性和视角新颖度共同决定是否写入；动态/冲突证据触发局部擦除或分支，而不是污染整个全局 state。</p>
+<h4 id="d_1">D. 事件驱动的多频率系统</h4>
+<p>借鉴 VideoLLM-online 和 hierarchical VLA：</p>
+<ul>
+<li>每帧：轻量特征、光流/track、depth propagation；</li>
+<li>关键帧：运行 VGGT/<span class="arithmatex">\(\pi^3\)</span>/DA3 局部几何；</li>
+<li>子图完成或不确定性升高：更新 TTT/global memory；</li>
+<li>检测到地点召回：启动 loop verification 与局部 BA。</li>
+</ul>
+<p>这通常比强行让 foundation model 达到相机原始 FPS 更有系统价值。</p>
+<h4 id="e-memory">E. 对历史 memory 做分级量化</h4>
+<p>结合 KIVI/QuantVGGT：最近窗口保留 BF16/FP16，较旧 key/value 使用 INT8/INT4，长期检索描述子甚至可二值化；pose、尺度和协方差保持较高精度。评价时必须把反量化 IO 和真实 kernel 延迟计入，而不只报告理论显存。</p>
+<h4 id="f">F. “短训长测”的几何课程</h4>
+<p>结合 ALiBi/YaRN/LongVILA/LongLoRA 的经验，在有限训练长度下合成长程困难：</p>
+<ul>
+<li>positional skip：相邻输入在原视频中随机跨越不同时间间隔；</li>
+<li>trajectory stretch：保持局部块长度不变，扩大块间基线和里程；</li>
+<li>delayed loop：回环证据故意延迟到数百帧之后；</li>
+<li>memory corruption：训练时随机删改历史 cache，迫使模型学习 refresh 与恢复；</li>
+<li>scene boundary：把多个场景串联，监督 reset/branch。</li>
+</ul>
+<h4 id="g">G. 为在线适配增加安全机制</h4>
+<p>Online3R/Self-Geometry 应补上 CoTTA/EATA 式 teacher、样本筛选、source-weight restoration、场景切换和 rollback。更新自由度优先级仍应是 statistics → prompt/register → LoRA → 少量 head，最后才是 backbone。</p>
+<h4 id="h">H. 评价“有效上下文”，而不是最大可运行帧数</h4>
+<p><a href="https://aclanthology.org/2024.tacl-1.9/">Lost in the Middle, TACL 2024</a> 与 <a href="https://openreview.net/pdf?id=kIoBbc76Sy">RULER, COLM 2024</a> 说明 nominal context length 不等于有效利用长度。三维版 benchmark 应加入：</p>
+<ul>
+<li>把唯一回环帧放在序列开头、中间、结尾，检查位置偏置；</li>
+<li>在 1k/5k/10k 帧后重新定位到早期地点；</li>
+<li>多个相似地点中只保留一个几何正确候选，检查 retrieval false positive；</li>
+<li>删除某个关键 submap 后测轨迹/尺度变化，评估真实记忆贡献；</li>
+<li>同时报告 memory recall、geometric verification precision、ATE 随长度曲线和 map consistency。</li>
+</ul>
+<h3 id="98">9.8 跨领域后的核心研究判断</h3>
+<p>当前三维方向与 LLM/VLM/VLA 的关系，可以压缩成一句话：</p>
+<blockquote>
+<p><strong>LLM 提供长上下文算子和检索范式，视频模型提供多层视觉记忆，VLA 提供任务驱动的因果更新；三维研究必须在此之上加入可验证的空间约束。</strong></p>
+</blockquote>
+<p>因此，下一阶段最可能胜出的并非单纯“3D Mamba”“3D RAG”或“把 context 拉到 100k”，而是：</p>
+<div class="arithmatex">\[
+\boxed{\text{dense local geometry}}
++
+\boxed{\text{multi-level bounded memory}}
++
+\boxed{\text{retrieval + geometric verification}}
++
+\boxed{\text{safe online adaptation}}.
+\]</div>
+<h2 id="10">10. 最终判断</h2>
+<p>如果研究问题是“让 VGGT / <span class="arithmatex">\(\pi^3\)</span> / DA3 / VGGT-<span class="arithmatex">\(\Omega\)</span> 在更长视频上低开销、快速并适应新场景”，最有含金量的切入点不是孤立地做 token pruning，而是同时处理三件事：</p>
+<div class="arithmatex">\[
+\boxed{\text{local lossless geometry}}
+\; + \;
+\boxed{\text{bounded global memory}}
+\; + \;
+\boxed{\text{confidence-controlled scene adaptation}}
+\]</div>
+<p>具体而言，<strong><span class="arithmatex">\(\pi^3\)</span>/R<span class="arithmatex">\(^3\)</span>/LongStream 的相对或 gauge-free 几何表示 + LoGeR/VGG-T<span class="arithmatex">\(^3\)</span>/Scal3R 的固定规模神经记忆 + LASER/TALO 的显式跨块约束 + Online3R/Self-Geometry 的小参数适配</strong>，比单独扩大模型或单独稀疏注意力更可能在真实公里级、动态、未知场景中取得稳健收益。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "header.autohide", "search.suggest", "search.highlight", "search.share"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../_js/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
