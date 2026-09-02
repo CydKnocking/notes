@@ -1486,3 +1486,24 @@ PanoCity, Matterport3D, Stanford2d3ds, PPO, OmniStereo-urban, deep360
   - [x] 实验章节，无关细节太多，如测试集有多少个clips，
 
   - [x] 图注、表注废话太多
+
+
+### 0902
+
+- [ ] 上传 point odyssey 到百度网盘
+
+- [ ] 测试 vggt-omega 在长序列的表现（pano的/pinhole的）
+
+- [ ] 补充panovggt、其他方法在panopointodyssey上的训练+测试
+
+  - [ ] UniFuse
+
+  - [ ] BiFuse++
+
+  - [ ] EGFormer
+
+  - [ ] PanoFormer
+
+  - [ ] OmniFusion
+
+  - [ ] PanoVGGT
