@@ -1490,7 +1490,7 @@ PanoCity, Matterport3D, Stanford2d3ds, PPO, OmniStereo-urban, deep360
 
 ### 0902
 
-- [ ] 上传 point odyssey 到百度网盘
+- [ ] 上传 point odyssey 到百度网盘：正在打包。
 
 - [ ] 测试 vggt-omega 在长序列的表现（pano的/pinhole的）
 
