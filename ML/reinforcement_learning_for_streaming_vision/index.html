@@ -1,0 +1,5683 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../great_links/">
+      
+      
+        <link rel="next" href="../../Web/clash/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../_assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>从零理解强化学习：面向流式重建、SLAM 与在线感知 - Knocking's notebook</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="brown" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#slam" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Knocking&#39;s notebook" class="md-header__button md-logo" aria-label="Knocking's notebook" data-md-component="logo">
+      
+  <img src="../../_assets/icon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Knocking's notebook
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              从零理解强化学习：面向流式重建、SLAM 与在线感知
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/CydKnocking/notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Knocking&#39;s notebook" class="md-nav__button md-logo" aria-label="Knocking's notebook" data-md-component="logo">
+      
+  <img src="../../_assets/icon.png" alt="logo">
+
+    </a>
+    Knocking's notebook
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/CydKnocking/notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Knocking's personal notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about_this_notebook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About this notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Vis Info Processing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    3D Vis Info Processing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/00_Introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    00 Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/01_Part%20One%20Acquisition%20of%203D%20Data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 Part One Acquisition of 3D Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/02_Part%20Two%20Integration%20of%203D%20data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 Part Two Integration of 3D data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/03_Part%20Three%20Descriptions%20of%203D%20Objects%20and%20Scenes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 Part Three Descriptions of 3D Objects and Scenes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/Full%20notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ML
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ML
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../great_links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Great links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    从零理解强化学习：面向流式重建、SLAM 与在线感知
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    从零理解强化学习：面向流式重建、SLAM 与在线感知
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阅读导航
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 先从一个你熟悉的视觉问题开始
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 先从一个你熟悉的视觉问题开始">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 一段视频，为什么不能每帧都精细处理？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 一个贯穿全文的小故事
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 强化学习、监督学习和自监督学习有什么不同？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 有时间顺序，就需要强化学习吗？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 强化学习的语言：把视觉系统翻译成决策过程
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 强化学习的语言：把视觉系统翻译成决策过程">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 七个最常见的词
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-mdp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 MDP：为什么大家都要写这个五元组？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-pomdp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 真实视觉更接近 POMDP
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 奖励和回报：算法到底在最大化什么？
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 奖励和回报：算法到底在最大化什么？">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 奖励是一次反馈，回报是以后的总账
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 期望：不要求每次都赢
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 折扣因子不能脱离真实时间理解
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 奖励与训练损失不是一个东西
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-valueq-bellman" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Value、Q 和 Bellman：长期收益是怎样估计出来的？
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Value、Q 和 Bellman：长期收益是怎样估计出来的？">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 状态价值与动作价值
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-bellman" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Bellman 方程其实只是拆账
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-monte-carlo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Monte Carlo：等这一局结束再算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-td" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 TD：先用下一步预测来更新这一步
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-advantage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 Advantage：这个动作比通常情况好多少？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-q-learning-dqn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 第一条算法路线：Q-learning 与 DQN
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 第一条算法路线：Q-learning 与 DQN">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-q-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Q-learning 如何从数据学习？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 从表格到神经网络
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 对你的任务有什么意义？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 第二条算法路线：直接学习策略
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 第二条算法路线：直接学习策略">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 一个看起来像分类器的网络
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-reinforce" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 REINFORCE 的直觉
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-actorcritic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 为什么需要 Actor–Critic？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-ppo-rl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 理解 PPO：你很可能会用到的第一种深度 RL 算法
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. 理解 PPO：你很可能会用到的第一种深度 RL 算法">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-ppo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 PPO 想解决什么问题？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-gae" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 GAE：把多个时间尺度的证据混合起来
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 训练过程长什么样？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 学到这里应该掌握到什么程度？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 算法地图：按问题选方法
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. 算法地图：按问题选方法">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 先理解三个彼此不同的分类轴
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 面向初学者的选择表
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 把强化学习接到流式视觉里：先区分被动与主动
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. 把强化学习接到流式视觉里：先区分被动与主动">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 被动流式处理：相机轨迹固定，算法选择处理方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 主动视觉：动作改变未来会看到什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 四个值得对照理解的研究例子
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. 奖励设计：最容易把任务做错的地方
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. 奖励设计：最容易把任务做错的地方">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 先写评价目标，再设计训练奖励
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 一个可用来起步的奖励模板
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 为什么只奖励“误差下降”可能出问题？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#104" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4 六种典型的奖励漏洞
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#105" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.5 几何不确定性与信息增益，先当作假设
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. 流式任务必须多想一层：因果性和墙钟时间
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. 流式任务必须多想一层：因果性和墙钟时间">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 未来帧不能出现在当前决策输入中
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 流式不只是“按帧读文件”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 为实时调度建立事件模拟
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#114" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4 对重建和跟踪，具体报告什么？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. 训练数据从哪里来？测试时还要奖励吗？
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. 训练数据从哪里来？测试时还要奖励吗？">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#121" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.1 最适合被动流式任务的起点：视频回放环境
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#122" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.2 训练可以看真值，部署策略不能偷偷依赖它
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#123" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.3 冻结部署通常不需要实时计算训练奖励
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#124-offline-rl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.4 只有固定日志时，才进入典型 offline RL 困境
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#125" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.5 真正结束与人为截断必须分开
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. 亲手运行：一次预算应该花在哪一帧？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. 你的第一个真实项目：固定预算下的关键帧写入
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14. 你的第一个真实项目：固定预算下的关键帧写入">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#141" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1 先把研究问题限定成一句话
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#142" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2 系统构成
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#143" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3 一份初始环境规格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#144-actor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4 Actor 应该看到什么？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#145" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.5 首轮只选择一个主要评价任务
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#146" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.6 必须比较的基线
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#147" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.7 实验顺序
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#148" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.8 训练到底要花多少钱？先量环境速度
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#149" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.9 什么样的结果值得继续？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. 怎样把应用做成一个有说服力的研究问题？
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="15. 怎样把应用做成一个有说服力的研究问题？">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#151" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.1 先证明长期后果存在
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#152" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.2 三个可以继续探索的方向
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#153" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.3 一组能支撑归因的消融
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#154" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.4 如何报告不稳定性？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. 该读什么？按理解顺序读，不按年份追
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16. 该读什么？按理解顺序读，不按年份追">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#161" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.1 第一轮：只选三份基础材料
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#162" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2 第二轮：算法论文每篇只带一个问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#163" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3 第三轮：与你的视觉方向建立联系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#164" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.4 实现时查的资料
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17. 一个四阶段学习计划
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18. 复习、自测与术语速查
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="18. 复习、自测与术语速查">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#181" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18.1 先不看答案，回答八个问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#182" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18.2 参考答案
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#183" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18.3 术语速查
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#184" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18.4 准备开始项目时，写下这六句话
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Web
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Web/clash/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clash
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Web/domains/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Domains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Conference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../conference/china3dv_2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    China3dv 2026
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Datasets
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Datasets
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/TUM_RGBD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TUM RGBD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/TartanAir/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TartanAir
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/proxy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proxy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Github
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Github
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../github/Deploy%20repo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Create a new github repository
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../github/verify%20domain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verify domain
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux and ubuntu
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Linux and ubuntu
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/chmod/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chmod
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/chown/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chown
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/cmatrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cmatrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/crontab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crontab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/dns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/softlink/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Softlink
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/ssh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ssh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/tmux/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/zsh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zsh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Math
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Math
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/great_links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Great links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/quaternion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quaternion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Papers
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Papers
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/3dgs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3dgs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/4d_tracking_submission_directions_18d_2mo_2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    单目流式 4D 重建与点追踪：18 天 / 两个月投稿决策与实验方案
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/4drecon_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4drecon tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/croco_and_crocov2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CroCo 与 CroCo v2：从跨视角补全到通用几何视觉骨干
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/discussions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Discussions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/long_sequence_3d_foundation_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    三维视觉基础模型的长序列、低开销与新场景适配
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/pano_3drecon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pano 3drecon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/panoramic_vo_reconstruction_survey/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    全景相机 Visual Odometry 与场景重建：精选文献简报
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/paper_notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paper notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/point_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Point tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/research_diary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research diary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/streaming_4d_tracking_research_2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    动态长序列的 4D 重建与 Point Tracking：文献调研与选题判断
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/vggt_mae/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VGGT 类几何基础模型 × MAE / Masked Modeling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Python
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/rosbag/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rosbag
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/send_email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Send email
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/torch_tips/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Torch tips
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/tqdm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tqdm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        阅读导航
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 先从一个你熟悉的视觉问题开始
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 先从一个你熟悉的视觉问题开始">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 一段视频，为什么不能每帧都精细处理？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 一个贯穿全文的小故事
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 强化学习、监督学习和自监督学习有什么不同？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 有时间顺序，就需要强化学习吗？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 强化学习的语言：把视觉系统翻译成决策过程
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 强化学习的语言：把视觉系统翻译成决策过程">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 七个最常见的词
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-mdp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 MDP：为什么大家都要写这个五元组？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-pomdp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 真实视觉更接近 POMDP
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 奖励和回报：算法到底在最大化什么？
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 奖励和回报：算法到底在最大化什么？">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 奖励是一次反馈，回报是以后的总账
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 期望：不要求每次都赢
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 折扣因子不能脱离真实时间理解
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 奖励与训练损失不是一个东西
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-valueq-bellman" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Value、Q 和 Bellman：长期收益是怎样估计出来的？
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Value、Q 和 Bellman：长期收益是怎样估计出来的？">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 状态价值与动作价值
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-bellman" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Bellman 方程其实只是拆账
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-monte-carlo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Monte Carlo：等这一局结束再算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-td" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 TD：先用下一步预测来更新这一步
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-advantage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 Advantage：这个动作比通常情况好多少？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-q-learning-dqn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 第一条算法路线：Q-learning 与 DQN
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 第一条算法路线：Q-learning 与 DQN">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-q-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Q-learning 如何从数据学习？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 从表格到神经网络
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 对你的任务有什么意义？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 第二条算法路线：直接学习策略
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 第二条算法路线：直接学习策略">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 一个看起来像分类器的网络
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-reinforce" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 REINFORCE 的直觉
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-actorcritic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 为什么需要 Actor–Critic？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-ppo-rl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 理解 PPO：你很可能会用到的第一种深度 RL 算法
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. 理解 PPO：你很可能会用到的第一种深度 RL 算法">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-ppo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 PPO 想解决什么问题？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-gae" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 GAE：把多个时间尺度的证据混合起来
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 训练过程长什么样？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 学到这里应该掌握到什么程度？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 算法地图：按问题选方法
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. 算法地图：按问题选方法">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 先理解三个彼此不同的分类轴
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 面向初学者的选择表
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 把强化学习接到流式视觉里：先区分被动与主动
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. 把强化学习接到流式视觉里：先区分被动与主动">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 被动流式处理：相机轨迹固定，算法选择处理方式
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 主动视觉：动作改变未来会看到什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 四个值得对照理解的研究例子
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. 奖励设计：最容易把任务做错的地方
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. 奖励设计：最容易把任务做错的地方">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 先写评价目标，再设计训练奖励
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 一个可用来起步的奖励模板
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 为什么只奖励“误差下降”可能出问题？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#104" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4 六种典型的奖励漏洞
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#105" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.5 几何不确定性与信息增益，先当作假设
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. 流式任务必须多想一层：因果性和墙钟时间
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. 流式任务必须多想一层：因果性和墙钟时间">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 未来帧不能出现在当前决策输入中
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 流式不只是“按帧读文件”
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#113" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.3 为实时调度建立事件模拟
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#114" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.4 对重建和跟踪，具体报告什么？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. 训练数据从哪里来？测试时还要奖励吗？
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. 训练数据从哪里来？测试时还要奖励吗？">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#121" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.1 最适合被动流式任务的起点：视频回放环境
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#122" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.2 训练可以看真值，部署策略不能偷偷依赖它
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#123" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.3 冻结部署通常不需要实时计算训练奖励
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#124-offline-rl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.4 只有固定日志时，才进入典型 offline RL 困境
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#125" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.5 真正结束与人为截断必须分开
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. 亲手运行：一次预算应该花在哪一帧？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. 你的第一个真实项目：固定预算下的关键帧写入
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="14. 你的第一个真实项目：固定预算下的关键帧写入">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#141" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1 先把研究问题限定成一句话
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#142" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2 系统构成
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#143" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3 一份初始环境规格
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#144-actor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.4 Actor 应该看到什么？
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#145" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.5 首轮只选择一个主要评价任务
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#146" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.6 必须比较的基线
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#147" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.7 实验顺序
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#148" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.8 训练到底要花多少钱？先量环境速度
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#149" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.9 什么样的结果值得继续？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. 怎样把应用做成一个有说服力的研究问题？
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="15. 怎样把应用做成一个有说服力的研究问题？">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#151" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.1 先证明长期后果存在
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#152" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.2 三个可以继续探索的方向
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#153" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.3 一组能支撑归因的消融
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#154" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15.4 如何报告不稳定性？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. 该读什么？按理解顺序读，不按年份追
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="16. 该读什么？按理解顺序读，不按年份追">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#161" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.1 第一轮：只选三份基础材料
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#162" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.2 第二轮：算法论文每篇只带一个问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#163" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.3 第三轮：与你的视觉方向建立联系
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#164" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16.4 实现时查的资料
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17. 一个四阶段学习计划
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#18" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18. 复习、自测与术语速查
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="18. 复习、自测与术语速查">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#181" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18.1 先不看答案，回答八个问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#182" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18.2 参考答案
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#183" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18.3 术语速查
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#184" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18.4 准备开始项目时，写下这六句话
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="slam">从零理解强化学习：面向流式重建、SLAM 与在线感知</h1>
+<blockquote>
+<p>面向读者：了解一点计算机视觉，但没有强化学习基础的学生。<br />
+编写与资料核查日期：2026-09-12。<br />
+本文是一份循序渐进的教程。基础概念采用标准定义；视觉场景中的例子、奖励设计和实验方案，除明确引用论文外，均为教学设计或研究建议，不代表已经验证的性能或创新性。</p>
+</blockquote>
+<p>你学习强化学习的第一目标，应当是能判断自己的视觉问题是否包含值得学习的长期决策，而不是记住一串算法缩写。</p>
+<p><strong>对于流式视觉，一个值得先尝试的方向是：保留已有的几何或感知模型，让一个小策略决定什么时候计算、保留什么记忆、什么时候更新。</strong> 这能把问题限定在一个可分析的决策环节。最终是否值得使用强化学习，需要与规则、监督学习和短视决策方法比较。</p>
+<h2 id="_1">阅读导航</h2>
+<ul>
+<li><strong>第一次读，建立直觉：</strong> <a href="#basics">第 1–4 节</a>，然后运行<a href="#practice">第 13 节的小实验</a>。</li>
+<li><strong>第二次读，理解算法：</strong> <a href="#algorithms">第 5–8 节</a>，重点理解 Q 值、优势函数、Actor–Critic 和 PPO。</li>
+<li><strong>准备接入自己的系统：</strong> <a href="#vision">第 9–12 节</a>及<a href="#project">第 14 节实验方案</a>。</li>
+<li><strong>准备研究选题：</strong> <a href="#research">第 15 节</a>，再看<a href="#reading">阅读材料与学习计划</a>；<a href="#review">第 18 节</a>用于复习和自测。</li>
+</ul>
+<p>公式允许分两遍读：先读公式后面的中文解释，再检查符号。你只需要期望、条件概率、求和、导数和梯度下降的初步知识；第 3 节会补最基本的数学直觉。</p>
+<hr />
+<p><a id="basics"></a></p>
+<h2 id="1">1. 先从一个你熟悉的视觉问题开始</h2>
+<h3 id="11">1.1 一段视频，为什么不能每帧都精细处理？</h3>
+<p>假设你有一个在线三维重建系统。相机每秒送来 30 张图像，系统需要估计相机运动、恢复几何，并维护历史记忆。</p>
+<p>计算和存储都有限，因此不断出现选择：</p>
+<ul>
+<li>当前帧值得成为关键帧吗？</li>
+<li>缓存已满，应该删除旧帧，还是拒绝新帧？</li>
+<li>当前跟踪不稳，要不要运行一次昂贵的重新定位？</li>
+<li>还有一些计算预算，要现在优化地图，还是留给后面的困难片段？</li>
+</ul>
+<p>这些选择往往不能只看当前帧的误差。删除一张看似冗余的旧帧，可能在几秒后的回访中导致重定位失败；多做一次优化，可能改善当前几何，也可能使输出滞后。</p>
+<p><strong>强化学习研究的是：如何通过交互经验，学会能取得较高累计收益的决策规则。</strong> “累计”意味着一个动作的价值可以在以后才显现。<a href="https://spinningup.openai.com/en/latest/spinningup/rl_intro.html">基础概念：Spinning Up</a></p>
+<h3 id="12">1.2 一个贯穿全文的小故事</h3>
+<p>设一段极简视频包含三个阶段。整个过程只有一次昂贵更新的预算。</p>
+<table>
+<thead>
+<tr>
+<th>决策时刻</th>
+<th>当前情况</th>
+<th>使用唯一一次更新的效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(t=0\)</span></td>
+<td>看见普通墙面</td>
+<td>立即得到 2 分，但对后面没有额外帮助</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(t=1\)</span></td>
+<td>看见有辨识度的岔路</td>
+<td>立即得到 1 分，并留下关键锚点</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(t=2\)</span></td>
+<td>遮挡后重新出现</td>
+<td>此时不能更新；若之前留下岔路锚点，再得到 6 分</td>
+</tr>
+</tbody>
+</table>
+<p>只追求眼前收益的策略，会在第一步花掉预算，最终得到 2 分。</p>
+<p>考虑长期收益的策略，会先等待，在第二步更新，最终得到 <span class="arithmatex">\(1+6=7\)</span> 分。</p>
+<p>这里的分数是人为设计的教学奖励，不是某个真实数据集指标。这么小且规则完全已知的问题，可以直接枚举或规划；使用强化学习只是为了演示如何从尝试中学到同样的决策。</p>
+<h3 id="13">1.3 强化学习、监督学习和自监督学习有什么不同？</h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>训练信号</th>
+<th>视觉例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>监督学习</td>
+<td>给定输入对应的目标答案</td>
+<td>用真值深度训练深度网络</td>
+</tr>
+<tr>
+<td>自监督学习</td>
+<td>从数据结构中构造约束</td>
+<td>利用多视图重投影一致性学习深度</td>
+</tr>
+<tr>
+<td>模仿学习</td>
+<td>给定专家采取的动作</td>
+<td>学习一个优秀规则或搜索器如何选择关键帧</td>
+</tr>
+<tr>
+<td>强化学习</td>
+<td>执行动作后得到的奖励与后续结果</td>
+<td>学习怎样选择关键帧，使整段序列的质量和开销更合适</td>
+</tr>
+</tbody>
+</table>
+<p>在监督分类中，你通常知道这一张图的类别。在强化学习中，你可能只知道“这串操作最后成功了”，却不知道其中每一步是否正确。这就产生了<strong>信用分配问题</strong>：最后的好坏，应当归因于哪些早期动作？</p>
+<p>奖励也可以依赖真值深度、真值位姿或人工设计的评测函数。<strong>强化学习不等于不需要标注，也不等于不需要人设计目标。</strong></p>
+<h3 id="14">1.4 有时间顺序，就需要强化学习吗？</h3>
+<p>不一定。分三种情况看：</p>
+<ol>
+<li><strong>每帧独立预测深度。</strong> 如果没有动作选择，通常直接做监督或自监督预测。</li>
+<li><strong>每帧选择大模型或小模型，但选择不影响以后，且没有共享预算或队列。</strong> 可以先做监督决策或 contextual bandit，即“上下文老虎机”：看当前信息，为这一次收益选择动作。</li>
+<li><strong>今天保留的记忆、消耗的预算或积累的延迟，会改变以后能做什么、做得怎样。</strong> 这才有明确的多步决策结构，可以考虑强化学习。</li>
+</ol>
+<p>即使属于第三种情况，动态规划、模型预测控制或优秀的启发式也可能更合适。<strong>把问题写成强化学习形式，只说明它可以这样建模，尚未说明强化学习是最好的求解方法。</strong></p>
+<h2 id="2">2. 强化学习的语言：把视觉系统翻译成决策过程</h2>
+<h3 id="21">2.1 七个最常见的词</h3>
+<table>
+<thead>
+<tr>
+<th>术语</th>
+<th>符号</th>
+<th>通俗解释</th>
+<th>流式重建中的例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>智能体，agent</td>
+<td>—</td>
+<td>做选择的部分</td>
+<td>决定是否写入关键帧的小网络</td>
+</tr>
+<tr>
+<td>环境，environment</td>
+<td>—</td>
+<td>接受动作并产生后果的系统</td>
+<td>视频回放器、重建器、缓存和计时器</td>
+</tr>
+<tr>
+<td>状态，state</td>
+<td><span class="arithmatex">\(s_t\)</span></td>
+<td>足以决定后续分布的完整信息</td>
+<td>场景状态、地图、预算、待处理队列等</td>
+</tr>
+<tr>
+<td>观测，observation</td>
+<td><span class="arithmatex">\(o_t\)</span></td>
+<td>智能体实际上看得到的信息</td>
+<td>当前图像特征、匹配统计、预算余量</td>
+</tr>
+<tr>
+<td>动作，action</td>
+<td><span class="arithmatex">\(a_t\)</span></td>
+<td>这一步选择做什么</td>
+<td>跳过写入、插入关键帧、触发优化</td>
+</tr>
+<tr>
+<td>奖励，reward</td>
+<td><span class="arithmatex">\(r_{t+1}\)</span></td>
+<td>动作之后得到的一个标量反馈</td>
+<td>精度收益减去计算成本</td>
+</tr>
+<tr>
+<td>策略，policy</td>
+<td><span class="arithmatex">\(\pi\)</span></td>
+<td>从可用信息到动作的规则</td>
+<td>各候选动作的概率分布</td>
+</tr>
+</tbody>
+</table>
+<p>本文统一使用：<strong>在 <span class="arithmatex">\(t\)</span> 时刻选 <span class="arithmatex">\(a_t\)</span>，随后得到 <span class="arithmatex">\(r_{t+1}\)</span> 和下一状态 <span class="arithmatex">\(s_{t+1}\)</span>。</strong> 有些论文把这次奖励写成 <span class="arithmatex">\(r_t\)</span>，只是下标约定不同。</p>
+<div class="highlight"><pre><span></span><code>当前可见信息 o_t ──→ 策略 π ──→ 动作 a_t
+        ↑                         │
+        │                         ↓
+下一次观测 o_(t+1) ←── 视频 + 重建器 + 记忆 + 预算
+                                  │
+                                  └──→ 奖励 r_(t+1)，用于训练
+</code></pre></div>
+<p>环境不必是机器人模拟器。一段固定视频与一个会被动作改变内部状态的重建程序，也能组成交互环境。</p>
+<h3 id="22-mdp">2.2 MDP：为什么大家都要写这个五元组？</h3>
+<p>马尔可夫决策过程，Markov Decision Process，简称 MDP，通常写作：</p>
+<div class="arithmatex">\[
+\mathcal{M}=(\mathcal{S},\mathcal{A},P,R,\gamma).
+\]</div>
+<p>其中 <span class="arithmatex">\(\mathcal{S}\)</span> 是状态集合，<span class="arithmatex">\(\mathcal{A}\)</span> 是动作集合，<span class="arithmatex">\(P(s'\mid s,a)\)</span> 是转移概率，<span class="arithmatex">\(R\)</span> 描述奖励，<span class="arithmatex">\(\gamma\)</span> 是折扣因子。完整任务还需说明初始状态分布、终止规则及有限或无限时域。</p>
+<p>马尔可夫性质表达为：</p>
+<div class="arithmatex">\[
+P(s_{t+1}\mid s_0,a_0,\ldots,s_t,a_t)
+=P(s_{t+1}\mid s_t,a_t).
+\]</div>
+<p>它的含义是：<strong>如果当前状态已经描述充分，就不用再额外翻查历史。</strong> 这不意味着世界没有历史，而是历史的相关影响已经体现在当前状态里。</p>
+<p>例如，同一张当前图像，配上“还剩 10 次优化预算”和“预算已耗尽”，应该得到不同决策。如果状态没有预算，算法看到的就是“相同输入却有不同后果”。</p>
+<p>有限时长任务还可能需要剩余时间。即将结束和刚刚开始时，同一笔预算的价值不同。</p>
+<h3 id="23-pomdp">2.3 真实视觉更接近 POMDP</h3>
+<p>单张 RGB 图像不能完整告诉你三维结构、遮挡后的物体、相机真实位姿，也不能直接给出跟踪对应是否正确。因此，视觉决策常是<strong>部分可观测马尔可夫决策过程</strong>，POMDP。</p>
+<p>要分清三层信息：</p>
+<ul>
+<li><strong>真实状态 <span class="arithmatex">\(s_t\)</span>：</strong> 理论上决定后果的信息，不一定可获取。</li>
+<li><strong>观测 <span class="arithmatex">\(o_t\)</span>：</strong> 当前实际可获取的图像、统计量等。</li>
+<li><strong>控制器记忆 <span class="arithmatex">\(z_t\)</span>：</strong> 从历史观测和动作中压缩出来的信息。</li>
+</ul>
+<p>例如：</p>
+<div class="arithmatex">\[
+z_t=f_\psi(z_{t-1},o_t,a_{t-1}),\qquad
+a_t\sim\pi_\theta(\cdot\mid z_t).
+\]</div>
+<p><span class="arithmatex">\(f_\psi\)</span> 可以是循环神经网络、历史窗口编码器，或手工维护的统计量。不要把一个特征向量命名为 <code>state</code>，就当作它满足马尔可夫性质。</p>
+<p>更严格的办法是维护 belief，即“根据历史，对真实状态的概率分布”。SLAM 中对位姿和地图的不确定性估计，可以帮助理解这种思想；但实际 SLAM 估计通常只是某种近似，不能直接当作完整 belief。</p>
+<p>对初次实验，先用“当前廉价特征 + 缓存摘要 + 预算 + 历史统计”。只有发现遗漏历史导致明显错误，再增加复杂记忆结构。</p>
+<h2 id="3">3. 奖励和回报：算法到底在最大化什么？</h2>
+<h3 id="31">3.1 奖励是一次反馈，回报是以后的总账</h3>
+<p>设一段 episode，也就是一次完整任务，共有 <span class="arithmatex">\(T\)</span> 步。时刻 <span class="arithmatex">\(t\)</span> 的折扣回报为：</p>
+<div class="arithmatex">\[
+G_t=\sum_{k=t}^{T-1}\gamma^{k-t}r_{k+1}.
+\]</div>
+<ul>
+<li><span class="arithmatex">\(\gamma=0\)</span>：只看立即奖励。</li>
+<li><span class="arithmatex">\(\gamma\)</span> 接近 1：远期奖励仍然有较大权重。</li>
+<li>有限回合且回报有界时，可以使用 <span class="arithmatex">\(\gamma=1\)</span>。</li>
+<li>无限时域问题通常用 <span class="arithmatex">\(\gamma&lt;1\)</span> 保证有界奖励的折扣和收敛，或另定义平均奖励目标。</li>
+</ul>
+<p>对第 1 节的故事，取 <span class="arithmatex">\(\gamma=0.95\)</span>：</p>
+<div class="arithmatex">\[
+G_0^{\text{立即更新}}=2,
+\qquad
+G_0^{\text{等到岔路}}=0+0.95\times1+0.95^2\times6=6.365.
+\]</div>
+<p>这里算法愿意暂时得 0 分，因为它能换来更好的后续机会。</p>
+<h3 id="32">3.2 期望：不要求每次都赢</h3>
+<p>策略的目标通常写成：</p>
+<div class="arithmatex">\[
+J(\theta)=\mathbb{E}_{\tau\sim\pi_\theta}[G_0].
+\]</div>
+<p><span class="arithmatex">\(\theta\)</span> 是策略参数，<span class="arithmatex">\(\tau\)</span> 是一次状态、动作、奖励构成的轨迹，<span class="arithmatex">\(\mathbb{E}\)</span> 表示对场景差异、动作随机性等取平均。</p>
+<p>例如，一个动作以 80% 的概率得到 10 分，以 20% 的概率得到 0 分，期望收益是 8 分。最大化期望不等于避免每一次失败。因此，真实系统还应单独评价失败率、极端延迟和最差场景；风险约束需要明确建模。</p>
+<h3 id="33">3.3 折扣因子不能脱离真实时间理解</h3>
+<p><span class="arithmatex">\(1/(1-\gamma)\)</span> 可作为折扣权重的粗略时间尺度，以“决策步”为单位；它不是硬性的最大规划长度。</p>
+<p>例如 <span class="arithmatex">\(\gamma=0.99\)</span> 时，大约是 100 步。如果每帧决策一次，30 FPS 下约为 3.3 秒；如果每秒决策一次，则约为 100 秒。</p>
+<p>如果你的价值主要在 20 秒后的重访才显现，只使用很短 rollout 和很快衰减的回报，学习信号可能非常弱。长程任务需要同时考虑折扣、价值估计、历史记忆和训练序列跨度。</p>
+<h3 id="34">3.4 奖励与训练损失不是一个东西</h3>
+<p><strong>奖励定义你想要什么；损失定义怎样更新参数。</strong></p>
+<p>重建误差可以参与构造奖励，例如 <span class="arithmatex">\(r=-E\)</span>。但 PPO 的策略损失并不是简单地把这个误差反向传播穿过整个重建过程。它利用被采样动作的概率和收益估计，调整以后采取该动作的倾向。</p>
+<p>所以，离散选择、不可微的缓存操作或黑箱程序，也能被策略梯度方法优化。代价是：通常需要更多交互样本，梯度估计也更嘈杂。</p>
+<h2 id="4-valueq-bellman">4. Value、Q 和 Bellman：长期收益是怎样估计出来的？</h2>
+<h3 id="41">4.1 状态价值与动作价值</h3>
+<p>先在完全可观测设定下理解：</p>
+<div class="arithmatex">\[
+V^\pi(s)=\mathbb{E}_\pi[G_t\mid s_t=s],
+\]</div>
+<div class="arithmatex">\[
+Q^\pi(s,a)=\mathbb{E}_\pi[G_t\mid s_t=s,a_t=a].
+\]</div>
+<ul>
+<li><span class="arithmatex">\(V^\pi(s)\)</span>：到达这个状态后，继续按策略 <span class="arithmatex">\(\pi\)</span> 行动，平均能得多少分？</li>
+<li><span class="arithmatex">\(Q^\pi(s,a)\)</span>：在这个状态先做动作 <span class="arithmatex">\(a\)</span>，以后按 <span class="arithmatex">\(\pi\)</span> 行动，平均能得多少分？</li>
+</ul>
+<p>Q 值不是当前动作的立即奖励，而是包含后续后果的预测。POMDP 中可以把完整历史作为条件，或使用近似历史表示训练价值网络。</p>
+<h3 id="42-bellman">4.2 Bellman 方程其实只是拆账</h3>
+<p>由于：</p>
+<div class="arithmatex">\[
+G_t=r_{t+1}+\gamma G_{t+1},
+\]</div>
+<p>因此：</p>
+<div class="arithmatex">\[
+V^\pi(s)=\mathbb{E}_{a\sim\pi,\,s'\sim P}
+\left[r_{t+1}+\gamma V^\pi(s')\mid s_t=s\right].
+\]</div>
+<p><strong>当前的长期价值 = 下一次得到的奖励 + 下一状态的折扣长期价值。</strong></p>
+<p>假如某动作立即得到 <span class="arithmatex">\(-1\)</span> 分，但下一状态价值为 10，且 <span class="arithmatex">\(\gamma=0.9\)</span>，那么该动作价值为 <span class="arithmatex">\(-1+0.9\times10=8\)</span>。立即付出代价并不意味着动作不好。</p>
+<p>最优动作价值 <span class="arithmatex">\(Q^*\)</span> 满足：</p>
+<div class="arithmatex">\[
+Q^*(s,a)=\mathbb{E}\left[
+r_{t+1}+\gamma\max_{a'}Q^*(s',a')\mid s,a
+\right].
+\]</div>
+<p>这里的 <code>max</code> 表示后面选择最有价值的动作。若转移和奖励已知、状态很小，可以用动态规划反复应用这种关系，不必先学习一个神经网络。</p>
+<h3 id="43-monte-carlo">4.3 Monte Carlo：等这一局结束再算</h3>
+<p>Monte Carlo，蒙特卡洛方法，用实际走完轨迹后得到的 <span class="arithmatex">\(G_t\)</span> 来学习价值：</p>
+<div class="arithmatex">\[
+V(s_t)\leftarrow V(s_t)+\alpha\big(G_t-V(s_t)\big).
+\]</div>
+<p><span class="arithmatex">\(\alpha\)</span> 是学习率，表示每次相信新证据多少。</p>
+<p>优点是目标直接来自实际回报，不依赖下一状态的价值预测；难点是要等回合结束，而且后续随机事件会让目标波动很大。</p>
+<h3 id="44-td">4.4 TD：先用下一步预测来更新这一步</h3>
+<p>时序差分学习，Temporal-Difference learning，简称 TD，采用目标：</p>
+<div class="arithmatex">\[
+y_t=r_{t+1}+\gamma V(s_{t+1}),
+\]</div>
+<p>以及 TD 误差：</p>
+<div class="arithmatex">\[
+\delta_t=r_{t+1}+\gamma V(s_{t+1})-V(s_t).
+\]</div>
+<p>于是：</p>
+<div class="arithmatex">\[
+V(s_t)\leftarrow V(s_t)+\alpha\delta_t.
+\]</div>
+<p>例如原来预测价值是 3，这一步得到 1 分，下一状态预测价值为 4，取 <span class="arithmatex">\(\gamma=0.9\)</span>，则新证据对应 <span class="arithmatex">\(1+0.9\times4=4.6\)</span>。TD 误差是 1.6；若学习率为 0.1，价值从 3 调到 3.16。</p>
+<p>这种“用一个估计更新另一个估计”叫 <strong>bootstrapping，自举</strong>。它让学习不必等待整段长视频结束，但也可能传播错误预测。</p>
+<h3 id="45-advantage">4.5 Advantage：这个动作比通常情况好多少？</h3>
+<p>优势函数定义为：</p>
+<div class="arithmatex">\[
+A^\pi(s,a)=Q^\pi(s,a)-V^\pi(s).
+\]</div>
+<p>如果这个状态平均能拿 5 分，而某动作预计能拿 7 分，优势就是 2。即使某动作的回报是正数，如果它比该状态下通常的选择更差，优势也可以为负。</p>
+<p>它的作用是把“场景本身容易”与“动作选择得好”区分开。后面的策略梯度和 Actor–Critic 会使用这个量。</p>
+<p>基础概念可对照 <a href="https://mitpress.mit.edu/9780262039246/reinforcement-learning/">Sutton 与 Barto 的《Reinforcement Learning: An Introduction》第二版</a>阅读；上面的视觉例子和数值演算为本文构造。</p>
+<p><a id="algorithms"></a></p>
+<h2 id="5-q-learning-dqn">5. 第一条算法路线：Q-learning 与 DQN</h2>
+<h3 id="51-q-learning">5.1 Q-learning 如何从数据学习？</h3>
+<p>观察一次转移 <span class="arithmatex">\((s_t,a_t,r_{t+1},s_{t+1})\)</span> 后，更新：</p>
+<div class="arithmatex">\[
+Q(s_t,a_t)\leftarrow Q(s_t,a_t)+\alpha
+\left[r_{t+1}+\gamma\max_{a'}Q(s_{t+1},a')-Q(s_t,a_t)\right].
+\]</div>
+<p>真正终止时，后续价值为 0。动作存在约束时，<code>max</code> 只应在合法动作中计算。</p>
+<p>学习完成后，选择：</p>
+<div class="arithmatex">\[
+a_t=\arg\max_a Q(s_t,a).
+\]</div>
+<p>训练时如果一直选当前看起来最好的动作，可能永远发现不了其他好选择。最简单的探索方式是 <strong><span class="arithmatex">\(\epsilon\)</span>-greedy</strong>：以 <span class="arithmatex">\(1-\epsilon\)</span> 的概率选当前最好动作，以 <span class="arithmatex">\(\epsilon\)</span> 的概率从合法动作中随机选择。</p>
+<p>注意这里的探索是“尝试不确定的动作”；机器人在空间中探索未知区域，则是一种具体任务。两者不能直接画等号。</p>
+<h3 id="52">5.2 从表格到神经网络</h3>
+<p>状态很多时，无法存一张完整 Q 表，于是使用网络 <span class="arithmatex">\(Q_\theta(s,a)\)</span> 近似 Q 值，这就是 DQN 的核心出发点。经典 DQN 使用经验回放与目标网络，缓解样本相关性和学习目标快速变化的问题。<a href="https://www.nature.com/articles/nature14236">DQN，Nature 2015</a></p>
+<p>一个简化目标是：</p>
+<div class="arithmatex">\[
+y_t=r_{t+1}+\gamma(1-d_t)\max_{a'}Q_{\bar\theta}(s_{t+1},a'),
+\qquad
+L_Q=\mathbb{E}\big[(Q_\theta(s_t,a_t)-y_t)^2\big].
+\]</div>
+<p><span class="arithmatex">\(d_t\)</span> 表示真正终止，<span class="arithmatex">\(\bar\theta\)</span> 是更新较慢的目标网络参数；计算目标时不通过 <span class="arithmatex">\(y_t\)</span> 反传梯度。</p>
+<p>经验回放，replay buffer，是保存过去转移并重复抽样训练的容器。它与视觉系统中保存关键帧的缓存是不同的东西。</p>
+<h3 id="53">5.3 对你的任务有什么意义？</h3>
+<p>“写入或不写入”“轻、中、重三档计算”这类小规模离散动作，可以考虑 DQN 系列。若动作变成从 10,000 个 token 中任意挑一个子集，直接枚举动作就不可行，应该先重设动作粒度。</p>
+<p>对于连续相机控制，经典 DQN 中的 <span class="arithmatex">\(\max_a Q(s,a)\)</span> 也不容易直接计算，需要其他算法或离散化设计。不要因为学会了一个算法，就把所有任务强行改成它能处理的形式。</p>
+<h2 id="6">6. 第二条算法路线：直接学习策略</h2>
+<h3 id="61">6.1 一个看起来像分类器的网络</h3>
+<p>假设有三个动作：保持、写入关键帧、重新定位。策略网络可以输出：</p>
+<div class="arithmatex">\[
+\pi_\theta(\cdot\mid o_t)=[0.6,0.3,0.1].
+\]</div>
+<p>训练时按这些概率采样动作。虽然结构像分类器，但训练数据中通常没有逐步的“正确动作标签”。你要根据动作后的结果，调整这些概率。</p>
+<h3 id="62-reinforce">6.2 REINFORCE 的直觉</h3>
+<p><strong>让带来较高回报的动作更可能再次发生。</strong></p>
+<p>最基本的策略梯度利用恒等式：</p>
+<div class="arithmatex">\[
+\nabla_\theta p_\theta(x)
+=p_\theta(x)\nabla_\theta\log p_\theta(x).
+\]</div>
+<p>对于本文的有限时域折扣目标，在环境转移不依赖策略参数的通常设定下，可以写为：</p>
+<div class="arithmatex">\[
+\nabla_\theta J(\theta)
+=\mathbb{E}\left[
+\sum_{t=0}^{T-1}\gamma^t
+\nabla_\theta\log\pi_\theta(a_t\mid s_t)
+\big(G_t-b(s_t)\big)
+\right].
+\]</div>
+<p>其中 <span class="arithmatex">\(b(s_t)\)</span> 是不依赖当前采样动作的 baseline，常取价值函数。减掉它不改变该梯度估计的期望，并可降低方差；策略更新时，把回报或优势目标视为常量。</p>
+<p>如果选择某动作带来的回报比 baseline 高，就增大其概率；低于 baseline，则降低其概率。对环境本身不需要求导。<a href="https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html">策略优化推导</a></p>
+<p>有些教程针对不折扣目标，或采用折扣状态访问分布来写期望，看不到外面的 <span class="arithmatex">\(\gamma^t\)</span>。比较公式时，先检查目标和采样约定。</p>
+<h3 id="63-actorcritic">6.3 为什么需要 Actor–Critic？</h3>
+<p>完整回报可能要等很久才能得到，也可能被很多偶然事件影响。因此常联合训练两个角色：</p>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>学什么</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Actor，策略</td>
+<td>如何选择动作</td>
+<td>动作概率或连续动作分布</td>
+</tr>
+<tr>
+<td>Critic，价值评估器</td>
+<td>预计还能得到多少回报</td>
+<td><span class="arithmatex">\(V\)</span> 或 <span class="arithmatex">\(Q\)</span> 的估计</td>
+</tr>
+</tbody>
+</table>
+<p>Actor 用 Critic 帮助估计优势，Critic 用真实奖励与后续价值目标学习。它不是一位掌握正确答案的“裁判”，也可能估错。</p>
+<p>当 <span class="arithmatex">\(V\)</span> 足够准确时，一步 TD 误差可以在合适条件下作为优势估计。更常见的折中是多步估计，例如下一节的 GAE。</p>
+<p>对小型视觉控制器，可以先使用共享廉价输入、分别输出策略与价值的两层 MLP。若观测不够充分，再尝试循环网络，而不是一开始同时增加大模型、长记忆和复杂动作空间。</p>
+<h2 id="7-ppo-rl">7. 理解 PPO：你很可能会用到的第一种深度 RL 算法</h2>
+<h3 id="71-ppo">7.1 PPO 想解决什么问题？</h3>
+<p>一次策略更新如果过大，新策略可能跑到旧数据几乎没覆盖的区域。PPO 使用旧策略采集一批数据，再通过较保守的代理目标进行若干轮更新。PPO-Clip 的目标包含概率比：</p>
+<div class="arithmatex">\[
+\rho_t(\theta)=
+\frac{\pi_\theta(a_t\mid s_t)}{\pi_{\mathrm{old}}(a_t\mid s_t)},
+\]</div>
+<div class="arithmatex">\[
+L^{\mathrm{clip}}(\theta)=
+\mathbb{E}_t\left[
+\min\left(
+\rho_t\hat A_t,
+\operatorname{clip}(\rho_t,1-\epsilon,1+\epsilon)\hat A_t
+\right)\right].
+\]</div>
+<p>这个目标被最大化。若用最小化损失的优化器，就对策略目标取负号。它限制继续把某个动作概率向有利方向推得太远的收益，但<strong>不是对新旧策略距离的严格保证</strong>。<a href="https://arxiv.org/abs/1707.06347">PPO 原论文</a>、<a href="https://spinningup.openai.com/en/latest/algorithms/ppo.html">PPO 官方教学说明</a></p>
+<p>自己算一个例子：旧概率为 0.2，新概率为 0.3，则 <span class="arithmatex">\(\rho=1.5\)</span>。若优势为 2，裁剪参数为 0.2，则两个候选项分别为 3 和 2.4，取较小的 2.4。这个样本不再鼓励沿同一方向无限增加概率。参数共享仍可能使概率继续改变，所以还应监测更新幅度。</p>
+<h3 id="72-gae">7.2 GAE：把多个时间尺度的证据混合起来</h3>
+<p>广义优势估计，Generalized Advantage Estimation，简称 GAE，使用：</p>
+<div class="arithmatex">\[
+\delta_t=r_{t+1}+\gamma V(s_{t+1})-V(s_t),
+\]</div>
+<div class="arithmatex">\[
+\hat A_t^{\mathrm{GAE}}=
+\sum_{l=0}^{L-1}(\gamma\lambda)^l\delta_{t+l}.
+\]</div>
+<p>这个式子针对同一条连续轨迹中的有效片段；真正终止时后续价值为 0。</p>
+<p><span class="arithmatex">\(\lambda\)</span> 控制使用多少长程信息。较小的值更多依赖近处的价值预测；较大的值纳入更多实际后续奖励，通常具有不同的偏差与方差权衡。<span class="arithmatex">\(\lambda\)</span> 和折扣 <span class="arithmatex">\(\gamma\)</span> 不是同一个参数。<a href="https://arxiv.org/abs/1506.02438">GAE 原论文</a></p>
+<h3 id="73">7.3 训练过程长什么样？</h3>
+<ol>
+<li>固定一份当前策略作为采样策略，运行多段训练视频。</li>
+<li>保存观测、动作、奖励、终止标志、旧动作对数概率和价值预测。</li>
+<li>根据连续轨迹计算回报目标和优势。</li>
+<li>对这批数据进行若干轮小批量更新，学习策略与价值；可加入熵奖励以鼓励探索。</li>
+<li>重新用更新后的策略采集数据。</li>
+</ol>
+<p>PPO 通常归为 <strong>on-policy</strong>。在同一批新数据上做有限轮更新，不等于可以无限复用任意旧策略生成的历史记录。</p>
+<h3 id="74">7.4 学到这里应该掌握到什么程度？</h3>
+<p>你应能解释：Actor 为什么提高某个动作概率，Critic 如何提供基准，为什么要限制策略变化，以及奖励为什么不需要可微。</p>
+<p>暂时不必手写完整 PPO。先用成熟实现验证一个小环境，再把精力花在视觉任务的动作、状态、奖励和评测协议上。PPO 在你的重建环境中是否稳定、是否划算，都需要实验确认。</p>
+<h2 id="8">8. 算法地图：按问题选方法</h2>
+<h3 id="81">8.1 先理解三个彼此不同的分类轴</h3>
+<table>
+<thead>
+<tr>
+<th>分类轴</th>
+<th>第一类</th>
+<th>第二类</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据与策略的关系</td>
+<td>on-policy：主要使用当前或近期采样策略的数据</td>
+<td>off-policy：允许行为策略和所学策略不同，复用历史数据</td>
+</tr>
+<tr>
+<td>是否再收集交互数据</td>
+<td>online RL：训练中继续通过策略采集新转移</td>
+<td>offline RL：只使用固定的既有转移数据集</td>
+</tr>
+<tr>
+<td>是否显式使用转移模型来学习或规划</td>
+<td>model-free：不显式建立这类动力学模型</td>
+<td>model-based：使用已知或学得的转移模型</td>
+</tr>
+</tbody>
+</table>
+<p><strong>off-policy 不等于 offline；online RL 不等于推理时处理流式输入。</strong></p>
+<p>你可以在实验室中反复回放录制视频，以当前策略重新运行重建器来产生转移，完成 online RL 训练；部署时冻结策略，进行流式推理。也可以在固定日志上做 offline RL，最后仍部署为流式系统。</p>
+<p>“model-free”也不表示没有神经网络，或环境里没有重建模型；它特指 RL 是否显式依靠状态转移模型进行学习或规划。</p>
+<h3 id="82">8.2 面向初学者的选择表</h3>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>建议先比较</th>
+<th>原因或限制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一次独立决策，能枚举动作效果</td>
+<td>规则、监督回归/分类</td>
+<td>不必先解决多步信用分配</td>
+</tr>
+<tr>
+<td>一次独立决策，只看到所选动作收益</td>
+<td>contextual bandit</td>
+<td>需要探索，但没有明确长期状态影响</td>
+</tr>
+<tr>
+<td>少量离散动作，可重复交互</td>
+<td>DQN 系列、PPO</td>
+<td>易于建立可解释的控制器</td>
+</tr>
+<tr>
+<td>连续动作，交互数据昂贵</td>
+<td>SAC 与其他 off-policy 方法</td>
+<td>能利用回放；环境适配与调参仍重要</td>
+</tr>
+<tr>
+<td>只有固定日志，不能测试新动作</td>
+<td>模仿学习、专门的 offline RL</td>
+<td>普通 off-policy 算法不自动解决分布外动作问题</td>
+</tr>
+<tr>
+<td>转移模型较准确，动作候选少</td>
+<td>短视搜索、MPC、动态规划</td>
+<td>可先通过显式规划利用已知结构</td>
+</tr>
+<tr>
+<td>观测缺失关键历史</td>
+<td>历史统计、循环策略或 belief 近似</td>
+<td>单纯换优化算法无法补回缺失信息</td>
+</tr>
+</tbody>
+</table>
+<p>SAC，Soft Actor-Critic，通过奖励与策略熵共同构造目标，是经典的 off-policy Actor–Critic 方法，原论文主要面向连续控制。<a href="https://proceedings.mlr.press/v80/haarnoja18b.html">SAC，ICML 2018</a></p>
+<p>上述表格是实验起点，不是算法性能排名。对视觉项目而言，正确的环境定义通常比“把 PPO 换成更热门算法”更重要。</p>
+<p><a id="vision"></a></p>
+<h2 id="9">9. 把强化学习接到流式视觉里：先区分被动与主动</h2>
+<h3 id="91">9.1 被动流式处理：相机轨迹固定，算法选择处理方式</h3>
+<p>假设输入是已经录好的视频，动作不改变下一帧图像，但会改变系统记忆：</p>
+<div class="arithmatex">\[
+m_{t+1}=F(m_t,I_t,a_t),
+\]</div>
+<p>以及剩余预算：</p>
+<div class="arithmatex">\[
+b_{t+1}=b_t-c_t(a_t).
+\]</div>
+<p><span class="arithmatex">\(m_t\)</span> 是处理当前帧之前的重建器状态或缓存，<span class="arithmatex">\(I_t\)</span> 是当前已到达图像，<span class="arithmatex">\(c_t\)</span> 是动作成本。即使 <span class="arithmatex">\(I_{t+1}\)</span> 固定，后续输出仍会因 <span class="arithmatex">\(m_{t+1}\)</span> 和 <span class="arithmatex">\(b_{t+1}\)</span> 不同而改变。</p>
+<p>因此，<strong>摄像机不受控制，也可以有强化学习问题。</strong> 学习的是内部处理决策。</p>
+<table>
+<thead>
+<tr>
+<th>决策位置</th>
+<th>可用观测</th>
+<th>动作</th>
+<th>可能的长期后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>关键帧选择</td>
+<td>当前廉价匹配、视差、缓存摘要</td>
+<td>写入或不写入</td>
+<td>基线质量、回访匹配和漂移改变</td>
+</tr>
+<tr>
+<td>记忆管理</td>
+<td>槽位年龄、覆盖、历史使用情况</td>
+<td>保留、替换某个槽位</td>
+<td>遮挡后能否恢复身份或定位</td>
+</tr>
+<tr>
+<td>计算分配</td>
+<td>跟踪置信度、当前预算、队列</td>
+<td>轻量更新或重优化</td>
+<td>剩余预算和输出延迟改变</td>
+</tr>
+<tr>
+<td>地图维护</td>
+<td>局部一致性、地图规模、动态区域比例</td>
+<td>融合、压缩、暂缓更新</td>
+<td>错误是否累积、地图是否遗忘</td>
+</tr>
+<tr>
+<td>测试时适配调度</td>
+<td>可用的自监督残差、漂移迹象</td>
+<td>不更新或执行若干步适配</td>
+<td>后续模型状态、耗时和遗忘改变</td>
+</tr>
+</tbody>
+</table>
+<p>这里“使用残差做观测”有一个前提：<strong>它在决策发生前已能算出，且计算成本计入系统。</strong> 不能先执行昂贵动作，再把该动作产生的结果用来决定要不要执行它。</p>
+<p>RL 用来决定是否运行测试时适配，并不意味着适配本身就是 RL；适配仍可以采用常规自监督梯度下降。</p>
+<h3 id="92">9.2 主动视觉：动作改变未来会看到什么</h3>
+<p>如果你能移动相机、机器人或传感器，就能控制未来观测。例如选择下一个拍摄位置，让遮挡区域被看见，或选择回到旧区域以减少位姿不确定性。</p>
+<p>这类任务需要考虑：可达性、相机运动成本、碰撞、视野以及渲染或真实采集。环境必须能够回答“如果去了另一个位置，会看到什么”。</p>
+<p>固定单条轨迹的视频一般不能回答这个问题。多视图数据可以支持有限候选视角选择，但其候选范围、遮挡和运动约束需要明确；不能直接当成自由移动的真实环境。</p>
+<h3 id="93">9.3 四个值得对照理解的研究例子</h3>
+<table>
+<thead>
+<tr>
+<th>工作</th>
+<th>设定与学习对象</th>
+<th>对你最有用的启发</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://arxiv.org/abs/2407.15626">Reinforcement Learning Meets Visual Odometry，ECCV 2024</a></td>
+<td>把图像序列和 VO 系统组成环境，学习关键帧及网格大小选择</td>
+<td>RL 可以控制传统视觉流水线中的决策，不必直接预测几何</td>
+</tr>
+<tr>
+<td><a href="https://arxiv.org/abs/2004.05155">Learning to Explore using Active Neural SLAM，ICLR 2020</a></td>
+<td>主动探索；结合学习模块、分层策略与解析规划器</td>
+<td>保留空间表示与规划结构，可以比完全端到端更容易分解问题</td>
+</tr>
+<tr>
+<td><a href="https://arxiv.org/abs/2008.12664">Next-Best View Policy for 3D Reconstruction / Scan-RL，2020，页面标注 ECCV Workshops</a></td>
+<td>学习下一个视点，以完成房屋扫描</td>
+<td>目标是控制观测获取；与固定视频上的缓存管理不同</td>
+</tr>
+<tr>
+<td><a href="https://arxiv.org/abs/2005.10420">Towards Streaming Perception，ECCV 2020</a></td>
+<td>定义把延迟纳入考虑的流式感知评测</td>
+<td>这是评价方式的重要参照，不能把它当作“必须使用 RL”的证据</td>
+</tr>
+</tbody>
+</table>
+<p>还有一篇直接相关的近期资料：<a href="https://arxiv.org/abs/2601.16020">Keyframe-Based Feed-Forward Visual Odometry，2026 年 arXiv 稿</a>，已将 RL 关键帧策略用于前馈视觉里程计。本文按检索到的 arXiv 稿标注，不推断正式录用情况。因此，“在三维基础模型外加一个 RL 选帧器”本身已经不足以作为新颖性论证。</p>
+<h2 id="10">10. 奖励设计：最容易把任务做错的地方</h2>
+<h3 id="101">10.1 先写评价目标，再设计训练奖励</h3>
+<p>假设你的目标是：在给定内存与计算预算下，使整段流式输出的几何误差尽量低。</p>
+<p>可以先写成约束问题：</p>
+<div class="arithmatex">\[
+\min_\pi\ \mathbb{E}[E_{\mathrm{task}}]
+\quad\text{s.t.}\quad
+\mathbb{E}\left[\sum_t c_t\right]\le B,
+\quad M_t\le M_{\max}.
+\]</div>
+<p>这里 <span class="arithmatex">\(E_{\mathrm{task}}\)</span> 必须提前定义，例如所有规定时刻的几何误差平均值，而不是仅挑选成功帧。<span class="arithmatex">\(B\)</span> 是整段计算预算，<span class="arithmatex">\(M_{\max}\)</span> 是工作记忆上限。</p>
+<p>软化成“误差 + 成本惩罚”是常用做法，但<strong>期望约束、惩罚项和逐次硬约束不同</strong>。若要求内存永不超限，就需要由合法动作集合、固定槽位等机制保证；仅在超限后扣分不足以保证约束成立。</p>
+<h3 id="102">10.2 一个可用来起步的奖励模板</h3>
+<p>对每帧固定决策一次的教学设定，可以考虑：</p>
+<div class="arithmatex">\[
+r_{t+1}=
+-w_g\widetilde E^{\mathrm{geom}}_t
+-w_p\widetilde E^{\mathrm{pose}}_t
+-w_i\widetilde E^{\mathrm{id}}_t
+-w_c\frac{c_t}{c_{\mathrm{ref}}}
+-w_f\mathbf{1}[\mathrm{failure}_t].
+\]</div>
+<p>几何、位姿、身份保持误差都在本次动作产生输出后计算，<span class="arithmatex">\(\widetilde E\)</span> 表示按预先约定方式缩放的误差。<span class="arithmatex">\(w\)</span> 是研究者选择的权重，<span class="arithmatex">\(c_{\mathrm{ref}}\)</span> 是参考成本。</p>
+<p>不需要一开始把所有项都放进去。第一版可以只用一个核心误差、一个计算成本和一个明确失败项。各项缩放依据只能来自训练集或预先固定标准；应记录原始指标，防止总奖励掩盖某一项恶化。</p>
+<p><strong>这只是起点，不是适用于所有视觉任务的标准奖励。</strong> 对实时调度，更合适的目标可能是规定时间网格上的误差积分；对最终静态模型，可能是终局重建质量。两者不应混用。</p>
+<h3 id="103">10.3 为什么只奖励“误差下降”可能出问题？</h3>
+<p>有人会设计：</p>
+<div class="arithmatex">\[
+r_{t+1}=E_t-E_{t+1}.
+\]</div>
+<p>当 <span class="arithmatex">\(\gamma=1\)</span>，且所有 <span class="arithmatex">\(E_t\)</span> 对应同一评价对象、同一尺度和同一规则时，累积和为 <span class="arithmatex">\(E_0-E_T\)</span>。这主要关心终局改善，不能表达中间是否长期输出很差。</p>
+<p>当评价区域变化、场景动态变化，或使用折扣时，上面的简单等价不再成立。当前帧更容易，也可能被误当成动作带来了改进。</p>
+<p>如果是在原目标上增加辅助奖励，经典的势函数形式为：</p>
+<div class="arithmatex">\[
+r'_{t+1}=r_{t+1}+\gamma\Phi(s_{t+1})-\Phi(s_t).
+\]</div>
+<p>在相应 MDP 假设下、使用同一折扣并正确处理终止边界，它能保持最优策略不变。有限回合通常需要令终止势为零，或作等价边界处理。任意增加“看起来合理”的辅助分数没有这个保证。<a href="https://people.eecs.berkeley.edu/~pabbeel/cs287-fa09/readings/NgHaradaRussell-shaping-ICML1999.pdf">Ng、Harada、Russell，ICML 1999</a></p>
+<h3 id="104">10.4 六种典型的奖励漏洞</h3>
+<table>
+<thead>
+<tr>
+<th>奖励写法</th>
+<th>策略可能学到的取巧方式</th>
+<th>改进方向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>只降低重投影误差</td>
+<td>删除难点或减少输出，留下少量容易点</td>
+<td>固定评价查询，统计覆盖率与缺失输出</td>
+</tr>
+<tr>
+<td>只奖励自报置信度</td>
+<td>越来越自信，但预测不更正确</td>
+<td>使用独立正确性指标，检查校准</td>
+</tr>
+<tr>
+<td>只奖励新建地图点数</td>
+<td>重复生成或保留大量错误点</td>
+<td>同时检验几何正确性与覆盖</td>
+</tr>
+<tr>
+<td>只惩罚耗时</td>
+<td>总是跳过或提前退出</td>
+<td>评价全时段服务质量及缺失结果</td>
+</tr>
+<tr>
+<td>只看终局全局误差</td>
+<td>中间严重漂移，最后再修补</td>
+<td>增加按实际时刻记录的前缀输出评测</td>
+</tr>
+<tr>
+<td>失败立即结束并不再计负分</td>
+<td>提前失败反而少受后续误差惩罚</td>
+<td>在剩余时域采用约定失败代价或明确终局处理</td>
+</tr>
+</tbody>
+</table>
+<p>动态场景还要区分“当前视野的几何正确”与“持续跟住同一物理点”。删掉动态物体可能让静态背景误差更好，却破坏你真正关心的感知能力。</p>
+<h3 id="105">10.5 几何不确定性与信息增益，先当作假设</h3>
+<p>对主动重建，奖励新增覆盖、减少位姿不确定性或预期信息增益，是自然的设计思路。但不确定性来自一个估计模型，可能失准；覆盖大也不意味着几何准。</p>
+<p>应该检验：这些代理量是否预测独立的真值误差下降，策略是否偏好本来就容易的区域，以及长时间运行后是否仍然有效。不能仅凭变量名叫 <code>uncertainty</code>，就断言策略在学习有价值的信息获取。</p>
+<h2 id="11_1">11. 流式任务必须多想一层：因果性和墙钟时间</h2>
+<h3 id="111">11.1 未来帧不能出现在当前决策输入中</h3>
+<p>严格因果策略只能依赖截至当前实际到达的观测：</p>
+<div class="arithmatex">\[
+a_t=\pi(I_{\le t},\text{当前可用内部状态}).
+\]</div>
+<p>常见泄漏包括：提前在整段视频上提取双向特征、用未来匹配质量给当前缓存排序、使用整段测试视频的统计量归一化，以及用最终优化后的轨迹作为当时已经可见的位姿。</p>
+<p>一个简单审计方法是<strong>前缀一致性检查</strong>：在固定随机数与相同运行条件下，完整视频和只提供到 <span class="arithmatex">\(t\)</span> 的前缀，其截至 <span class="arithmatex">\(t\)</span> 的决策应一致。这里仅隐藏后续输入，不能同时改变已知任务期限、预算或提前发送结束信号。模拟延迟的系统还需保持相同到达时间与已完成任务状态。</p>
+<h3 id="112">11.2 流式不只是“按帧读文件”</h3>
+<p>假设图像在 0、33、67 毫秒到达。处理第一张图需要 70 毫秒，那么在 67 毫秒，第一张图的结果还没有产生。</p>
+<div class="highlight"><pre><span></span><code>墙钟时间： 0 ms          33 ms          67 ms   70 ms
+图像到达： I0             I1             I2
+处理过程： [------------- I0 计算 -------------]
+可用结果：                                     I0 的结果
+</code></pre></div>
+<p>如果你在评价 67 毫秒时就使用 I0 的最终结果，或者直接读取 I2 的离线预测，就是提前使用了尚未算出的输出。</p>
+<p>真实流式评价应明确：在时刻 <span class="arithmatex">\(u\)</span>，实际可用的输出是什么，它描述哪个时刻，是否经过跟踪或预测传播到当前时刻。这是 <a href="https://arxiv.org/abs/2005.10420">Towards Streaming Perception</a> 提醒视觉研究注意的核心问题。</p>
+<h3 id="113">11.3 为实时调度建立事件模拟</h3>
+<p>至少需要记录图像采集时间、入队时间、开始处理时间、完成时间、输出发布时间，以及策略决策自身的耗时。</p>
+<p>评测器在固定墙钟时间网格读取“当时已发布的最新输出”。排队策略也要固定说明：处理所有积压帧、只处理最新帧、还是丢弃过期帧。否则不同方法比较的不是同一种服务方式。</p>
+<p>若动作持续时间不同，<span class="arithmatex">\(t\)</span> 更适合表示决策事件序号。若采用按时间折扣，可设置 <span class="arithmatex">\(\gamma_t=\exp(-\beta\Delta t)\)</span>，并让该事件奖励覆盖动作持续区间内的任务收益或误差成本。这样不会把 1 毫秒与 1 秒的动作机械地当作相同长度的一步；它属于半马尔可夫建模的思路。</p>
+<h3 id="114">11.4 对重建和跟踪，具体报告什么？</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>建议指标或说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>当前感知质量</td>
+<td>指定时刻的深度、几何、位姿或跟踪指标</td>
+</tr>
+<tr>
+<td>长期一致性</td>
+<td>随前缀长度变化的漂移、遮挡后恢复、身份保持</td>
+</tr>
+<tr>
+<td>完整性</td>
+<td>完成序列比例、有效覆盖、缺失预测数量</td>
+</tr>
+<tr>
+<td>实时性</td>
+<td>端到端延迟的中位数与 P95、输出年龄、截止期违约率</td>
+</tr>
+<tr>
+<td>资源</td>
+<td>峰值工作显存、CPU 工作内存、地图和缓存规模</td>
+</tr>
+<tr>
+<td>训练代价</td>
+<td>环境步数、训练墙钟时间、硬件与策略额外开销</td>
+</tr>
+</tbody>
+</table>
+<p>ATE 是绝对轨迹误差，RPE 是相对位姿误差。单目评测还需说明是否允许尺度对齐。可以报告整段轨迹一次对齐后的最终指标，但也应单独报告适合在线输出的前缀指标；不能把整段未来信息得到的对齐效果称为系统当时已经具有的精度。</p>
+<p>只保存更多历史到 CPU，并不能自动宣称系统总内存恒定。应该写清工作记忆、长期地图和结果归档分别统计什么。</p>
+<h2 id="12_1">12. 训练数据从哪里来？测试时还要奖励吗？</h2>
+<h3 id="121">12.1 最适合被动流式任务的起点：视频回放环境</h3>
+<p>将已有训练视频、冻结的视觉模型和可重置的记忆管理器组合起来：</p>
+<div class="highlight"><pre><span></span><code>reset：抽取训练视频，清空地图、策略记忆、预算和队列
+step(action)：
+    1. 在当前内部状态上执行动作
+    2. 更新视觉输出、记忆、预算和模拟时钟
+    3. 由独立评价器计算训练奖励
+    4. 获取下一决策时刻允许看到的观测
+    5. 返回观测、奖励、终止状态与诊断信息
+</code></pre></div>
+<p>同一段训练视频可以重复使用，但每次必须按照这次策略的动作，重新推进会受动作影响的内部状态。</p>
+<p>只缓存某个旧策略跑出来的地图和输出，再假装改变动作后仍会得到它们，不是正确的交互模拟。只有与动作、历史状态无关的确定性特征，才适合直接预计算复用；依赖缓存或跨帧上下文的特征需要另行处理。</p>
+<h3 id="122">12.2 训练可以看真值，部署策略不能偷偷依赖它</h3>
+<table>
+<thead>
+<tr>
+<th>信息</th>
+<th>训练奖励计算</th>
+<th>部署 Actor 输入</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>训练序列真值深度、位姿</td>
+<td>可以</td>
+<td>不可以，除非部署任务本来就提供</td>
+</tr>
+<tr>
+<td>训练序列未来结果</td>
+<td>可以用于事后评价长期后果</td>
+<td>严格因果设定下不可以</td>
+</tr>
+<tr>
+<td>当前已测得的残差、预算、缓存统计</td>
+<td>可以</td>
+<td>可以，但必须计入获取成本</td>
+</tr>
+<tr>
+<td>测试集真值</td>
+<td>只供独立最终评测</td>
+<td>不可以用于调策略、挑阈值或挑检查点</td>
+</tr>
+</tbody>
+</table>
+<p>训练时事后知道“早先保留的帧帮助了后面”，是信用分配所需的反馈；把后面帧的内容直接塞给当时的 Actor，是另一回事。</p>
+<p>有些方法让 Critic 在训练时使用特权信息，再在部署时丢弃 Critic。例如 <a href="https://arxiv.org/html/2407.15626v1">Reinforcement Learning Meets Visual Odometry 的方法部分</a>使用了可访问真值位姿信息的训练 Critic。实现这种方法时，还需检查 Actor 是否通过共享特征、历史奖励输入或预处理间接拿到了部署时不存在的信息。</p>
+<h3 id="123">12.3 冻结部署通常不需要实时计算训练奖励</h3>
+<p>离线完成训练后，部署路径可以仅保留：</p>
+<div class="highlight"><pre><span></span><code>当前图像与内部统计 → Actor → 动作 → 更新视觉系统
+</code></pre></div>
+<p>Critic、真值奖励和策略梯度更新不必运行。离散策略部署时可以取最高概率动作，也可以保留采样；两者可能有不同效果，应明确并验证实际采用的方式。策略每帧做不同选择，是<strong>自适应行为</strong>；策略参数每帧被训练更新，则是另一个问题。</p>
+<p>这也解释了：一个系统可以具有流式决策能力，却完全不在测试序列上训练。</p>
+<h3 id="124-offline-rl">12.4 只有固定日志时，才进入典型 offline RL 困境</h3>
+<p>假设你只能拿到旧系统保存的 <span class="arithmatex">\((o_t,a_t,r_{t+1},o_{t+1})\)</span>，不能重跑重建器，也不能测试其他动作。此时新策略选出日志几乎没出现过的动作，其后果无法直接核实。</p>
+<p>这会导致分布偏移与不可靠的价值外推。普通 DQN 或 SAC 能用经验回放，并不意味着它们能可靠地只靠任意固定日志训练。<a href="https://arxiv.org/abs/2005.01643">Offline RL 教程</a></p>
+<p>CQL 等专门方法尝试约束价值的过度乐观，但不能凭空补齐完全没有证据支持的动作后果。若日志动作覆盖很窄，先做行为克隆并严格评价，可能更合理。<a href="https://arxiv.org/abs/2006.04779">Conservative Q-Learning</a></p>
+<h3 id="125">12.5 真正结束与人为截断必须分开</h3>
+<p>Gymnasium 的常见接口为：</p>
+<div class="highlight"><pre><span></span><code>obs, info = env.reset()
+next_obs, reward, terminated, truncated, info = env.step(action)
+</code></pre></div>
+<ul>
+<li><code>terminated</code>：任务定义中的结束，例如明确的有限时域结束或不可恢复的失败。</li>
+<li><code>truncated</code>：因训练采样长度等外部条件停止，但任务在概念上仍会继续。</li>
+</ul>
+<p>真正终止不 bootstrap；外部截断通常需要用截断处真实下一观测的价值 bootstrap，不能错误地使用环境自动重置后的初始观测。GAE 的轨迹递推也不能跨入下一回合。<a href="https://gymnasium.farama.org/tutorials/gymnasium_basics/handling_time_limits/">Gymnasium：处理时间限制</a></p>
+<p>长视频切成多个训练片段时尤其要注意：片段结束不一定等于环境终止。视频本身就是完整有限任务时，结尾则可以是终止。选择哪一种，应由任务定义决定。</p>
+<p><a id="practice"></a></p>
+<h2 id="13_1">13. 亲手运行：一次预算应该花在哪一帧？</h2>
+<p>这个实验实现第 1 节的三阶段故事。只用 Python 标准库，不需要 GPU、PyTorch 或 RL 框架。将下面整段代码保存为 <code>toy_keyframe_rl.py</code>，使用 Python 3 运行。</p>
+<p>状态是 <code>(阶段, 剩余预算, 是否有岔路锚点)</code>；动作 0 表示等待，1 表示更新。时间和预算都进入状态，因此这个玩具问题是可完全观测的。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="n">GAMMA</span> <span class="o">=</span> <span class="mf">0.95</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">legal_actions</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
+    <span class="n">t</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">anchor</span> <span class="o">=</span> <span class="n">state</span>
+    <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="k">return</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">budget</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">legal_actions</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">t</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">anchor</span> <span class="o">=</span> <span class="n">state</span>
+    <span class="n">reward</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">budget</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">reward</span> <span class="o">=</span> <span class="mf">2.0</span>
+        <span class="k">elif</span> <span class="n">t</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">reward</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="n">anchor</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">anchor</span><span class="p">:</span>
+        <span class="n">reward</span> <span class="o">=</span> <span class="mf">6.0</span>
+    <span class="n">next_state</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">anchor</span><span class="p">)</span>
+    <span class="n">terminated</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">next_state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">terminated</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">episodes</span><span class="o">=</span><span class="mi">5000</span><span class="p">):</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">Random</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.1</span>
+    <span class="k">for</span> <span class="n">episode</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">episodes</span><span class="p">):</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">epsilon</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">episode</span> <span class="o">/</span> <span class="n">episodes</span><span class="p">))</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">actions</span> <span class="o">=</span> <span class="n">legal_actions</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">epsilon</span><span class="p">:</span>
+                <span class="n">action</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">action</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">actions</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">q</span><span class="p">[</span><span class="n">state</span><span class="p">][</span><span class="n">a</span><span class="p">])</span>
+            <span class="n">next_state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">terminated</span> <span class="o">=</span> <span class="n">step</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">reward</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">terminated</span><span class="p">:</span>
+                <span class="n">target</span> <span class="o">+=</span> <span class="n">GAMMA</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span>
+                    <span class="n">q</span><span class="p">[</span><span class="n">next_state</span><span class="p">][</span><span class="n">a</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">legal_actions</span><span class="p">(</span><span class="n">next_state</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="n">q</span><span class="p">[</span><span class="n">state</span><span class="p">][</span><span class="n">action</span><span class="p">]</span> <span class="o">+=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="p">(</span><span class="n">target</span> <span class="o">-</span> <span class="n">q</span><span class="p">[</span><span class="n">state</span><span class="p">][</span><span class="n">action</span><span class="p">])</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="n">next_state</span>
+            <span class="k">if</span> <span class="n">terminated</span><span class="p">:</span>
+                <span class="k">break</span>
+    <span class="k">return</span> <span class="n">q</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="n">policy</span><span class="p">):</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">actions</span><span class="p">,</span> <span class="n">rewards</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">terminated</span> <span class="o">=</span> <span class="n">step</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span>
+        <span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+        <span class="n">rewards</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reward</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">terminated</span><span class="p">:</span>
+            <span class="k">break</span>
+    <span class="n">discounted</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="n">GAMMA</span> <span class="o">**</span> <span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="n">r</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rewards</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">actions</span><span class="p">,</span> <span class="nb">sum</span><span class="p">(</span><span class="n">rewards</span><span class="p">),</span> <span class="n">discounted</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">greedy_immediate</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">legal_actions</span><span class="p">(</span><span class="n">state</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">step</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">a</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">train</span><span class="p">()</span>
+<span class="n">learned</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="n">legal_actions</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">q</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="n">a</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">policy</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">"immediate"</span><span class="p">,</span> <span class="n">greedy_immediate</span><span class="p">),</span> <span class="p">(</span><span class="s2">"Q-learning"</span><span class="p">,</span> <span class="n">learned</span><span class="p">)]:</span>
+    <span class="n">actions</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">discounted</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">policy</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: actions=</span><span class="si">{</span><span class="n">actions</span><span class="si">}</span><span class="s2">, total=</span><span class="si">{</span><span class="n">total</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, G0=</span><span class="si">{</span><span class="n">discounted</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Q(start, wait/update):"</span><span class="p">,</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">q</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]])</span>
+<span class="k">assert</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">learned</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="k">assert</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">learned</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mf">7.0</span>
+</code></pre></div>
+<p>预期输出：</p>
+<div class="highlight"><pre><span></span><code>immediate: actions=[1, 0, 0], total=2.0, G0=2.000
+Q-learning: actions=[0, 1, 0], total=7.0, G0=6.365
+Q(start, wait/update): [6.365, 2.0]
+</code></pre></div>
+<p>代码中的关键步骤是：到 <span class="arithmatex">\(t=2\)</span> 才出现的 6 分，通过 <span class="arithmatex">\(Q\)</span> 值更新逐步传回前面的决策，最终让 <span class="arithmatex">\(t=0\)</span> 的“等待”变得有价值。</p>
+<p>这段实验也有明确局限：视频阶段固定，策略可以记住顺序；奖励规则已知，直接规划或写“第二步更新”的规则同样有效。<strong>得到 7 分只能说明你理解并实现了这个教学问题，不能证明 RL 对真实关键帧选择有优势。</strong></p>
+<p>完成后尝试三个改动：</p>
+<ol>
+<li>把 <code>GAMMA</code> 改成 0，观察策略是否只追求立即奖励；同时修改末尾断言以符合新目标。</li>
+<li>把岔路锚点的延迟奖励从 6 改成 0，观察第一步决策如何变化。</li>
+<li>随机化岔路出现时刻，并给策略提供能辨识当前内容的观测，检查它是否还只会记住时间位置。</li>
+</ol>
+<p>第三个改动开始接近真正的研究问题：策略需要识别“什么时候值得保留信息”，而不只是记住某个固定剧本。</p>
+<p><a id="project"></a></p>
+<h2 id="14_1">14. 你的第一个真实项目：固定预算下的关键帧写入</h2>
+<p>下面是一份可执行的实验设计，<strong>不是已跑出的结果</strong>。目的是检查你的现有视觉系统是否存在可学习的长期决策收益。</p>
+<h3 id="141">14.1 先把研究问题限定成一句话</h3>
+<blockquote>
+<p>在固定输入视频、固定视觉模型和明确工作记忆上限下，只学习“当前帧是否写入关键帧缓存”，改善给定预算下的整段在线输出质量。</p>
+</blockquote>
+<p>暂时不要同时学习选帧、删帧、token 压缩、优化迭代数和连续相机运动。动作越多，性能变化越难归因。</p>
+<h3 id="142">14.2 系统构成</h3>
+<div class="highlight"><pre><span></span><code>当前图像 + 历史缓存
+        │
+        ├──→ 已有廉价特征与统计 ──→ 小型 Actor ──→ 写入 / 不写入
+        │                                               │
+        └──────────────→ 冻结视觉主干 + 缓存更新规则 ←────┘
+                                      │
+                                      └──→ 规定的逐帧输出
+
+仅在训练时：输出 + 训练真值 + 实际成本 → 奖励 → 更新 Actor / Critic
+</code></pre></div>
+<p>选择能暴露缓存与更新接口的现有系统。如果主干完全不允许控制历史输入或内部状态，先做好接口，不能只给网络外面加一个没有实际影响的动作。</p>
+<h3 id="143">14.3 一份初始环境规格</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>第一版定义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>输入</td>
+<td>录制的单目 RGB 序列；是否已知内参在实验中固定说明</td>
+</tr>
+<tr>
+<td>视觉模型</td>
+<td>冻结权重、固定预处理与输出协议</td>
+</tr>
+<tr>
+<td>初始化</td>
+<td>所有方法使用相同的因果初始化，不给策略额外真值位姿</td>
+</tr>
+<tr>
+<td>工作缓存</td>
+<td>例如 8 个关键帧槽位，属于实验起始设置</td>
+</tr>
+<tr>
+<td>动作</td>
+<td>0：不写入；1：写入当前帧</td>
+</tr>
+<tr>
+<td>缓存满时</td>
+<td>使用统一的确定性替换规则，例如删除最旧的非锚点帧</td>
+</tr>
+<tr>
+<td>硬预算</td>
+<td>每个明确有限任务至多写入 <span class="arithmatex">\(B\)</span> 次；另记录实际计算成本</td>
+</tr>
+<tr>
+<td>合法动作</td>
+<td>预算耗尽或状态不允许写入时，只能选 0</td>
+</tr>
+<tr>
+<td>输出</td>
+<td>所有规定时刻仍需提供预测，缺失输出按统一规则处理</td>
+</tr>
+<tr>
+<td>Episode</td>
+<td>一段事先定义的任务；场景、地图、预算和策略记忆同步重置</td>
+</tr>
+<tr>
+<td>奖励</td>
+<td>先选一个核心任务误差，加必要的成本与失败处理</td>
+</tr>
+</tbody>
+</table>
+<p>若任务有已知期限，把剩余期限作为观测；对实际不知道何时结束的无限流，不要让策略偷看视频总长度，可以改用每秒预算或令牌桶等资源机制重新定义环境。</p>
+<p>“8 个槽位、二值动作”是为了降低第一轮实验复杂度。它们既不是论文结论，也不是必须采用的超参数。</p>
+<p>使用动作掩码时，采样、记录旧策略概率和更新时计算新策略概率，都要使用该状态对应的同一合法动作集合。不要让策略选了非法动作，再由环境悄悄改成另一个动作，却仍按原动作概率训练。</p>
+<h3 id="144-actor">14.4 Actor 应该看到什么？</h3>
+<p>建议先用低维统计量，并逐项确认能在决策前获得：</p>
+<ul>
+<li>当前与上一关键帧的廉价匹配数量、内点率和视差摘要。</li>
+<li>图像模糊程度、亮度变化、可用的动态区域比例。</li>
+<li>缓存大小、槽位年龄、最近一次写入距今多久。</li>
+<li>跟踪器已经产生的置信度、残差或状态标志。</li>
+<li>剩余预算；实时版本还包括队列与近期延迟。</li>
+</ul>
+<p>先用两层 MLP。若同一组统计在不同历史下需要明显不同动作，再尝试 GRU 等循环模型。增加历史后，要按连续片段训练，并正确重置隐藏状态。</p>
+<p>对于基于 Transformer 的缓存，不能默认 key/value 可以随意删。应确认位置编码、参考坐标、缓存长度与关联元数据都支持你的操作。</p>
+<h3 id="145">14.5 首轮只选择一个主要评价任务</h3>
+<table>
+<thead>
+<tr>
+<th>首轮任务</th>
+<th>可以使用的核心训练反馈</th>
+<th>必须另报的指标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>位姿估计</td>
+<td>训练真值下的局部位姿或固定规则轨迹误差</td>
+<td>完成率、尺度处理、长前缀漂移</td>
+</tr>
+<tr>
+<td>稠密重建</td>
+<td>固定评价点上的几何或深度误差</td>
+<td>覆盖、错误几何、动态区域表现</td>
+</tr>
+<tr>
+<td>长期点跟踪</td>
+<td>固定查询的定位与可见性误差</td>
+<td>遮挡后恢复、身份错误、丢失查询</td>
+</tr>
+</tbody>
+</table>
+<p>如果有训练真值，先验证“决策是否有效”，之后再研究无真值奖励。把难环境、弱奖励和复杂策略一次叠加，会让失败原因难以判断。</p>
+<p>固定评价查询非常重要：策略不能通过删掉难跟踪的点，降低自己面对的考题难度。</p>
+<h3 id="146">14.6 必须比较的基线</h3>
+<table>
+<thead>
+<tr>
+<th>基线</th>
+<th>它检验什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>原系统默认规则</td>
+<td>新方法是否比已有工程实践更好</td>
+</tr>
+<tr>
+<td>按固定间隔写入</td>
+<td>是否只是更新频率带来收益</td>
+</tr>
+<tr>
+<td>随机写入，匹配写入次数与资源</td>
+<td>是否只是探索到不同但无规律的选择</td>
+</tr>
+<tr>
+<td>视差、置信度等阈值规则，在验证集调参</td>
+<td>小策略是否优于合理手工规则</td>
+</tr>
+<tr>
+<td>学习单步收益的监督模型或 bandit</td>
+<td>收益是否真的需要长程信用分配</td>
+</tr>
+<tr>
+<td>相同观测与相近容量的模仿学习策略</td>
+<td>强化学习训练是否比学一个好教师更必要</td>
+</tr>
+<tr>
+<td>短片段上的搜索参考</td>
+<td>当前动作空间究竟有没有可利用的性能空间</td>
+</tr>
+</tbody>
+</table>
+<p>只有当短片段内枚举全部合法动作序列，并按同一目标求解时，才能称其为该设定的最优上界。有限宽度搜索或贪心搜索一般只是更强参考，不是真正上界。能够看到未来的搜索器也必须单独标注，不能与部署方法混报。</p>
+<p>资源比较至少做两种：<strong>同等预算比较质量；相近质量比较资源。</strong> 多个预算点组成质量–成本曲线，比只报一个精心选出的工作点更有说服力。</p>
+<h3 id="147">14.7 实验顺序</h3>
+<p><strong>第一步：验证动作有用。</strong> 在少量短片段上比较不同写入序列。如果同样预算下怎么选都差不多，当前动作空间可能没有研究价值，不必立刻训练 PPO。</p>
+<p><strong>第二步：验证环境正确。</strong> 重放完全相同的动作序列，应得到可重复结果；切换动作，应确实改变缓存及后续输出。检查预算扣除、重置、失败和合法动作。</p>
+<p><strong>第三步：建立学习基线。</strong> 能便宜评估多个动作时，先训练一步收益预测器，或模仿一个合理搜索器。使用 PPO 时可从简单策略开始，也可从模仿策略初始化；两者要在结果中说明。</p>
+<p><strong>第四步：训练小型 RL 控制器。</strong> 先在少数训练序列上确认能学到规律，再扩展场景。前者只用于调试，不是泛化结果。</p>
+<p><strong>第五步：按场景验证泛化。</strong> 训练、验证、测试使用不重叠场景或采集序列。不能把同一房间的相邻片段随机拆开，当成独立泛化证据。</p>
+<p><strong>第六步：拉长时域和加入真实计时。</strong> 先检查完整长序列的记忆与漂移，再验证真实墙钟服务质量。如果只做了离线回放步数预算，结论应限定为预算分配，不能直接称为实时性能提升。</p>
+<h3 id="148">14.8 训练到底要花多少钱？先量环境速度</h3>
+<p>RL 成本常由重建器反复运行决定，而不是小策略决定。先测若干完整 episode，估算：</p>
+<div class="arithmatex">\[
+\text{训练时间}\approx
+\frac{\text{所需交互步数}}{\text{实测有效交互吞吐}}
++\text{策略更新与评测时间}.
+\]</div>
+<p>例如，仅作量级演算：若平均一步需 0.2 秒，串行执行 <span class="arithmatex">\(10^6\)</span> 步就要约 55.6 小时，还未计策略训练和评测。并行环境受显存、共享 GPU 和数据传输限制，不保证线性加速。</p>
+<p>冻结与动作无关的特征提取器、缓存合法的确定性计算、降低决策频率，可能降低成本。每一种简化都应检查是否改变了要研究的任务。</p>
+<h3 id="149">14.9 什么样的结果值得继续？</h3>
+<p>值得继续的信号是：在多个未见场景、多个训练随机种子和合理预算范围内，策略稳定改善真正关心的指标，并且动作行为能与某种失效机制对应起来。</p>
+<p>如果优势只来自更多计算、更大观测信息、更强主干或测试集调参，就不能归因于强化学习。</p>
+<p>若一个简单阈值在公平条件下达到相同效果，可以采用阈值。这个结果仍然帮助你理解系统瓶颈；没有必要为保留 RL 模块而修改评价标准。</p>
+<p><a id="research"></a></p>
+<h2 id="15">15. 怎样把应用做成一个有说服力的研究问题？</h2>
+<h3 id="151">15.1 先证明长期后果存在</h3>
+<p>相比“把 PPO 用到重建”，下面这种表述更具体：</p>
+<blockquote>
+<p>在有限缓存中，当前帧的即时重建贡献不足以预测其重访价值；是否能用当前可观测证据选择锚点，从而改善长遮挡之后的几何与身份恢复？</p>
+</blockquote>
+<p>这仍只是研究假设。你需要先找到反例片段：短视规则确实删除了将来有用的信息，而且更好的选择在同等预算下能恢复性能。</p>
+<h3 id="152">15.2 三个可以继续探索的方向</h3>
+<table>
+<thead>
+<tr>
+<th>方向</th>
+<th>需要验证的假设</th>
+<th>最有辨别力的实验</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>遮挡与重访下的记忆保留</td>
+<td>即时不显著的观测具有可预测的后续价值</td>
+<td>按遮挡时长、重访间隔和重复纹理分组</td>
+</tr>
+<tr>
+<td>跟踪失稳前的计算分配</td>
+<td>廉价信号能提前识别未来困难，及早干预更划算</td>
+<td>与同信息、同容量的短视预测器比较</td>
+</tr>
+<tr>
+<td>动态场景中的更新调度</td>
+<td>过早融合或适配会污染后续状态，等待可以减少错误传播</td>
+<td>分离静态几何、物体运动与身份保持指标</td>
+</tr>
+</tbody>
+</table>
+<p>这些方向的价值来自具体机制与可证伪假设。是否新颖，仍需针对确切设定补做文献核查；本文不承诺某个方向尚无人研究。</p>
+<h3 id="153">15.3 一组能支撑归因的消融</h3>
+<ul>
+<li><strong>长程与短视：</strong> 保持相同观测和动作，比较长期目标与单步收益训练。改变 <span class="arithmatex">\(\gamma\)</span> 会改变优化目标，解释结果时要明确这一点。</li>
+<li><strong>记忆是否必要：</strong> 比较无历史、简单历史统计和循环策略。</li>
+<li><strong>奖励是否对齐：</strong> 去掉某一奖励项，观察独立任务指标是否按预期变化。</li>
+<li><strong>信息是否公平：</strong> 给规则或学习基线同样的廉价输入，防止仅靠更多信息获胜。</li>
+<li><strong>预算是否泛化：</strong> 在未用于调参的预算和更长序列上评价。</li>
+<li><strong>动作是否可解释：</strong> 画出写入时刻、误差、预算及遮挡事件的时间曲线，核对决策与失效机制。</li>
+</ul>
+<p>不要只展示累计奖励上升。那只能说明策略更会优化你写下的分数。</p>
+<h3 id="154">15.4 如何报告不稳定性？</h3>
+<p>训练随机性和测试场景差异是两种不同的不确定性。分别记录，使用多个训练种子，在固定测试场景集合上配对比较；按场景进行重采样时，应保留整段时序结构，不把高度相关的视频帧当成独立样本。</p>
+<p>初步试验可以先用少量种子筛查，正式结论需要与结果波动相适应的重复次数和置信区间。只挑最好种子或删除失败场景都不足以支撑可靠结论。<a href="https://arxiv.org/abs/2108.13264">Deep Reinforcement Learning at the Edge of the Statistical Precipice，NeurIPS 2021</a></p>
+<p><strong>冻结视觉主干、只训练小策略，也属于需要训练的方法。</strong> 可以强调训练范围小、复用已有主干或测试时不更新策略，但不应把整个方法称为 training-free。</p>
+<p><a id="reading"></a></p>
+<h2 id="16">16. 该读什么？按理解顺序读，不按年份追</h2>
+<h3 id="161">16.1 第一轮：只选三份基础材料</h3>
+<ol>
+<li><strong>Sutton 与 Barto 的教材第二版。</strong> 先读第 1 章建立问题意识，再读第 3–6 章的 MDP、动态规划、Monte Carlo 和 TD；理解后再读第 13 章策略梯度。第 2 章老虎机有助于理解探索和一步决策。不要要求自己先通读全书才动手。<a href="https://mitpress.mit.edu/9780262039246/reinforcement-learning/">出版社页面</a></li>
+<li><strong>Spinning Up 的概念与策略优化教程。</strong> 用它连接符号、损失和代码，重点掌握策略、价值、回报以及策略梯度。它的概念说明仍有教学价值；旧代码环境不必逐项照搬。<a href="https://spinningup.openai.com/en/latest/spinningup/rl_intro.html">概念</a> · <a href="https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html">策略优化</a></li>
+<li><strong>Berkeley CS285 的课程材料。</strong> 推荐从模仿学习、策略梯度、Actor–Critic、Q-learning 开始，之后再看 offline RL 和 model-based RL。下面是可访问的 2023 年课程存档，不要求一定使用最新一期。<a href="https://rail.eecs.berkeley.edu/deeprlcourse-fa23/">课程与作业</a></li>
+</ol>
+<h3 id="162">16.2 第二轮：算法论文每篇只带一个问题</h3>
+<table>
+<thead>
+<tr>
+<th>材料</th>
+<th>阅读时必须回答的问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://www.nature.com/articles/nature14236">DQN，2015</a></td>
+<td>为什么 Q 学习需要经验回放和目标网络？</td>
+</tr>
+<tr>
+<td><a href="https://arxiv.org/abs/1506.02438">GAE，2015 年首稿</a></td>
+<td>如何在价值预测与实际长程回报之间折中？</td>
+</tr>
+<tr>
+<td><a href="https://arxiv.org/abs/1707.06347">PPO，2017</a></td>
+<td>为什么要限制用旧数据更新策略的幅度？</td>
+</tr>
+<tr>
+<td><a href="https://proceedings.mlr.press/v80/haarnoja18b.html">SAC，ICML 2018</a></td>
+<td>连续动作、经验回放与熵目标如何结合？</td>
+</tr>
+<tr>
+<td><a href="https://arxiv.org/abs/2005.01643">Offline RL 教程，2020</a></td>
+<td>为什么固定日志上的策略学习比普通监督学习困难？</td>
+</tr>
+</tbody>
+</table>
+<p>初次实现离散控制器，不必同时复现这五篇。把 Q-learning 小实验理解清楚，再读 PPO，已经足以进入第一个项目。</p>
+<h3 id="163">16.3 第三轮：与你的视觉方向建立联系</h3>
+<p>优先精读 <a href="https://arxiv.org/abs/2407.15626">RL Meets VO</a>。在纸上分别画出环境、观测、动作、奖励、训练数据、部署输入，重点检查哪些量来自视觉系统，哪些仅用于训练。</p>
+<p>接着读 <a href="https://arxiv.org/abs/2005.10420">流式感知评测论文</a>，用它重新审视“更快”的含义。关注结果在什么时候真正可用，而不是只看单次前向耗时。</p>
+<p>如果你的相机可控，再读 <a href="https://arxiv.org/abs/2004.05155">Active Neural SLAM</a> 和 <a href="https://arxiv.org/abs/2008.12664">Scan-RL</a>。阅读时追问：动作改变的是内部计算还是外部视角？重建、定位、规划和策略分别负责什么？</p>
+<p>准备做基础模型选帧时，把 <a href="https://arxiv.org/abs/2601.16020">2026 年前馈 VO 选帧稿</a>加入相关工作核查。本文并未对 2026 年所有 RL 与视觉论文进行穷尽综述。</p>
+<h3 id="164">16.4 实现时查的资料</h3>
+<ul>
+<li><a href="https://gymnasium.farama.org/introduction/basic_usage/">Gymnasium 基本接口</a>：学习环境的 reset、step 与观测/动作空间约定。</li>
+<li><a href="https://gymnasium.farama.org/tutorials/gymnasium_basics/handling_time_limits/">Gymnasium 终止与截断</a>：做长视频片段训练前读。</li>
+<li><a href="https://stable-baselines3.readthedocs.io/en/master/guide/rl_tips.html">Stable-Baselines3 实践建议</a>：检查自定义环境、评测、归一化和训练稳定性。安装时固定并记录实际版本。</li>
+<li><a href="https://github.com/uzh-rpg/rl_vo">RL VO 官方代码</a>：参考怎样把现有 VO 程序变成 RL 环境，不应预设能直接兼容你的主干。</li>
+<li><a href="https://github.com/google-research/rliable">rliable 官方代码</a>：在需要更系统地汇总实验不确定性时使用。</li>
+</ul>
+<h2 id="17">17. 一个四阶段学习计划</h2>
+<p>下面可以按每阶段约一周安排，也可以按自己的节奏延长。通过标准比日历重要。</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>学习内容</th>
+<th>亲手完成的产物</th>
+<th>通过标准</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1：建立决策直觉</td>
+<td>第 1–4、13 节</td>
+<td>跑通并修改玩具实验，手算回报和一次 TD 更新</td>
+<td>能解释为何延迟收益改变第一步动作</td>
+</tr>
+<tr>
+<td>2：理解训练机制</td>
+<td>第 5–8 节与一份 PPO 实现</td>
+<td>在小型标准环境中训练策略，记录回报与失败</td>
+<td>能说清 Actor、Critic、优势和采样数据的关系</td>
+</tr>
+<tr>
+<td>3：连接视觉程序</td>
+<td>第 9–12、14 节前半</td>
+<td>一个能重置、回放、切换动作的环境，以及规则基线</td>
+<td>相同动作可复现，不同动作确实影响后续状态</td>
+</tr>
+<tr>
+<td>4：验证研究假设</td>
+<td>第 14–15 节</td>
+<td>一个明确场景划分下的小型比较实验</td>
+<td>能判断收益来自长期决策，还是信息、预算或主干差异</td>
+</tr>
+</tbody>
+</table>
+<p>第一阶段最不该省略。很多“PPO 不收敛”的问题，实际上来自奖励与目标不一致、终止处理错误，或动作根本没有影响环境。</p>
+<p>第二阶段使用小环境，是为了把算法调试与昂贵视觉系统调试分开。第三阶段如果环境速度过慢，先解决反馈和回放成本，不要直接扩大训练规模。</p>
+<p>到第四阶段，你的成果可以是“在这个设定下，阈值规则已经足够”。这也是有价值且可以支撑下一步选题的结论。</p>
+<p><a id="review"></a></p>
+<h2 id="18">18. 复习、自测与术语速查</h2>
+<h3 id="181">18.1 先不看答案，回答八个问题</h3>
+<ol>
+<li>当前图像一样，剩余预算不同，为什么策略可能需要不同动作？</li>
+<li>一个动作立即奖励为负，它的 Q 值能不能为正？</li>
+<li>为什么一个固定录制视频也可以构成 RL 环境？</li>
+<li>为什么在同一视频上重复回放并重新计算动作后果，不一定是 offline RL？</li>
+<li>训练奖励使用未来真值，与部署时偷看未来帧有什么区别？</li>
+<li>为什么增加每帧预测准确率，可能降低流式服务质量？</li>
+<li>策略累计奖励上涨、但跟踪覆盖下降，你首先检查什么？</li>
+<li>如果相同预算下监督决策器与 PPO 表现一样，你能得到什么结论？</li>
+</ol>
+<h3 id="182">18.2 参考答案</h3>
+<ol>
+<li>预算决定以后还有哪些合法选择及机会，因此是决策相关状态。忽略它会丢失影响后果的信息。</li>
+<li>可以。后续收益折扣后足够大，就能补偿立即损失。</li>
+<li>动作可改变重建器记忆、预算或队列，即使原始图像顺序不变，后续预测仍然不同。</li>
+<li>如果新策略能在可执行环境中产生新的转移，就是持续采集交互；offline RL 指训练只依赖固定的既有转移记录。</li>
+<li>前者是事后评价动作后果；后者改变了当时决策可以使用的信息。训练反馈、Actor 输入和部署接口要分开检查。</li>
+<li>更昂贵的推理可能使结果过时、排队增加或错过截止期。准确率必须与实际输出时间共同评价。</li>
+<li>检查策略是否通过删除困难查询、减少输出或拒绝困难片段取巧，且评测是否惩罚这些缺失。</li>
+<li>当前实验尚未证明多步 RL 训练的额外价值。可能需要重新检查长程机制，也可能直接选择更简单的方法。</li>
+</ol>
+<h3 id="183">18.3 术语速查</h3>
+<table>
+<thead>
+<tr>
+<th>英文</th>
+<th>中文</th>
+<th>一句话记忆</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Episode</td>
+<td>回合、一次完整任务</td>
+<td>从重置到真正结束</td>
+</tr>
+<tr>
+<td>Rollout</td>
+<td>采样轨迹或轨迹片段</td>
+<td>用策略实际运行环境得到的记录</td>
+</tr>
+<tr>
+<td>Policy</td>
+<td>策略</td>
+<td>决定做什么</td>
+</tr>
+<tr>
+<td>Reward</td>
+<td>奖励</td>
+<td>一次动作后的分数</td>
+</tr>
+<tr>
+<td>Return</td>
+<td>回报</td>
+<td>以后分数的累计</td>
+</tr>
+<tr>
+<td>Value</td>
+<td>价值</td>
+<td>对回报的期望预测</td>
+</tr>
+<tr>
+<td>Advantage</td>
+<td>优势</td>
+<td>某动作相对当前策略平均选择的价值差</td>
+</tr>
+<tr>
+<td>Credit assignment</td>
+<td>信用分配</td>
+<td>后果该归功或归咎于哪些动作</td>
+</tr>
+<tr>
+<td>Exploration</td>
+<td>探索</td>
+<td>尝试后果尚不确定的选择</td>
+</tr>
+<tr>
+<td>Bootstrap</td>
+<td>自举</td>
+<td>用价值估计帮助更新价值估计</td>
+</tr>
+<tr>
+<td>Replay buffer</td>
+<td>经验回放缓冲区</td>
+<td>训练用转移记录，区别于关键帧缓存</td>
+</tr>
+<tr>
+<td>Behavior cloning</td>
+<td>行为克隆</td>
+<td>用监督学习模仿示范动作</td>
+</tr>
+<tr>
+<td>Contextual bandit</td>
+<td>上下文老虎机</td>
+<td>根据当前信息优化这一次选择的收益</td>
+</tr>
+<tr>
+<td>POMDP</td>
+<td>部分可观测决策过程</td>
+<td>决策者看不见完整状态</td>
+</tr>
+<tr>
+<td>MPC</td>
+<td>模型预测控制</td>
+<td>每次向前规划一段，只执行开头再重规划</td>
+</tr>
+<tr>
+<td>Reward hacking</td>
+<td>奖励取巧</td>
+<td>分数提高，但真实目标没有改善</td>
+</tr>
+</tbody>
+</table>
+<h3 id="184">18.4 准备开始项目时，写下这六句话</h3>
+<ol>
+<li><strong>我要控制的动作是：</strong> ______。</li>
+<li><strong>这个动作通过 ______ 改变未来，而不只是影响当前一次预测。</strong></li>
+<li><strong>策略当时实际能看到：</strong> ______。</li>
+<li><strong>训练奖励来自 ______；独立评价指标是 ______。</strong></li>
+<li><strong>在相同预算、信息与主干下，我要超过的简单基线是：</strong> ______。</li>
+<li><strong>如果实验出现 ______，我就认为当前 RL 假设没有得到支持。</strong></li>
+</ol>
+<p>如果这六句已经写清楚，你就具备了把强化学习用于视觉问题的正确起点。接下来最值得做的，是实现一个小而真实的决策环境，观察一次选择怎样改变后面的重建或感知结果。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "header.autohide", "search.suggest", "search.highlight", "search.share"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../_js/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
