@@ -1507,3 +1507,39 @@ PanoCity, Matterport3D, Stanford2d3ds, PPO, OmniStereo-urban, deep360
   - [ ] OmniFusion
 
   - [ ] PanoVGGT
+
+
+### 0914
+
+决定一下是否要改StreamDPM：要不要把 decoder + point head 改成只输入 source frame + target camera pose + target timestamp 三者输入？？？
+
+是先改SreamDPM的网络并重新训练？还是先攒流式的系统？？？
+
+已有的StreamDPM：
+
+- aggregator部分，是causal attention，测试时可以kv-cache
+
+- decoder部分，是分组attention，包含global attention，time-aware attention 和 world-aware attention，实现层面仍需优化。N帧同时估计
+
+- 经过self-distill training 后，student model (StreamDPM) 的参数拿去用在 global attention 的时候精度反而会提高。
+
+评测目标：
+
+- tracking 精度，query点来自第一帧，跟踪几百上千帧
+
+- 动态重建精度，每个pointmap都是第t帧在各自的时间戳下的图像
+
+- 位姿精度，每一帧的估计相机位姿
+
+然而，新帧进来的时候，需要将第0帧给 time condition 到新时刻下，因此decoder部分无法使用kv-cache。
+
+现在有几种方案：
+
+- 用 self-distill training 后的参数用在 global attention 下，像kv-tracker 一样攒个系统。需要一个轻量的 point decoder。
+
+- 用 self-distill training 后的流式方法攒个系统，仍然需要一个轻量的point decoder。
+
+
+今日结论：
+
+- 将StreamDPM改成了一个处理流式的系统，有自适应选关键帧、维护kv-cache等。在长序列上跟踪表现良好，比v-dpm和point4d好。
