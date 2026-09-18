@@ -1543,3 +1543,42 @@ PanoCity, Matterport3D, Stanford2d3ds, PPO, OmniStereo-urban, deep360
 今日结论：
 
 - 将StreamDPM改成了一个处理流式的系统，有自适应选关键帧、维护kv-cache等。在长序列上跟踪表现良好，比v-dpm和point4d好。
+
+
+### 0918
+
+check 一下streamdpm的长序列测评代码。
+
+一定要找真问题！！！！！！
+
+- evaluation 一定要一开始就check并且freeze！！！
+
+- 去找point4d作者要一下测评代码。
+
+- 拿真实数据去测可视化结果。找真问题。
+
+长序列：是ego-motion很复杂的长序列，还是动态部分很多的长序列？作为一个user去找问题，拿手机拍些序列试试。
+
+目前：只是在benchmark上提升，看似有提升，但没解决实际问题。
+
+比如目标20hz，手机拍摄的某些场景似乎ok（compare的baseline会fail,但我的还ok），或者能实时跑。不要单纯只在公认的benchmark上提点。。。
+
+当前，streamdpm网络的上限一定是v-dpm，没理由比他更好。拿数据集真值直接训练？？？
+
+有没有其他正则项？比如光流的loss？self-supervised warping loss？mixture expert？缺乏correspondence的gt，当前是个真问题。可以提一个scalable的supervision方式。
+
+如果要从预训练模型搞蒸馏，那就必须做到极致的efficiency。
+
+另外，“数据闭环”：做一个很好的“评价器”，评价当前方法的结果是否好，用好的结果拿回去作为监督，不好的部分继续再调整。
+
+1. 训练数据本身如何？
+2. inference time有没有可以提升？
+3. 序列长度更长？
+
+训练 -> 可视化分析 -> 定位问题 -> 调整
+
+倒推：两个月后有个很棒的video demo --> 应该去找当前方法fail的，但我能解决的场景 --> 这背后的问题是什么
+
+真问题：correspondence gt缺乏；online streaming 系统的效率低；屌炸的实拍demo，当前方法解决不了的，同时定位其背后的问题。
+
+找难demo，测运行速度，测序列长度。
