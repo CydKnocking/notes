@@ -1,11 +1,11 @@
 # 动态长序列的 4D 重建与 Point Tracking：文献调研与选题判断
 
-> 更新至 **2026-09-22**。面向正在准备 ICLR/CVPR 级论文的研究合作者。此次新增第 19 节机械臂数据专题；第 1–18 节沿用各节原有检索截止日期。
+> 更新至 **2026-09-24**。面向正在准备 ICLR/CVPR 级论文的研究合作者。此次新增第 20 节特征匹配、点跟踪与伪标签监督专题；第 1–19 节沿用各节原有检索截止日期。
 >
 > 已确认设置：**单目 RGB、未知相机位姿、动态场景、流式输入或长视频；可用 8 张 H20D；优先 training-free、测试时优化/适配或有限微调。**  
 > 本文在已有 4D/tracking/长序列笔记基础上重新检索原论文、补充材料和官方代码。论文结果、作者的资源报告与本文的研究推断分别标明；没有实际运行模型，也没有实测 H20D 性能。
 
-> **最新增量阅读入口：第 19 节（9 月 22 日，机械臂数据）；上一轮入口：第 13–18 节（9 月 17 日）。** 上一轮补查 2026 年论文、近期公开稿及代码更新，并扩展到机器人、视频生成/编辑、姿态估计和场景理解。第 1–12 节保留 9 月 8 日的研究脉络；Point4D、TAPNext++ 等已重新核实的状态在原处修正，其他旧条目不代表本轮逐一重审。
+> **最新增量阅读入口：第 20 节（9 月 24 日，matching/tracking 教师与伪监督）；此前入口：第 19 节（9 月 22 日，机械臂数据）、第 13–18 节（9 月 17 日）。** 本轮补查 RoMa-Ω、LoMa、UFM 新权重、CoWTracker、Track-On-R 及近期 3D 教师的发布状态，并给出标签质量审计与小规模微调方案。第 1–19 节未逐条重审；同一方法的本轮状态以第 20 节为准。
 
 ## 1. 先给选题判断
 
@@ -702,3 +702,141 @@ PointWorld-DROID 的发布包以 HDF5 / JSON 等标注为主，**不是完整原
 - **协议：** 主输入是否依然单目 RGB？机器人/深度信息用于测试评分还是作为输入？是否有整段训练测试泄漏或相邻片段泄漏？
 
 本节核查截止 **2026-09-22**，依据论文、官方文档、代码仓库和实际可见的数据卡/文件目录。**没有下载完整数据、执行模拟器重放或实测标注质量。** “已公开”表示存在可定位发布入口；标注字段覆盖率、数据完整性和运行成本仍需小样本验收。特别是 TAPVid-MV 的下载状态、Robo360 的多模态释放范围，以及各仿真平台的额外导出工作，不应在论文计划中视为已经解决。
+
+## 20. 特征匹配、点跟踪与伪标签监督：当前教师怎么选（2026-09-24）
+
+### 20.1 结论：可以做，先选监督的类型，再选模型
+
+**使用强 matching/tracking 模型生成伪标签，监督动态 4D 模型，是已经有直接成功先例的路线。** St4RTrack 已用 CoTracker3 轨迹监督 3D 轨迹的重投影；Stereo4D 则把二维跟踪、双目深度和相机估计组合成训练数据。本节建议把模型输出称为“伪标签/教师估计”，避免把高置信预测等同于测量真值。[St4RTrack §3.3](https://arxiv.org/html/2504.13152v1)、[Stereo4D](https://arxiv.org/html/2412.09621v2)
+
+针对我们的 **RGB-only、未知相机、动态长视频、8 张 H20D** 设置，建议从以下分工开始；这是研究建议，不是已经实测的最佳组合。
+
+| 所需监督 | 优先候选 | 实际用途 |
+|---|---|---|
+| 可见区域二维物质点轨迹 | **CoTracker3** 起步；**TAPNext++ / Track-On-R** 补充长时与重检测 | 监督 3D 轨迹投影，或微调 tracking 模块 |
+| 非相邻帧直接对应、漂移校验 | **RoMa v2**；动态稠密对应比较 **UFM 新权重**；稀疏锚点比较 **LoMa** | 不经过逐帧累积，检查起始点与远帧是否仍对应同一表面点 |
+| 高密度轨迹/运动场 | **CoWTracker / AllTracker** | 对稠密 warp、动态点图或运动分支提供监督 |
+| 三维几何与轨迹 | 短窗 **4RC**；联合几何 **SpatialTrackerV2**；长程 **Point4D** | 第二阶段补充；首先审计尺度、相机和遮挡误差 |
+| 有可靠 RGB-D / 相机的训练数据 | **TAPIP3D**，以及双目深度 + 2D tracker 管线 | 利用训练阶段额外几何信息生产更可靠标签，学生测试仍可只用 RGB |
+
+**首轮不要全部部署。** 推荐先跑 **CoTracker3 + RoMa v2**，分别承担轨迹生成和跨帧校验；有明显长遮挡/出画重入时加入 TAPNext++，需要 dense 标签时加入 CoWTracker。其余模型按失败类型替换或加入。用训练阶段离线教师蒸馏在线学生是可行设置，但必须与测试时整段视频适配区分。
+
+### 20.2 Feature matching：近期强方法及适合作为教师的角色
+
+这里的 matching 指同一物理表面点的图像对应，不是“不同对象上语义相似部位”的对应。稀疏匹配受关键点覆盖限制；稠密匹配能够在查询位置采样，但不保证每个像素都有可靠匹配。相对位姿 AUC 高也不自动意味着动态前景的逐点标签更准。
+
+| 方法 / 时间 | 输出、公开状态 | 教师价值与边界 |
+|---|---|---|
+| **RoMa v2**；2025-11 首发，2026-07 v3 / ECCV 2026 | 稠密 warp、overlap、二维定位误差 precision/covariance；推理、权重、评测公开。[论文](https://arxiv.org/html/2511.15706v3)、[代码](https://github.com/Parskatt/RoMaV2) | **首选通用稠密匹配教师。** 适合关键帧对和直接远帧对应；overlap 与误差协方差可分别辅助共视筛选和定位加权。协方差分支只在共视且残差较小的样本上训练，不能解释为所有身份错误的概率。 |
+| **UFM**；NeurIPS 2025；**2026-02 L-init、2026-04 G-init 更新权重** | 光流与宽基线匹配统一；输出 dense flow + 共视概率；多种分辨率和检查点公开。[论文](https://arxiv.org/abs/2506.09278)、[官方版本说明](https://github.com/UniFlowMatch/UFM) | **动态视频可见区域的重点候选。** 同时覆盖近邻运动与较大视角变化，值得与 RoMa v2 同协议比较。共视概率不等于定位置信度；新权重不能直接沿用旧论文成绩。 |
+| **LoMa / LoMa-R**；2026-04；官方分别标 ECCV 2026 Oral / CVPRW 2026 | 稀疏关键点与对应；B/L/G 等规模及旋转增强 R 版本公开。[LoMa](https://arxiv.org/abs/2604.04931)、[LoMa-R](https://arxiv.org/abs/2604.11809)、[代码](https://github.com/davnords/LoMa) | **当前值得加入的稀疏强基线。** 可做静态背景锚点、远帧重关联及稠密轨迹校验。先测 B 版；关键点不足时不能给任意表面点提供监督，高层 API 的返回项需核实后再设计置信加权。 |
+| **RoMa-Ω**；**2026-09-08**；官方标 ECCVW 2026 | 将 RoMa v2 的特征换为 VGGT-Ω 表征；稠密匹配，代码与权重公开。[论文](https://arxiv.org/html/2609.09507v1)、[代码](https://github.com/davnords/RoMa-Omega) | **困难图像对的新增离线教师候选。** 对困难外观/视角变化很有竞争力，但代价更大，动态数据并非全面超过 v2；不默认取代 v2。 |
+| **EfficientLoFTR**；CVPR 2024 | 半稠密、亚像素匹配及 score；代码权重公开。[论文](https://arxiv.org/abs/2403.04765)、[代码](https://github.com/zju3dv/EfficientLoFTR) | 成熟的效率对照和批量对应前端；比仅检测关键点更便于补充弱纹理区域。score 需目标域校准，不具备独立的长期身份机制。 |
+| **LightGlue + SuperPoint / ALIKED**；ICCV 2023 | 局部特征与稀疏匹配分数；成熟代码和权重。[代码](https://github.com/cvg/LightGlue) | 低成本背景锚点、相机几何与匹配基线；必须写清特征提取器。不是当前精度上限，也不适合作为无纹理动态表面的唯一标签来源。 |
+| **MatchAnything**；2025-01；官方标 TPAMI 2026 | 跨模态预训练；公开 MatchAnything-ELOFTR 权重、推理；训练代码仍需核查发布状态。[论文](https://arxiv.org/abs/2501.07556)、[代码](https://github.com/zju3dv/MatchAnything)、[模型卡](https://huggingface.co/zju-community/matchanything_eloftr) | RGB–IR、RGB–depth 等跨模态任务更有针对性。对我们纯 RGB 视频，先当跨域补充，不能从名称推断全面强于 RoMa/UFM。 |
+| **MINIMA**；2024-12 / CVPR 2025 | 跨模态数据引擎与微调框架，含多个 matcher 版本及公开权重。[论文](https://arxiv.org/abs/2412.19412)、[代码](https://github.com/LSXI7/MINIMA) | 有跨模态训练/验证需求时使用，也可参考其数据构造。生成的 depth/normal 外观不是独立的真实几何测量，不能直接充当 3D GT。 |
+
+**同表证据说明为什么不能简单按“最新”选教师。** RoMa-Ω 论文的稠密评测中，它在六个数据集中的五个更强，但 FlyingThings3D 的 EPE 为 **1.07**，RoMa v2 为 **0.93**，后者更好；同一 A100、560×560、batch=8 的运行比较中，显存约 **29.9 GB vs 4.0 GB**。这些是作者给定配置的数据，不是 H20D 测速，也不能脱离推理配置推广到所有分辨率。[RoMa-Ω §5.6–5.7](https://arxiv.org/html/2609.09507v1)
+
+专项补充：**REDI-Match（2026-06）**值得在大平面旋转/相机 roll 场景中比较；它蒸馏 DINOv3 特征到等变编码器，但后续 matcher 仍使用 GT correspondence 训练。因此不能把它算作“单靠匹配输出伪真值训练成功”的直接证据。[论文](https://arxiv.org/html/2606.24330v1)、[官方推理与权重](https://github.com/YinjiGe/REDI-Match)
+
+### 20.3 2D Point Tracking：哪些模型适合直接生产轨迹标签
+
+| 方法 / 时间 | 输出与可用性 | 教师定位、长序列与成本边界 |
+|---|---|---|
+| **CoTracker3**；2024 预印本 / ICCV 2025 | 坐标、visibility，底层另有 confidence；scaled online/offline 权重及真实视频微调代码公开。[论文](https://arxiv.org/abs/2410.11831)、[代码](https://github.com/facebookresearch/co-tracker) | **成熟首选。** 比较 offline 与滑窗版后再选，不能预设离线一定更准。online 是重叠窗口处理；全视频离线标签的成本随片长增长。 |
+| **BootsTAPIR**；ACCV 2024 | 轨迹、occlusion、expected_dist；标准与 causal 版本、JAX/PyTorch 实现及权重可用。[论文](https://arxiv.org/abs/2402.00847)、[项目](https://bootstap.github.io/)、[代码](https://github.com/google-deepmind/tapnet) | 成熟的异构教师与自训练参考。适合和 CoTracker3 交叉检查；expected_dist 是风险相关输出，不能直接当像素误差。遮挡位置不作为默认硬监督。 |
+| **TAPNext / BootsTAPNext → TAPNext++**；ICCV 2025 → **CVPR 2026 Findings** | ++ 为逐帧因果递归模型；坐标与可见性，256/512 PyTorch 权重公开。[++ 论文](https://arxiv.org/html/2604.10582v1)、[正式类别](https://openaccess.thecvf.com/content/CVPR2026F/html/Jung_TAPNext_Whats_Next_for_Tracking_Any_Point_TAP_CVPRF_2026_paper.html)、[代码](https://github.com/google-deepmind/tapnet) | **长序列、出画重入和重检测优先候选。** 固定递归状态有利于处理长视频；长期稳定性仍需目标域验证。可见性不等于经过校准的定位可靠性。 |
+| **Track-On2 / Track-On-R + Verifier**；2025–2026，R 为 CVPR 2026 | online tracker + 多教师可靠性选择器；tracker、verifier 权重和训练代码公开。[论文](https://arxiv.org/html/2603.12217v1)、[代码](https://github.com/gorkaydemir/track_on) | **与本次想法最直接的参考。** Verifier 逐帧挑选可靠候选轨迹，既可产标也可集成推理。Tracker 的在线性不代表 verifier 的全时间推理同样因果；DINOv3 权重访问是环境准备项。 |
+| **CoWTracker**；2026-02 | 高分辨率 dense tracks、visibility、confidence；官方推理与 HF 权重公开。[论文](https://arxiv.org/html/2602.04877v1)、[代码](https://github.com/facebookresearch/cowtracker) | **稠密标签的新强候选。** 对边界和细结构值得专测。视频骨干随帧长增加开销，长片段应核查 windowed 模式；全片段前向并不等于逐帧在线，长遮挡/镜面仍有失败。 |
+| **AllTracker**；ICCV 2025 | 单 query frame 的全像素多帧轨迹、visibility、confidence；代码模型公开。[论文](https://arxiv.org/abs/2506.07310)、[代码](https://github.com/aharley/alltracker) | 稠密运动场成熟对照。更换 query frame 通常需要额外计算；标签落盘成本也不可忽略。与 CoWTracker 用相同分辨率、片长和有效点数比较。 |
+
+第二批候选：**TAPTRv3（ICLR 2026）**关注长时特征漂移与遮挡感知上下文，官方 v3 分支已发布，适合增加架构多样性；**LocoTrack / Anthro-LocoTrack**仍是效率和人体域的有用对照。首轮不必为覆盖所有模型承担环境成本。[TAPTR 仓库](https://github.com/IDEA-Research/TAPTR)、[LocoTrack](https://github.com/cvlab-kaist/locotrack)、[AnthroTAP](https://github.com/cvlab-kaist/AnthroTAP)
+
+**输出接口必须核对。** CoTracker3 高层 Predictor 通常只返回坐标和经过阈值化的 visibility，可能丢弃底层 confidence。生产伪标签应尽量保存原始输出，再统一筛选；不同模型的 confidence、共视概率、occlusion 和误差风险不能直接比较数值大小。模型代码中的 resize、坐标归一化和 query 时刻约定也应一并保存。[CoTracker Predictor](https://github.com/facebookresearch/co-tracker/blob/main/cotracker/predictor.py)、[TAPIR 模型](https://github.com/google-deepmind/tapnet/blob/main/tapnet/torch/tapir_model.py)
+
+### 20.4 3D Point Tracking / 联合 4D 教师：可补充，但需要额外审计
+
+| 方法 | 输入、坐标与发布状态 | 本项目中的使用建议 |
+|---|---|---|
+| **SpatialTrackerV2 / SpaTrackerV2，ICCV 2025** | 支持 RGB，也支持 depth+camera；联合几何、相机与世界系轨迹，另有可见性/动态相关输出；代码权重可用。[论文](https://arxiv.org/html/2507.12462v1)、[代码](https://github.com/henry123-boy/SpaTrackerV2) | 成熟的 RGB-only 联合教师。重点检查相机错误是否被吸收成物体运动；预测尺度和 dynamics 都不是独立真值。 |
+| **TAPIP3D，NeurIPS 2025** | 跟踪模块使用 RGB、depth、K；world 模式另需 pose。RGB demo 用其他模型先估计几何；输出 XYZ 与 visibility，代码权重可用。[论文](https://arxiv.org/html/2504.14717v2)、[代码](https://github.com/zbw001/TAPIP3D) | **有可信 RGB-D / 标定时优先。** 可以与 RGB-only 联合模型形成不同误差来源的检查。论文的跟踪模块速度不包含深度和位姿预处理。 |
+| **4RC，ICML 2026** | RGB 视频，联合几何及时间条件 3D 查询；推理、评估、HF 权重公开。[论文](https://arxiv.org/abs/2602.10094)、[代码](https://github.com/Luo-Yihang/4RC) | **短片段稠密 3D 教师优先候选。** 一次编码可多次查询；长片段切块后的坐标、尺度和身份仍需处理。不同几何微调 checkpoint 不默认具有相同 tracking 性能。 |
+| **Point4D，2026-09** | RGB + 像素查询，内部升到 3D 并跨块传递；轨迹在首帧参考系，另输出 confidence；代码、HF 权重和长序列接口公开。[论文](https://arxiv.org/html/2609.09145v1)、[代码](https://github.com/point-4d/Point4D) | **长程标签的新候选。** 通过跨块传递 3D query 延续轨迹；代码采用重叠分块与 Sim(3) 对齐，不保证原始米制尺度。confidence 不能当作 visibility。 |
+| **DELTA / DELTAv2，2025** | RGB-D 或预测深度；稠密 3D 轨迹，也有 2D 变体；v2 代码权重公开。[项目](https://snap-research.github.io/DELTAv2/)、[代码](https://github.com/snap-research/DenseTrack3Dv2) | 大规模 dense 标签的效率候选；首先明确 UVD、相机系到世界系的变换。预测深度在遮挡和边界处的误差会污染 3D 标签。 |
+| **Any4D，CVPR 2026** | RGB，可选 depth/pose/IMU/radar；局部相机系深度/内参与世界系外参/scene flow 的分解表示，可组装世界系几何。**本轮已核到官方推理和 HF 权重**。[项目](https://any-4d.github.io/)、[代码](https://github.com/Any-4D/Any4D) | 短窗几何/运动候选，有额外传感器时更值得测；RGB-only 的米制尺度仍需验证。scene flow 不自动等于可靠长期物质点身份。 |
+
+补充边界：**St4RTrack**若已准备好环境，最适合作为检验伪监督收益的学生/适配基线，并应使用官方更新后的权重；**V-DPM**短片段结果值得比较，本轮确认[官方代码/demo](https://github.com/eldar/vdpm)，但未核实独立权重下载入口；**SM4RT**可作为结构化运动教师，但要分刚体、关节和非刚性审计；**D4RT**是重要性能参照，本轮在[官方项目](https://d4rt-paper.github.io/)未找到官方模型下载入口，不以第三方复现冒充原模型。[St4RTrack 实现](https://github.com/HavenFeng/St4RTrack)、[SM4RT 实现](https://github.com/wzzheng/SM4RT)
+
+3D 模型比较尤其要统一 **depth/pose 来源、参考系、尺度对齐与片长**。例如 Point4D 的长期实验也并非所有数据集都超过 SpatialTrackerV2 或 TAPIP3D，且评测使用尺度对齐；不能用对齐后的成绩证明未经处理的教师标签具有准确米制尺度。[Point4D 实验](https://arxiv.org/html/2609.09145v1)
+
+### 20.5 已有伪监督证据：这条路线可行，但基础做法已有先例
+
+| 工作 | 已经验证的监督方式 | 对我们的直接启发 |
+|---|---|---|
+| **CoTracker3** | 预训练教师给无标注真实视频生成轨迹，混合/采样教师进行微调；官方有真实视频训练脚本 | 不必从头训练教师；先验证目标域真实数据是否有增益。伪标签阶段论文冻结 confidence/visibility 相关头，避免不可靠监督破坏它们。[正式论文](https://www.robots.ox.ac.uk/~vgg/publications/2025/Karaev25/karaev25.pdf) |
+| **BootsTAP** | EMA 教师、扰动后的学生输入、变换一致性和重新选 query 的循环约束 | 自训练需要处理标签噪声与退化解；轨迹一致性是一种过滤证据，不是真值证明。[方法](https://arxiv.org/html/2402.00847v2) |
+| **Track-On-R** | 学习 verifier 评估多教师候选，逐帧选择可靠监督；真实数据定位损失屏蔽遮挡帧 | “多教师 + 置信筛选”本身已有直接竞争。可复用 verifier 作为强基线；完整论文训练规模不能直接等同于我们的小规模适配成本。[论文](https://arxiv.org/html/2603.12217v1) |
+| **St4RTrack** | CoTracker3 的二维轨迹 + MoGe 深度 + 几何一致性，适配联合 4D 网络 | **与我们最直接的先例。** 只换更强 tracker 通常是有用基线，不能单独当作充分创新。[论文 §3.3](https://arxiv.org/html/2504.13152v1) |
+| **Stereo4D / PointWorld-DROID** | 跟踪器、双目深度、相机与过滤/优化组合成 3D 监督 | 3D 数据生产需要整个几何链条，不能只把二维坐标乘深度。可参考现成数据管线；原始输入、标定与标签来源见第 19 节。[Stereo4D 项目](https://stereo4d.github.io/)、[PointWorld 数据代码](https://github.com/NVlabs/PointWorld/tree/data) |
+
+因此，科研问题应收紧为：**在哪些动态场景中，教师的表面高置信对应会系统性出错？能否借助额外可验证的几何或时间证据，在保留困难动态点覆盖率的同时减少错误监督？** 这是值得先做诊断的研究假设，不是已经证明的新颖性。
+
+### 20.6 建议的伪标签生产与监督协议
+
+以下是面向本项目的设计建议，尚未运行实验。
+
+**（1）标签先分三层，避免把不确定性混在一起。**
+
+- **二维观测层**：可见点坐标、可见性/共视、定位可靠性，最适合先用。
+- **几何层**：深度、相机、尺度及其来源；单目预测、双目估计、传感器测量分别记录。
+- **三维轨迹层**：由独立 3D 教师或二维跟踪加几何产生；仅在几何与身份同时可靠时用于较强监督。
+
+缓存至少包括原始视频/片段 ID、时间戳、query 帧和坐标、目标坐标、原始质量分数、teacher/checkpoint ID、坐标缩放与裁剪变换、保留掩码和拒绝原因。多个模型先统一到同一原图坐标系；对 RoMa v2 等协方差输出，也要同步转换坐标单位。
+
+**（2）先做可见区域监督，再考虑遮挡段。** 正向跟踪后，在可靠目标帧重新以预测位置查询并回到源帧，构造真正的反向重查询检查；同时用 matcher 直接连接源帧与若干远帧。不要把 tracker 的“向 query 之前补轨迹”开关直接当作整个轨迹的往返验证。多教师明显分歧时可拒绝标签或选择候选，不把落在不同物体上的坐标直接平均。
+
+对于遮挡、出画和重现，保存分段可靠轨迹及“未知”状态；不要为得到完整轨迹而强行填满所有时刻。**隐藏点投影处的深度通常属于遮挡物，不能拿来反投影隐藏点。** 若要用教师预测的隐藏轨迹，应作为单独实验，用有独立 3D GT 的数据验证，再决定是否采用软约束。
+
+**（3）几何过滤必须保留真实动态。** 全场景统一套背景相机的 F/E 矩阵 RANSAC，会把正确的动态物体对应当外点剔除。背景可以做静态多视图检验；刚体物体可用自身运动模型；非刚体采用适当局部约束，不能强行要求整体刚性。语义掩码只辅助区分对象，不自动证明同一物质点身份。循环一致、跨教师一致也会在重复纹理上共同出错。
+
+**（4）最先接入的是二维投影损失。** 对学生预测的世界系轨迹 \(X_i(t)\)，用可见且通过筛选的教师坐标 \(\tilde u_{it}\)：
+
+\[
+\mathcal L_{\mathrm{2D}}
+=\frac{\sum_{i,t}m_{it}w_{it}\,
+\rho\!\left(\pi\!\left(K_t(R_{CW,t}X_i(t)+t_{CW,t})\right)-\tilde u_{it}\right)}
+{\sum_{i,t}m_{it}w_{it}+\epsilon}.
+\]
+
+其中 \(m\) 为有效标签掩码，\(w\) 为校准后的可靠性权重，\(\rho\) 为鲁棒损失，\(R_{CW},t_{CW}\) 表示世界到相机的旋转和平移。教师和标签权重先冻结，防止学生通过降低权重逃避误差。二维约束不能唯一确定深度、尺度和相机/物体运动分解；需要独立几何约束，或先固定几何只适配运动分支作控制实验。
+
+有可靠额外几何时，令齐次像素坐标为 \(\tilde u_h=(u,v,1)^\top\)，**可见**标签可按 \(X_W=R_{WC}(dK^{-1}\tilde u_h)+t_{WC}\) 构造，其中 \(R_{WC},t_{WC}\) 表示相机到世界的变换。这里 \(d\) 是相机光轴方向的深度；若给的是沿射线距离，则需先转换或使用单位视线向量。RGB-D、双目或多视角作为训练教师的特权信息可以使用，但与纯 RGB 教师分开报告。相机位姿错误会污染整个轨迹，不能因单个深度估计可信就认为世界坐标可靠。
+
+**（5）区分训练看未来和推理看未来。** 离线教师用完整训练视频生产标签，在线学生只看允许的历史，是合法的教师—学生设置。若在测试视频上先跑完整离线教师再适配，整个测试管线属于离线/转导设置。若研究未来预测，未来视频可用于制作训练 target，但其特征、估计轨迹、相机或归一化统计不得进入预测时的历史输入。
+
+### 20.7 先做一个小规模审计，再决定是否投入微调
+
+以下规模是启动建议，不是作者配置或收益保证。
+
+**阶段 A：固定 50–100 段目标域视频，先比较标签。** 保留一部分完整长序列，其余按 64–128 帧短片段审计；每段先抽 256–512 个 query，兼顾背景、机械臂、被操作物体、细结构和低纹理区域。覆盖快运动、相机快动、接触、重复纹理、短/长遮挡、出画重入。长轨迹审计不能每个窗口重新定义身份。第一批只运行 CoTracker3 和 RoMa v2；按失败类型再加一个 tracker 或 matcher。
+
+用仿真 GT、真实人工可见点标注或独立多视角测量的验证子集确定阈值，报告：
+
+- **精度—覆盖率曲线**：不同筛选阈值下的坐标误差/错误率与保留比例；同时做相同保留数量的对照。
+- **动态点覆盖率**：按静态背景、动态前景、接触边界、低纹理、长时间跨度分桶，避免平均分被容易的背景主导。
+- **身份与重检测**：ID 切换、重现后首次可靠定位、连续可靠片段长度；隐藏位置误差仅在有独立隐藏点 GT 时报告。
+- **生产成本**：每分钟原视频的 GPU 时间、峰值显存、存储量；注明分辨率、点数、片长和所有几何预处理。
+
+**阶段 B：只微调已有学生的小模块，做递进消融。** 建议最小集合为：原始学生；原始单教师标签；单教师质量筛选；再加 matcher 远帧校验；再加第二 tracker/verifier；最后单独加入 3D 标签。先以同样数据量、保留点数和训练步数比较筛选质量，再补充各策略自然覆盖率下的实际收益。已有 St4RTrack 环境时，优先以其运动分支适配形成首个闭环。
+
+**继续投入的标准**应是：过滤后的独立标签误差确实下降，困难动态点没有被大量清空，并且学生在独立测试集上的 tracking/3D 几何指标改善。若只是“更像教师”、只改善静态背景、二维投影更好而世界系轨迹更差，先定位原因，不立即扩大伪标签规模。教师可按视频分配到不同 GPU 离线产标；8 张 H20D 能否满足具体片长和密度，仍需先测速。
+
+### 20.8 评测、创新性与本轮证据边界
+
+1. **独立评测**：不以生成训练标签的同一个教师作为唯一评判者。TAP-Vid/RoboTAP 等测试视频不得进入伪标签微调；相邻片段必须按原视频/场景划分，避免泄漏。阈值用验证集确定。
+2. **教师未必全面更强**：分别报告教师、原学生和适配学生；离线教师对在线学生具有信息优势，不能混在同一部署排行榜中。多教师也可能共享预训练数据和错误，并非统计独立。
+3. **新颖性已有直接约束**：CoTracker3、BootsTAP、Track-On-R 已覆盖多种伪监督，St4RTrack 已覆盖二维轨迹对 4D 的适配监督。可研究的重点应来自新发现的失效机制，例如动态点筛选偏置、跨窗身份错误、几何教师互相补偿错误，而非单纯增加一个 confidence threshold。
+4. **状态核查的含义**：截至 **2026-09-24**，依据论文、正式出版页、作者项目和官方仓库；“代码/权重公开”表示存在官方入口或模型加载路径，不代表本机下载和推理已验收。没有运行以上模型、实测 H20D、验证 checkpoint 文件完整性或测量伪标签收益；数值性能均保留原论文设置。
+
+**当前实施优先级：先完成 CoTracker3 + RoMa v2 的标签审计与学生微调基线，再依据失败分布加入 TAPNext++、CoWTracker、UFM 或 3D 教师。** 这样首先回答“哪些标签确实提供了学生缺少的可靠信息”，再决定是否值得形成更复杂的教师系统。

@@ -1,6 +1,9 @@
-# 近两年 3D Gaussian Splatting 研究综述：以前馈式重建为主线
+# 3DGS / 4DGS 研究综述：前馈式重建与任意点跟踪
 
-> 检索截止：**2026-09-15**。主线覆盖 **2024 年下半年至 2026 年 9 月**，并补入理解该方向必需的 2024 年奠基论文；其中少数论文的首次预印本在 2023 年末。  
+> **第 0–11 节检索截止：2026-09-15。** 前馈重建主线覆盖 **2024 年下半年至 2026 年 9 月**，并补入理解该方向必需的 2024 年奠基论文；其中少数论文的首次预印本在 2023 年末。
+>
+> **第 12 节新增检索截止：2026-09-24。** 专题整理 **2023–2026 年 3DGS / 4DGS 与 point tracking / Tracking Any Point（TAP）** 的结合，区分轨迹先验、轨迹输出、前馈预测和相邻工作。
+>
 > 本文是代表性工作综述，不是穷尽式论文清单。重点是通用场景重建，兼顾物体、单图生成、动态场景和 SLAM。来源优先使用原论文、正式会议论文页、作者项目页及官方代码。  
 > 年份尽量区分“首次公开”与“正式发表”；仅由作者页面确认录用的论文会说明依据。文中“评价 / 判断 / 建议”属于综合分析。未运行模型，速度与质量不作为统一条件下的实测排名。
 
@@ -15,7 +18,7 @@
 5. **“更多帧”和“流式”是两类问题。** Long-LRM 扩大一次处理的视图集合；流式模型需要进一步处理历史复用、因果性和状态更新。一次前向处理整段视频，不自动等于在线 SLAM。[Long-LRM](https://openaccess.thecvf.com/content/ICCV2025/html/Ziwen_Long-LRM_Long-sequence_Large_Reconstruction_Model_for_Wide-coverage_Gaussian_Splats_ICCV_2025_paper.html)、[StreamSplat：2026 年流式前馈工作](https://arxiv.org/abs/2608.01659)
 6. **面向 SLAM 的研究判断：应把渲染质量和几何可靠性分开优化、分开评价。** 好看的新视角不保证可测量表面、正确尺度或回环一致性。前馈初始化加在线校正，是值得研究的组合，但不是已被证明对所有场景最优的方案。[2DGS](https://arxiv.org/abs/2403.17888)、[Splat-SLAM](https://openaccess.thecvf.com/content/CVPR2025W/VOCVALC/html/Sandstrom_Splat-SLAM_Globally_Optimized_RGB-only_SLAM_with_3D_Gaussians_CVPRW_2025_paper.html)
 
-**阅读导航：** 第 1 节统一概念；第 2 节快速了解非前馈背景；第 3–8 节按技术路线梳理前馈工作；第 9–11 节讨论比较方法、研究问题和阅读顺序。
+**阅读导航：** 第 1 节统一概念；第 2 节快速了解非前馈背景；第 3–8 节按技术路线梳理前馈工作；第 9–11 节讨论比较方法、研究问题和阅读顺序；**第 12 节是新增的“3DGS / 4DGS + 任意点跟踪”专题**，可独立阅读。
 
 ## 1. 前馈式 3DGS 究竟指什么
 
@@ -451,6 +454,317 @@ WildSplat 关注外观不一致，UniSHARP 关注广角/鱼眼/全景输入。�
 ### 11.3 一句话总结
 
 **前馈式 3DGS 已从“几张图快速出一个可渲染模型”，发展到同时研究相机恢复、几何先验、表示预算、长期更新与真实成像条件。对 SLAM 而言，最关键的衡量标准是：这个快速生成的表示，能否被持续融合、校正和可靠地用于几何推理。**
+
+## 12. 新增专题：3DGS / 4DGS 与 Point Tracking / Tracking Any Point
+
+> **范围与口径：** 检索截至 **2026-09-24**，回溯 2023 年以来的代表性工作。本节将“4DGS”作为动态高斯方法的宽泛统称，涵盖持久高斯、形变场、运动基、运动骨架和时间条件预测；不限定为某一篇同名论文，也不要求每个方法都使用四维协方差高斯。正文优先使用论文、正式会议页、作者项目和官方实现；“未见 TAP 定量”表示在本次核查的正文、补充或项目资料中未找到相应结果，不等于证明作者从未进行该实验。
+
+### 12.1 先看结论：两类任务正在汇合，但不能互相替代
+
+**这一方向的核心问题是：能否让一个可渲染的高斯表示，同时记录“同一个物理点随时间去了哪里”。** 从论文脉络看，有三条主线：
+
+1. **重建产生轨迹。** Dynamic 3D Gaussians 以持久高斯表达运动；DynOMo 将这一思路推进到单目在线优化。两者都不以现成的 2D 点轨迹作为必要监督，但仍有相机、深度或特征方面的输入条件。[Dynamic 3D Gaussians](https://arxiv.org/abs/2308.09713)、[DynOMo](https://arxiv.org/abs/2409.02104)
+2. **轨迹帮助重建，再从重建中读取轨迹。** Shape of Motion、MoSca、4D-Fly、MotionScale 把外部点跟踪、深度和运动约束融合到动态高斯中。这是近几年非常清晰的技术路线；收益应同时用渲染和跟踪实验验证。[Shape of Motion](https://arxiv.org/abs/2407.13764)、[MoSca](https://arxiv.org/abs/2405.17421)、[4D-Fly](https://diankun-wu.github.io/4D-Fly/)、[MotionScale](https://arxiv.org/abs/2603.29296)
+3. **跨场景学习高斯及运动。** MoVieS、C4G 将动态表示与轨迹输出纳入前馈模型；Video-GMAE 则研究通过动态高斯视频重建，学习可用于点跟踪的表征。它们与第 3–8 节的前馈重建主线直接相接，但监督方式、相机条件和跟踪输出并不相同。[MoVieS](https://arxiv.org/abs/2507.10065)、[C4G](https://arxiv.org/abs/2605.31595)、[Video-GMAE](https://videogmae.org/)
+
+**阅读时最重要的判断：** 高斯有运动、能渲染新视角、能输出任意查询点的长期轨迹，是三个不同层次。持续保留一个 Gaussian ID，并不能单独证明它始终对应同一物理表面点；颜色变化、遮挡、增密和裁剪都可能破坏这种对应。这是本综述对表示与任务关系的分析，而非某篇论文的性能结论。
+
+### 12.2 统一概念与分类
+
+#### 12.2.1 Point tracking、光流和相机 tracking 的区别
+
+- **TAP / 任意点跟踪：** 输入视频和查询点 $(u_q,v_q,t_q)$，输出该物理点在其他帧中的位置及可见性；查询点可以选在图像中的物体区域内部，不限于角点或语义关键点，并对应查询帧中可见的物质点。2D TAP 输出像素轨迹，3D TAP 还需明确三维坐标、尺度和坐标系。[TAP-Vid](https://tapvid.github.io/)、[TAPVid-3D](https://tapvid3d.github.io/)
+- **光流：** 通常描述两帧之间的像素对应。多次串接光流能构造长轨迹，但跨遮挡身份保持与误差积累仍需额外处理。本文把仅使用成对光流的工作标为“对应先验”，不直接归为完整 TAP 方法。
+- **相机 tracking：** 估计相机自身的位姿，常用 ATE / RPE 衡量。它与场景中任意物质点的轨迹是不同输出。
+- **静态 feature tracks：** 同一个静态场景点在多张图像中的观测链，常用于 SfM、标定和束调整；不自动包含动态物体的长程点跟踪。
+- **分割传播：** Track Anything / SAM2 可以输出随时间变化的物体掩码；同一掩码内的每个像素是否对应同一物理点，需要另一个模型解决。
+
+#### 12.2.2 按信息流，而不是按论文标题分类
+
+| 类别 | 轨迹与高斯的关系 | 代表工作 | 应核查的证据 |
+|---|---|---|---|
+| 高斯 → 轨迹 | 从持久动态表示读取运动，外部点轨迹不是必要输入 | Dynamic 3D Gaussians、DynOMo | 查询点如何绑定高斯、可见性如何计算、是否评测轨迹 |
+| 轨迹 → 高斯 | 已有 tracker / 光流提供初始化或约束 | TrackerSplat、MOSAIC-GS；MoDGS 属光流分支 | 是否真的改善重建；不能据此声称提出了更强 tracker |
+| 轨迹 → 高斯 → 轨迹 | 用外部轨迹约束场景，再输出几何一致的对应 | Shape of Motion、MoSca、4D-Fly、MotionScale | 输入教师与输出轨迹的差别、独立跟踪评估 |
+| 前馈高斯 + 运动 | 网络在新视频上预测动态表示和轨迹 | MoVieS、C4G | 是否需要已知相机、整段视频及测试时优化 |
+| 高斯用于跟踪表征学习 | 用动态高斯视频重建塑造跨帧对应能力 | Video-GMAE | 零样本与微调协议、2D 跟踪与真实三维恢复的区别 |
+| 相邻任务 | 高斯服务于生成、静态配准或 SLAM | GS-DiT、DreamScene4D、TrackGS、ProDyG | tracking 到底指什么，指标属于哪个模块 |
+
+这几类可以重叠。例如，MoSca 既利用轨迹，又能输出对应关系；分类只强调它主要如何连接两个任务。
+
+### 12.3 核心论文对照表
+
+年份以“预印本 / 正式会议”区分。**“优化”指对测试视频或场景执行梯度更新；“前馈”指已有模型在新片段上预测表示，仍可能依赖外部相机估计或后处理。** 表中的跟踪证据只记录已核实内容，不构成统一性能排行榜。
+
+| 工作与发表信息 | 场景与重要输入条件 | 跟踪的作用 | 计算方式 | 已核实的跟踪证据 |
+|---|---|---|---|---|
+| [Dynamic 3D Gaussians](https://arxiv.org/abs/2308.09713)，2023 / 3DV 2024 | 同步多相机、标定；论文首帧用深度相机点云初始化 | 高斯运动产生轨迹 | 逐时间步优化 | 持久 3D / 6-DoF 运动及点跟踪实验 |
+| [Shape of Motion](https://arxiv.org/abs/2407.13764)，2024 / ICCV 2025 | 单目；相机、深度、掩码、TAPIR tracks | 输入监督 + 输出 | 全视频优化 | 2D 与 3D 点跟踪定量 |
+| [MoSca](https://arxiv.org/abs/2405.17421)，2024 / CVPR 2025 | 单目；深度与外部 tracks，可优化相机 | 骨架初始化、监督及对应输出 | 全视频优化 | DyCheck 2D correspondence，PCK-T |
+| [DynOMo](https://arxiv.org/abs/2409.02104)，2024 / 3DV 2025 | 单目；深度、特征、掩码；估计外参 | 无输入 tracks / flow，输出轨迹 | 在线逐帧优化 | TAPVid-DAVIS、Panoptic Sports、iPhone |
+| [4D-Fly](https://diankun-wu.github.io/4D-Fly/)，CVPR 2025 | 单目；内外参、深度、前景及 TAPIR tracks | 传播先验 + 输出 | 流式扩展及逐帧优化 | DyCheck iPhone 2D / 3D 点跟踪 |
+| [TrackerSplat](https://doi.org/10.1145/3757377.3763829)，SIGGRAPH Asia 2025；arXiv 2026 | 标定多视图视频；预训练 tracker | 预对齐高斯，辅助重建 | 逐场景优化，可多 GPU 并行 | 主要是渲染质量和重建吞吐；未见标准 TAP 定量 |
+| [MotionScale](https://arxiv.org/abs/2603.29296)，CVPR 2026 | 单目；几何、分割和 CoTracker3 等先验 | 运动监督 + 输出 | 渐进扩展及历史联合优化 | 有点跟踪定量及查询轨迹构造 |
+| [MOSAIC-GS](https://arxiv.org/abs/2601.05368)，CVPR 2026 | 单目；相机、深度、分割、tracks | 主要用于动态初始化 | 全片预处理 + 优化 | 主要验证动态 NVS；未见标准 TAP 输出评测 |
+| [MoVieS](https://arxiv.org/abs/2507.10065)，2025 / CVPR 2026 | 单目视频、已知逐帧内外参与时间戳 | 训练监督 + 推理输出 | 片段联合前馈 | TAPVid-3D 三子集 |
+| [C4G](https://arxiv.org/abs/2605.31595)，2026 预印本 | 单目视频与时间戳；模型输入不要求相机位姿 | 训练轨迹监督、Gaussian 轨迹及特征场 | 全时间上下文前馈 | 直接轨迹的 ADT / DriveTrack 2D 实验；另有特征场跟踪实验 |
+| [Video-GMAE](https://videogmae.org/)，2025 / CVPR 2026 | RGB 片段；固定虚拟相机建模 | 自监督预训练，零样本 / 监督读出 | 前馈预测 + 轨迹传播 | TAP-Vid / Kubric 2D；须核对短片段评测协议 |
+
+### 12.4 重点论文：方法、价值与限制
+
+#### 12.4.1 Dynamic 3D Gaussians：以持久身份连接重建与跟踪
+
+**完整题名：** *Dynamic 3D Gaussians: Tracking by Persistent Dynamic View Synthesis*。
+
+- **方法：** 首帧建立高斯，后续通过局部刚性、旋转和等距约束，使同一组高斯随场景运动。任意 3D 查询点可以绑定到高斯的局部坐标并随其运动；2D 查询还需深度反投影与重新投影。[论文](https://arxiv.org/abs/2308.09713)
+- **价值：** 把用于渲染的基元变成持久运动载体，是理解后续工作的合适起点。
+- **限制：** 依赖同步标定多相机；论文实验首帧使用深度相机稀疏点云。逐帧在线优化不等于实时推理，首帧未建模、后续新进入的内容也较难处理。[项目与演示](https://dynamic3dgaussians.github.io/)
+- **实现注意：** 作者仓库是部分代码发布；论文的固定颜色与代码中的颜色时间一致性软约束存在差异，复现时需核对。[官方代码](https://github.com/JonathonLuiten/Dynamic3DGaussians)
+
+#### 12.4.2 Shape of Motion：轨迹、几何与低维运动基联合优化
+
+**完整题名：** *Shape of Motion: 4D Reconstruction from a Single Video*。
+
+- **方法：** 用 canonical 高斯、共享 SE(3) 运动基及高斯固定混合系数表达运动。TAPIR 轨迹经深度提升参与初始化，之后联合图像、几何、轨迹及运动约束；可从查询时刻的渲染权重读取目标时刻 XYZ。[方法正文](https://arxiv.org/html/2407.13764v2)
+- **价值：** 同时研究动态 NVS 和长期 2D / 3D tracking，展示了“用轨迹拟合可渲染运动场，再查询轨迹”的闭环。
+- **限制：** 需要整段视频优化，并依赖相机、深度和前景掩码。相机可以先估计，不代表优化器完全无需相机输入；不同版本的预处理也有变化。[正式论文](https://openaccess.thecvf.com/content/ICCV2025/papers/Wang_Shape_of_Motion_4D_Reconstruction_from_a_Single_Video_ICCV_2025_paper.pdf)
+- **复现入口：** [项目](https://shape-of-motion.github.io/)、[官方代码与预处理](https://github.com/vye16/shape-of-motion/)。对比时应记录相机来源、深度尺度对齐方式和输入 tracker。
+
+#### 12.4.3 MoSca：从稀疏轨迹构造可变形的运动骨架
+
+**完整题名：** *MoSca: Dynamic Gaussian Fusion from Casual Videos via 4D Motion Scaffolds*。
+
+- **方法：** 用轨迹与深度建立稀疏 4D motion scaffold；节点带有运动，时空拓扑和局部约束补全未观测部分。高斯可来自多个参考时刻，经蒙皮随骨架运动并融合。[方法正文](https://arxiv.org/html/2405.17421v2)
+- **价值：** 把较稀疏的点对应转换成能驱动密集高斯的结构，同时解决不同时间所见几何的融合。作者实现支持多种深度模型和 BootsTAPIR / CoTracker 等 tracker。[官方代码](https://github.com/JiahuiLei/MoSca)
+- **评测边界：** DyCheck 的对应关系结果使用 PCK-T，属于 2D correspondence；不能改称 TAP-Vid AJ 或完整 TAP3D 结果。其主要 DyCheck 设置使用 iPhone LiDAR 深度，另有 RGB 深度替代实验。[CVPR 正式论文](https://openaccess.thecvf.com/content/CVPR2025/papers/Lei_MoSca_Dynamic_Gaussian_Fusion_from_Casual_Videos_via_4D_Motion_CVPR_2025_paper.pdf)
+- **限制：** 全片优化；外部 tracks 和深度出错会影响骨架。未观测区域及无法用几何形变解释的外观变化仍困难。[当前项目页](https://jiahuilei.com/projects/mosca/)
+
+#### 12.4.4 DynOMo：不依赖轨迹监督的单目在线重建与点跟踪
+
+**完整题名：** *DynOMo: Online Point Tracking by Dynamic Online Monocular Gaussian Reconstruction*。
+
+- **方法：** 逐帧优化相机和动态高斯，以 RGB、深度、特征、语义及局部运动约束保持对应；查询像素绑定高斯并持续追踪。它不用外部点轨迹或光流监督，但使用其他预训练先验。[论文正文](https://arxiv.org/html/2409.02104v2)
+- **价值：** 是“从在线重建中产生点跟踪”的直接案例，并有 TAPVid-DAVIS 及其他数据上的跟踪实验。
+- **比较陷阱：** DynOMo⋆ 使用真值选择更合适的高斯，是 oracle，不能当作可部署主结果。论文中 Panoptic Sports 与 iPhone 的深度分别来自 Dynamic 3D Gaussians、Shape of Motion 的预处理；DAVIS 条件又不同。[官方数据与评测说明](https://github.com/dvl-tum/DynOMo)
+- **限制：** online 指逐帧处理与优化，不意味着一次前向或实时。大幅相机运动、深度不一致和严重遮挡会影响结果。[项目失败案例](https://jennyseidenschwarz.github.io/DynOMo.github.io/)
+
+#### 12.4.5 4D-Fly：利用跟踪锚点显式传播高斯
+
+**完整题名：** *4D-Fly: Fast 4D Reconstruction from a Single Monocular Video*。
+
+- **方法：** 将 TAPIR 轨迹、深度及相机参数组合成三维运动锚点，传播动态高斯，再优化静态与动态部分，并扩展 canonical map。野外管线还用 DROID-SLAM、DepthCrafter 和前景分割。[CVPR 论文](https://openaccess.thecvf.com/content/CVPR2025/papers/Wu_4D-Fly_Fast_4D_Reconstruction_from_a_Single_Monocular_Video_CVPR_2025_paper.pdf)
+- **证据：** 有 DyCheck iPhone 上的 2D AJ / 位置精度 / OA，以及 3D EPE 和距离阈值精度。不能把这一结果改标为 TAPVid-DAVIS。
+- **限制：** 是“传播 + 逐帧优化”，前置先验是否使用未来帧要单独审核；论文所报重建耗时与渲染 FPS 属于不同阶段。[正式会议页](https://openaccess.thecvf.com/content/CVPR2025/html/Wu_4D-Fly_Fast_4D_Reconstruction_from_a_Single_Monocular_Video_CVPR_2025_paper.html)
+- **资源状态：** 本次在[作者项目页](https://diankun-wu.github.io/4D-Fly/)核实到论文、补充与视频，未找到可确认的官方实现入口。
+
+#### 12.4.6 TrackerSplat：跟踪先对齐，梯度再细化
+
+**完整题名：** *TrackerSplat: Exploiting Point Tracking for Fast and Robust Dynamic 3D Gaussians Reconstruction*。
+
+- **方法：** 对标定多视图视频提取点轨迹，用 PWI-LS 估计投影运动，经多视图关系更新高斯位置、旋转和尺度，再做图像重建优化。论文比较多个 tracker，最终选择 DOT；不能写成默认使用 CoTracker3。[论文正文](https://arxiv.org/html/2604.02586v1)
+- **价值：** 对大帧间位移和多 GPU 分帧重建很直接：先把高斯移到接近正确的位置，有助于避免单靠图像梯度导致的褪色、改色和漂移。
+- **边界：** 主要目标是重建稳定性与吞吐，未核到标准 TAP 定量；需要已标定多视图及场景优化，不能归为单目前馈 tracker。[正式出版记录](https://doi.org/10.1145/3757377.3763829)
+- **年份与代码：** 正式发表于 **SIGGRAPH Asia 2025**，arXiv 于 **2026-04** 上传，不能仅按 arXiv 号归为 2026 年首发。[官方代码](https://github.com/yindaheng98/TrackerSplat)
+
+#### 12.4.7 MotionScale：在更长视频中组织与优化高斯运动
+
+**完整题名：** *MotionScale: Reconstructing Appearance, Geometry, and Motion of Dynamic Scenes with Scalable 4D Gaussian Splatting*。
+
+- **方法：** 用以聚类为中心的全局 / 局部运动基驱动高斯，渐进扩展动态场景。真实视频默认先验包括 π³ 几何、SAM2 分割和 CoTracker3 轨迹；外参进一步优化。[论文与查询轨迹公式](https://arxiv.org/html/2603.29296v1)
+- **与 TAP 的联系：** 可按查询帧的 alpha-blending 权重组合目标时刻高斯位置，得到三维轨迹并投影；论文也进行点跟踪评估。
+- **限制：** 这是逐场景渐进优化，非前馈。后期会采样整个已处理历史中的帧对联合细化，不能据此认定总内存固定；历史回放本身不违反因果性，严格因果性还需核查预处理和窗口是否使用未来帧。[CVPR 正式记录](https://openaccess.thecvf.com/content/CVPR2026/html/Zhou_MotionScale_Reconstructing_Appearance_Geometry_and_Motion_of_Dynamic_Scenes_with_CVPR_2026_paper.html)
+- **资源：** [项目](https://hrzhou2.github.io/motion-scale-web/)、[官方代码](https://github.com/hrzhou2/motion-scale)。其意义在于研究更大时间跨度下如何组织运动，而非证明点身份问题已经解决。
+
+#### 12.4.8 MOSAIC-GS：先恢复运动，再拟合外观
+
+**完整题名：** *MOSAIC-GS: Monocular Scene Reconstruction via Advanced Initialization for Complex Dynamic Environments*。
+
+- **方法：** 将深度、相机、分割和 BootsTAPIR / CoTracker 等轨迹用于初始化；用实例级刚性约束细化运动，给动态高斯分配 Poly-Fourier 时间曲线，再进行渲染优化。[论文](https://arxiv.org/html/2601.05368v1)
+- **价值：** 强调运动初始化的重要性，是“现成 TAP 能怎样改善 4DGS”的直接例子。
+- **边界：** 输入定义仍需要相机和深度，且采用全片先验与场景优化。主要验证 NVS，本次未核到独立任意点轨迹输出的标准 TAP 评估。[CVPR 正式记录](https://openaccess.thecvf.com/content/CVPR2026/html/Morkva_MOSAIC-GS_Monocular_Scene_Reconstruction_via_Advanced_Initialization_for_Complex_Dynamic_CVPR_2026_paper.html)
+
+#### 12.4.9 MoVieS：前馈重建与三维点轨迹的直接结合
+
+**完整题名：** *MoVieS: Motion-Aware 4D Dynamic View Synthesis in One Second*。
+
+- **方法：** 从视频预测像素对齐高斯，用时间条件 motion head 预测目标时刻的三维位移及属性变化，同时支持渲染、深度与点轨迹。[方法和实验](https://arxiv.org/html/2507.10065v2)
+- **关键条件：** 输入包括每帧已知内参、外参及时间戳。真实视频可先用 MegaSaM 求相机，但这属于额外处理；不能归为无需相机的模型。
+- **跟踪证据：** 有任意像素对应的 3D 轨迹构造和 TAPVid-3D 三子集评测；训练使用几何与 3D 轨迹监督。[CVPR 正式记录](https://openaccess.thecvf.com/content/CVPR2026/html/Lin_MoVieS_Motion-Aware_4D_Dynamic_View_Synthesis_in_One_Second_CVPR_2026_paper.html)
+- **限制：** 对一个片段联合前馈，不等于逐帧因果推理；长序列、高分辨率与外部相机成本应计入部署评估。[官方代码](https://github.com/chenguolin/MoVieS)
+
+#### 12.4.10 C4G：从逐像素高斯转向紧凑的全局运动表示
+
+**完整题名：** *Learning Global Motion with Compact Gaussians for Feed-Forward 4D Reconstruction*；2026-05 预印本。
+
+- **方法：** 时间条件的可学习 Gaussian query tokens 汇聚整段上下文，再解码动态高斯；模型输入为视频和时间戳，无需提供相机位姿。训练仍使用几何、相机及 CowTracker 轨迹等监督。[论文](https://arxiv.org/html/2605.31595v1)
+- **两种跟踪用途：** 一种将查询关联到最近高斯并传播其中心，在 ADT / DriveTrack 做 2D tracking；另一种把视觉特征提升到 4D 高斯场，通过渲染特征进行匹配。二者应分别看待。[项目](https://cvlab-kaist.github.io/C4G/)
+- **价值与限制：** 为第 5 节讨论的“减少逐像素高斯冗余”增加动态场景实例。最近高斯关联会引入查询偏差；全时间上下文不是因果流式。论文另有扩散式渲染增强和 NVS 测试时相机对齐，整体耗时应与基础高斯前馈分别报告。
+
+#### 12.4.11 Video-GMAE：用动态高斯重建视频，学习点对应
+
+**完整题名：** *Tracking by Predicting 3-D Gaussians Over Time*；2025-12 首次公开，项目标注 CVPR 2026 Highlight。[论文记录](https://arxiv.org/abs/2512.22489)、[项目](https://videogmae.org/)
+
+- **方法：** 掩码视频编码器预测首帧高斯和后续残差，用视频重建进行自监督预训练。零样本时把高斯投影位移渲染成 flow，结合固定的 top-k 高斯锚点传播 2D 查询点；官方零样本路径为前馈及解析传播，无逐视频梯度优化。
+- **监督口径：** 预训练不用轨迹标签；冻结编码器后的监督读出、完整微调使用 Kubric 标签，零样本提取器的超参数也依据训练集表现选择。不能把所有表格都归为无监督结果。[正文 §4–7](https://arxiv.org/html/2512.22489v2)
+- **三维边界：** 使用固定虚拟相机建模，论文明确不能恢复度量三维。其贡献是对应表征与 2D tracking，不能据“3-D Gaussians”推断已实现真实世界尺度的 TAP3D。
+- **评测注意：** 正文比较注明 stride=5；本次所见[官方零样本评测实现](https://github.com/tekotan/video-gmae/blob/master/vidgmae/models/zeroshot_gmae.py)还将指标截取到输入片段的前 5 帧。该观察限定于所核查代码路径，不能推定每个论文数字都由此产生；复现时须对齐查询采样、片段长度和计分范围，不能直接拿数字做完整长视频排名。
+
+### 12.5 补充工作：相关，但与标准 TAP 的距离不同
+
+下面这些工作有助于理解技术来源和应用边界。它们不都提出任意点跟踪器。
+
+| 工作 | 与 GS + tracking 的具体联系 | 应如何解读 |
+|---|---|---|
+| **DynMF**，2023 / ECCV 2024；*Neural Motion Factorization for Real-time Dynamic View Synthesis with 3D Gaussian Splatting* | 共享运动基与每高斯固定系数给出连续轨迹，项目展示 trajectory tracking | 主要研究动态 NVS，是运动表示背景；渲染时运行小网络不等于跨场景前馈重建。[论文](https://arxiv.org/abs/2312.00112)、[项目](https://agelosk.github.io/dynmf/) |
+| **GFlow**，2024 / AAAI 2025；*Recovering 4D World from Monocular Video* | MASt3R 几何与 UniMatch 光流支撑相机 / 高斯优化，并展示高斯点轨迹 | 顺序逐帧优化，主要定量为重建与相机指标；未见标准 TAP 定量。预处理因果性需另查。[论文](https://arxiv.org/html/2405.18426)、[官方代码](https://github.com/littlepure2333/GFlow) |
+| **MoDGS**，2024 / ICLR 2025；*Dynamic Gaussian Splatting from Casually-captured Monocular Videos with Depth Priors* | 已知相机、深度与 RAFT 成对光流构造三维对应，初始化可逆变形场及高斯 | 属于对应先验辅助重建；不是 CoTracker 长轨迹方法，主要验证 NVS。[论文](https://arxiv.org/html/2406.00434)、[项目](https://modgs.github.io/) |
+| **SplineGS**，2024 / CVPR 2025；*Robust Motion-Adaptive Spline for Real-Time Dynamic 3D Gaussians from Monocular Video* | CoTracker 轨迹和 UniDepth 初始化 Hermite 样条运动，再优化高斯、曲线与相机 | 补充材料明确将 motion tracking 展示与输入视频中的 2D 对应任务区分；不能把轨迹可视化当作 TAP 验证。“实时”指渲染。[论文](https://openaccess.thecvf.com/content/CVPR2025/papers/Park_SplineGS_Robust_Motion-Adaptive_Spline_for_Real-Time_Dynamic_3D_Gaussians_from_CVPR_2025_paper.pdf)、[补充 §A/§D](https://openaccess.thecvf.com/content/CVPR2025/supplemental/Park_SplineGS_Robust_Motion-Adaptive_CVPR_2025_supplemental.pdf) |
+| **GS-DiT / D3D-PT**，CVPR 2025；*Advancing Video Generation with Dynamic 3D Gaussian Fields through Efficient Dense 3D Point Tracking* | D3D-PT 预测稠密 $(u,v,d)$ 与可见性；轨迹形成动态高斯场，渲染结果用于可控视频生成 | D3D-PT 的跟踪评测与 GS-DiT 的生成评测分属不同模块；TAPVid-3D 使用 minival。不能把 tracker 成绩归因于高斯重建，也不能把整个扩散生成管线叫一次前馈。[正式论文](https://openaccess.thecvf.com/content/CVPR2025/papers/Bian_GS-DiT_Advancing_Video_Generation_with_Dynamic_3D_Gaussian_Fields_through_CVPR_2025_paper.pdf)、[项目](https://wkbian.github.io/Projects/GS-DiT/) |
+| **DreamScene4D**，NeurIPS 2024；*Dynamic Multi-Object Scene Generation from Monocular Videos* | 将单目多物体视频提升成动态高斯；项目展示将高斯轨迹投影得到 2D tracking | 属于生成式视频到 4D；轨迹展示说明表示可用于跟踪，生成补全的合理性不等于不可见真实运动的准确性。[项目与论文入口](https://dreamscene4d.github.io/) |
+| **TrackGS**，2025 / AAAI 2026；*Optimizing COLMAP-Free 3D Gaussian Splatting with Global Track Constraints* | 静态多视图特征链构造 track Gaussians，用重投影 / 反投影约束联合优化相机和场景 | “track”是静态特征观测链，适合与前文 pose-free GS 对照；不是动态 TAP。[论文](https://arxiv.org/abs/2502.19800)、[AAAI 正式记录](https://ojs.aaai.org/index.php/AAAI/article/view/37851) |
+| **ProDyG**，NeurIPS 2025；*Progressive Dynamic Scene Reconstruction via Gaussian Splatting from Monocular Videos* | 用提升到三维的像素轨迹初始化渐进运动骨架，结合 SLAM 和高斯重建 | 主要 tracking 表是相机 ATE；未核到通用 TAP 评测。不能将相机结果列入点跟踪排行榜。[论文](https://arxiv.org/html/2509.17864v1)、[官方代码](https://github.com/cs-vision/ProDyG) |
+
+**另外两类建议保留为对照：**
+
+- **几何 + tracking，但不用 GS 的方法。** [C4D: 4D Made from 3D through Dual Correspondences（ICCV 2025）](https://openaccess.thecvf.com/content/ICCV2025/html/Wang_C4D_4D_Made_from_3D_through_Dual_Correspondences_ICCV_2025_paper.html)结合深度、相机、点轨迹和优化，输出 pointmaps，不应列为高斯方法；[TAPIP3D（NeurIPS 2025）](https://tapip3d.github.io/)可作为持久三维几何跟踪的相邻基线。
+- **动态 GS 的系统性分析。** [Monocular Dynamic Gaussian Splatting: Fast, Brittle, and Scene Complexity Rules](https://arxiv.org/html/2412.04457v2)研究表示、优化和场景复杂度；早期题名为 *Monocular Dynamic Gaussian Splatting is Fast and Brittle but Smooth Motion Helps*。它适合帮助理解重建失败原因，不能当作新的 TAP 方法。[初版记录](https://arxiv.org/abs/2412.04457v1)
+
+**代码入口不等于实现已发布。** 截至本次核查，[DynMF](https://github.com/agelosk/dynmf)、[GS-DiT](https://github.com/wkbian/GS-DiT)和 [TrackGS](https://shidongbo97.github.io/TrackGS/)仍出现代码待发布说明或仅展示资料；本节不保证其已有可运行的完整算法。其他仓库也未在本次综述中实际安装运行。
+
+### 12.6 从方法层面看：轨迹如何约束高斯，高斯又如何输出轨迹
+
+以下公式用于解释共性，**不是宣称所有论文采用同一公式**。
+
+#### 12.6.1 轨迹约束动态场景
+
+设二维轨迹观测为 $\hat u_{q,t}$，模型中的对应三维位置为 $X_q(t)$，世界到相机的旋转和平移分别为 $R_{cw,t}$、$\mathbf t_{cw,t}$，则可用重投影约束：
+
+$$
+\mathcal L_{\mathrm{track}}
+=\sum_{q,t}m_{q,t}\,
+\rho\!\left(
+\pi\!\left(K_t(R_{cw,t}X_q(t)+\mathbf t_{cw,t})\right)-\hat u_{q,t}
+\right).
+$$
+
+这里 $m_{q,t}$ 表示有效性或置信度，$\rho$ 是鲁棒误差；深度、渲染、局部刚性等项提供补充约束。直观上，**图像损失要求“画得像”，轨迹损失要求“这个点应当移动到这里”。**
+
+两者仍可能冲突：错误的二维轨迹会强迫三维形变配合它；错误的相机或深度又能产生看似正确的重投影。因此，轨迹提供了额外约束，但单靠二维吻合不能唯一确定三维运动。SoM 的运动基、MoSca 的骨架、SplineGS 的曲线，分别限制了允许的运动形式。
+
+#### 12.6.2 查询点如何绑定到高斯
+
+常见思路包括：
+
+1. **单高斯及局部坐标。** 查询点在 $t_q$ 与某个高斯建立关联，保存相对偏移；后续跟随该高斯平移和旋转。对应 Dynamic 3D Gaussians 一类显式持久身份思路。
+2. **查询帧的混合权重。** 根据查询像素在 $t_q$ 的渲染贡献，为一组高斯确定权重，再组合它们在目标时刻的位置。例如，简化写成
+
+   $$
+   X_q(t)=\sum_i \bar w_i(q,t_q)\mu_i(t),
+   \qquad \sum_i\bar w_i(q,t_q)=1.
+   $$
+
+   这里强调的是保持查询关联；具体论文可能使用未归一化渲染、局部偏移或其他修正。
+3. **运动骨架或形变映射。** 先将查询点关联到局部节点 / canonical 空间，再随运动场传播，而非直接把查询点等同于高斯中心。
+4. **渲染位移或特征。** 例如 Video-GMAE 的位移场加锚点、C4G 的特征场匹配。此时高斯参与构建跟踪所需信息，最终输出器并不只是“读取某个中心”。
+
+#### 12.6.3 为什么“同一个高斯”未必等于“同一个物理点”
+
+- **高斯是有体积的渲染基元。** 其中心未必落在真实表面；一个大高斯可能覆盖多个纹理点。
+- **混合会跨层。** 前景边缘的像素可能同时受前后两个深度层影响，位置加权平均可能落在空中。
+- **增密 / 裁剪改变身份。** 分裂后的高斯应怎样继承旧轨迹，删除高斯后怎样保留查询点，不能仅靠数组索引解决。
+- **可见性不等于 opacity。** 高斯自身不透明不代表目标点在某帧可见；还要考虑遮挡、深度排序及是否移出画面。
+- **外观拟合有替代路径。** 优化器可能通过改颜色、透明度或形状降低渲染误差，而没有恢复真实运动。
+
+这些因素解释了为什么 NVS 与 TAP 应分别评价，也说明“持久 ID + 可渲染”仍有研究空间。
+
+### 12.7 怎样公平比较：避免把不同输入与指标放进一张排行榜
+
+#### 12.7.1 先记录输入和计算条件
+
+| 必须记录的字段 | 需要区分的设置 |
+|---|---|
+| 相机数量与标定 | 同步多相机 / 单目；给定 / 预测内参；给定 / 优化外参 |
+| 深度来源 | 传感器 / 单目预测 / 多视图估计；是否做真值尺度对齐 |
+| 轨迹先验 | 无；成对光流；TAPIR / CoTracker 等长轨迹；具体模型版本 |
+| 使用先验的阶段 | 仅训练监督，还是测试视频也需运行教师 tracker |
+| 时间可用性 | 整段视频；双向窗口；允许未来帧的数量；严格因果 |
+| 场景适配 | 一次预测；每帧更新；全视频优化；是否回放历史 |
+| 查询与输出 | 首帧或任意帧查询；2D / 相机系 3D / 世界系 3D；可见性 |
+| 资源 | 先验提取、重建 / 更新、查询、渲染四阶段的时间与显存 |
+
+**给定相机的 MoVieS、单目估计相机的 DynOMo、多相机的 Dynamic 3D Gaussians、LiDAR 辅助设置的 MoSca，不能只按一个平均误差得出无条件优劣。**
+
+#### 12.7.2 指标分别回答什么问题
+
+- **2D TAP：** AJ 综合位置和可见性；$\delta_{\mathrm{avg}}$ 反映可见点落在距离阈值内的比例；OA 衡量遮挡 / 可见性判断。必须保留数据集、分辨率、查询协议、序列范围及评测脚本版本。[TAP-Vid 论文](https://arxiv.org/abs/2211.03726)、[官方评测实现](https://github.com/google-deepmind/tapnet)
+- **3D tracking：** 位置误差、阈值精度、AJ3D 等需要说明坐标系及尺度处理。TAPVid-3D 的标准轨迹位于**各时刻相机坐标系**，单位为米；世界系预测应转换到同一坐标定义。[官方数据格式](https://github.com/google-deepmind/tapnet/tree/main/tapnet/tapvid3d#data-format)
+- **协议不能合并：** TAPVid-3D 的全局尺度对齐与逐轨迹对齐并非同一条件；minival 与完整集也不同。DyCheck PCK-T、iPhone EPE 与 TAPVid-3D AJ3D不能直接互换。[TAPVid-3D 论文](https://arxiv.org/html/2407.05921v2)、[DyCheck 对应关系接口](https://github.com/KAIR-BAIR/dycheck#2-correspondence-metrics)
+- **渲染与相机：** PSNR / SSIM / LPIPS 回答图像质量，ATE / RPE 回答相机运动；它们可以作为附加指标，不能代替物质点轨迹精度。
+
+#### 12.7.3 本方向尤其需要注意的评测陷阱
+
+1. **伪真值来源。** TAPVid-3D 的 Panoptic Studio 子集使用预训练 Dynamic 3D Gaussians 重建生成轨迹伪真值：把查询关联到高斯并跟随其运动，可见性来自渲染深度。它不是独立传感器逐点直接测得的三维真值。[原论文 §3.3](https://arxiv.org/html/2407.05921v2#S3.SS3)
+
+   **综述判断：** 评价高斯跟踪器时，应同时看其他标注来源的数据，避免单一表示生成的伪真值成为唯一依据。
+2. **拟合教师不等于独立验证。** 使用 TAPIR / CoTracker 预测作为测试时优化输入是允许的方法设计，但应报告原始教师结果，以及优化输出相对独立真值的提升；教师轨迹一致性只能说明拟合程度。
+3. **oracle 与正常查询必须分开。** 不能用真值在多个候选高斯中挑选最优轨迹后，再当作普通查询算法的成绩。DynOMo⋆ 是需要明确标注的例子。
+4. **查询采样与计分长度都影响任务。** Video-GMAE 的代码提示了这种核查的必要性；“用了 TAP-Vid 指标”并不自动意味着完整长视频、完全一致的评测协议。
+5. **长遮挡与新进入内容要单独看。** 平均指标之外，建议报告遮挡前后重识别、长时间离开画面后返回、细小物体及大相机运动的结果。
+6. **速度包含整个系统。** tracker、深度、分割和相机预处理都计入端到端延迟；训练后的渲染 FPS 不代表重建或跟踪 FPS。
+
+### 12.8 对前馈 4DGS、SLAM 和研究选题的启发
+
+以下为综合研究判断，**不是已完成新颖性论证的选题，也不是保证优于已有方法的结论**。
+
+#### 12.8.1 值得优先研究的五个问题
+
+| 问题 | 可探索的做法 | 验证时最关键的证据 |
+|---|---|---|
+| 高斯 ID 与物理点 ID 不一致 | 分离用于渲染的高斯与用于身份保持的锚点；设计分裂 / 合并的继承关系 | 长遮挡、增密和新物体进入后，轨迹是否仍连续正确 |
+| 前馈结果跨窗口漂移 | 用前馈模型初始化动态地图，再以历史锚点约束局部更新 | 统一世界坐标中的累计误差；窗口交界和回环后的点身份 |
+| 教师轨迹有误差 | 显式估计置信度，联合深度、几何与多视图可见性筛选约束 | 独立真值下优于原始 tracker，而非只降低教师拟合损失 |
+| 重建与跟踪目标存在取舍 | 同时监督渲染、表面几何、轨迹与可见性，控制共享和独立参数 | 同条件下同时报告 NVS、TAP 与几何；展示取舍曲线 |
+| 在线状态随视频增长 | 压缩运动基 / 骨架，保留可追溯查询关联，限制历史回放 | 状态大小、最坏更新延迟、未来帧依赖与长期身份误差 |
+
+#### 12.8.2 一个具体、可检验的研究起点
+
+**建议：以“前馈动态高斯初始化 + 持久点锚点 + 有界窗口校正”为研究假设。**
+
+- **初始化：** 参考 MoVieS 的像素运动预测，或 C4G 的紧凑动态表示；明确相机是否已知。
+- **关联：** 为用户查询点维护独立锚点及局部坐标，使渲染高斯增密 / 裁剪不会直接删除轨迹身份。
+- **更新：** 只利用声明范围内的帧和先验更新几何、相机与运动；若回放历史，应计入资源并说明延迟。
+- **比较：** 与相同输入条件的直接 tracker、单纯高斯传播、带锚点的联合更新做对照；主结果使用独立轨迹真值。
+- **消融：** 比较最近高斯、查询帧混合权重、显式锚点三种查询方式；检查提升来自身份关联还是更多计算 / 更强先验。
+
+这条建议连接了前文的前馈重建与本节的跟踪问题。它的难点不是再加一个轨迹损失，而是同时处理**坐标一致性、表面身份、遮挡和表示更新**。
+
+### 12.9 阅读顺序与可复用的论文记录模板
+
+#### 12.9.1 按问题选择阅读路线
+
+| 主要兴趣 | 建议顺序 |
+|---|---|
+| 理解 GS 为什么能做点跟踪 | Dynamic 3D Gaussians → DynOMo → Shape of Motion |
+| 用现成 TAP 改善动态重建 | Shape of Motion → MoSca → SplineGS / 4D-Fly → TrackerSplat / MOSAIC-GS |
+| 前馈 4DGS + tracking | MoVieS → C4G → Video-GMAE；三者分别看联合三维预测、紧凑表示、自监督对应学习 |
+| 在线与长视频 | DynOMo → 4D-Fly → MotionScale；逐一检查先验和历史优化的因果性 |
+| 视频生成与运动控制 | D3D-PT / GS-DiT → DreamScene4D |
+| SLAM / 未知相机 | DynOMo → MoSca；以 ProDyG、TrackGS 为相邻任务对照 |
+
+如果只精读 **6 篇**：**Dynamic 3D Gaussians、Shape of Motion、MoSca、DynOMo、MoVieS、Video-GMAE**。之后按对紧凑表示或大规模优化的兴趣补 C4G、MotionScale；这只是覆盖不同技术思路的阅读建议，不是效果排名。
+
+#### 12.9.2 后续增补每篇论文时记录这些字段
+
+- **论文信息：** 完整题名、首次公开日期、正式发表、所读版本、论文 / 项目 / 代码链接。
+- **任务：** NVS、TAP2D、TAP3D、相机 tracking、生成；分别列出实际验证的输出。
+- **输入：** RGB / RGB-D、相机数量、内外参、深度、掩码、外部 tracker 与来源。
+- **表示：** 高斯组织方式、运动模型、时间范围、增密 / 裁剪及身份继承。
+- **查询：** 任意时刻是否可查询，像素怎样关联三维点，可见性怎样计算。
+- **计算：** 前馈 / 场景优化 / 混合；因果性、前置模型、历史回放与完整耗时。
+- **证据：** 数据划分、真值来源、尺度与坐标协议、跟踪指标、NVS 指标、失败案例。
+- **判断：** 相比输入 tracker 或已有动态表示，实际增加了什么能力；哪些结论仍缺实验。
+
+**本节总结：** 3DGS / 4DGS 与 TAP 的结合，已经从“动态高斯附带轨迹”发展到“利用轨迹重建可渲染场景”，并进一步走向“跨场景学习几何、运动与点对应”。判断贡献时应沿着**输入轨迹 → 动态表示 → 查询关联 → 输出轨迹 → 独立评测**逐步检查；对于前馈与在线系统，还要把相机条件、未来信息和完整计算成本写清。
 
 ---
 
