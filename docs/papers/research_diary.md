@@ -1608,3 +1608,16 @@ check 一下streamdpm的长序列测评代码。
   对于非刚体运动、表面拉伸：是否有更好的建模方式？微分几何？
 
   对重复物体、快速运动：是否可以引入 sam 等实例分割模型的特征？
+
+- [ARROW](https://ifradlin.github.io/arrow/?cap=mv-track)
+
+  基于 Depth Anything 3 ，可以输入无序的图像集，将基于 timestamp 生成的token改成了基于图像内容生成的身份token（以及DA3的camera token也作为身份token）。
+
+
+### 1012
+
+- [Point4Cast](https://openaccess.thecvf.com/content/CVPR2026/papers/Liu_Point4Cast_Streaming_Dynamic_Scene_Reconstruction_and_Forecasting_CVPR_2026_paper.pdf)
+
+  查询源帧在未来某个时刻的点云。用的流式隐状态，而非显示token当作记忆。可以预测下1-10帧的内容。
+
+  没有开源。考虑可以做一个预测-观测-监督的回环？
