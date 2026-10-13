@@ -1621,3 +1621,40 @@ check 一下streamdpm的长序列测评代码。
   查询源帧在未来某个时刻的点云。用的流式隐状态，而非显示token当作记忆。可以预测下1-10帧的内容。
 
   没有开源。考虑可以做一个预测-观测-监督的回环？
+
+
+### 1013
+
+- [Shape of Motion](https://shape-of-motion.github.io/)
+
+  从动态场景视频构建4d高斯，带tracking。但是视角仍局限于源相机周围，从其他视角观看的几何、渲染都不对。
+
+  2025年iccv的highlight，不知道后面有没有新的工作。
+
+关于当前StreamDPM：
+
+最直接能改进的点：增大训练数据；更准的真值/伪真值
+
+像 track-on-r 那样，用多个系统提供真值，用verifier选一个更准的真值？
+
+当前可用的伪真值备选：
+
+- 4RC. 4d重建+tracking
+
+- OmniX. 4d重建+tracking
+
+- Point4D. 4d重建+tracking，长序列
+
+- V-DPM. 4d重建+tracking
+
+- MegaSaM. 4d重建
+
+- Lingbot-map. 4d重建
+
+- VGGT-Omega. 4d重建
+
+TODO:
+
+- [ ] 测以上方法的定性+定量结果，在point odyssey长序列上测
+
+- [ ] 测它们对于 disordered 的输入的表现。
