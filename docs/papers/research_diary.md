@@ -1639,13 +1639,19 @@ check 一下streamdpm的长序列测评代码。
 
 当前可用的伪真值备选：
 
+- ARROW. 4d重建+tracking
+
 - 4RC. 4d重建+tracking
 
 - OmniX. 4d重建+tracking
 
+- Trace Anything. 4d重建+tracking
+
 - Point4D. 4d重建+tracking，长序列
 
 - V-DPM. 4d重建+tracking
+
+- TAPIP3D. 4d重建+tracking
 
 - MegaSaM. 4d重建
 
@@ -1653,8 +1659,29 @@ check 一下streamdpm的长序列测评代码。
 
 - VGGT-Omega. 4d重建
 
+- MERG3R. 4d重建，支持无需输入。
+
+- LASER. 4d重建
+
 TODO:
 
-- [ ] 测以上方法的定性+定量结果，在point odyssey长序列上测
+- [x] 测以上方法的定性+定量结果，在point odyssey长序列上测。
+
+- [ ] 除了测sliding window形式之外，还测对于 large stride 的结果。
+
+- [ ] 如果把这些离线的网络，用在streamdpm同款的在线系统上，精度表现如何、速度表现如何
 
 - [ ] 测它们对于 disordered 的输入的表现。
+
+难点：
+
+- 各个子专家占用显存很大。
+
+如果不用已有的专家系统，那就选选训练数据集。
+
+同时考虑一下 一个训练样本用多长的序列。
+
+
+### 1014
+
+灵光一现：用任意的 (x,y,z,t) 对场景进行查询，把 四维时空 和 当下的动态场景 编码进一个连续的隐空间，此时的 (x,y,z) 并不局限于任意帧的相机视角， t 也不局限于任意帧的时间戳。
