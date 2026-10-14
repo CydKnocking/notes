@@ -1,0 +1,3625 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../china3dv_2026/">
+      
+      
+        <link rel="next" href="../../datasets/TUM_RGBD/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../_assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>CVPR 2026 与 ECCV 2026：代表论文梳理与科研趋势 - Knocking's notebook</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="brown" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cvpr-2026-eccv-2026" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Knocking&#39;s notebook" class="md-header__button md-logo" aria-label="Knocking's notebook" data-md-component="logo">
+      
+  <img src="../../_assets/icon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Knocking's notebook
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              CVPR 2026 与 ECCV 2026：代表论文梳理与科研趋势
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/CydKnocking/notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Knocking&#39;s notebook" class="md-nav__button md-logo" aria-label="Knocking's notebook" data-md-component="logo">
+      
+  <img src="../../_assets/icon.png" alt="logo">
+
+    </a>
+    Knocking's notebook
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/CydKnocking/notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Knocking's personal notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about_this_notebook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About this notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Vis Info Processing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    3D Vis Info Processing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/00_Introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    00 Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/01_Part%20One%20Acquisition%20of%203D%20Data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 Part One Acquisition of 3D Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/02_Part%20Two%20Integration%20of%203D%20data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 Part Two Integration of 3D data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/03_Part%20Three%20Descriptions%20of%203D%20Objects%20and%20Scenes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 Part Three Descriptions of 3D Objects and Scenes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/Full%20notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ML
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ML
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ML/great_links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Great links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ML/reinforcement_learning_for_streaming_vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    从零理解强化学习：面向流式重建、SLAM 与在线感知
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Web
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Web/clash/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clash
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Web/domains/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Domains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Conference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../china3dv_2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    China3dv 2026
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CVPR 2026 与 ECCV 2026：代表论文梳理与科研趋势
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CVPR 2026 与 ECCV 2026：代表论文梳理与科研趋势
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 先把握整体变化
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 会议与论文公开情况
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 按研究问题梳理代表论文
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 按研究问题梳理代表论文">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 多模态推理：决定看什么、保留什么、如何推理
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 理解与生成：表示统一、细节保留、运动控制与低延迟
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-cvpr-4d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 CVPR 的三维与 4D 样本：统一表示、动态重建与系统约束
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-eccv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 ECCV 的长序列几何样本：记忆、状态估计与全局校正
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 视觉到行动，以及长视频中的可检索记忆
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 基础表征、监督机制与资源效率
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#37" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.7 数据与评测：从总分转向可定位的失效机制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#38" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.8 真实条件、垂直领域与计算成像
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 把不同方向串起来：哪些判断最值得保留
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 把不同方向串起来：哪些判断最值得保留">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 “统一”正在发生于表示、状态和任务接口
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 扩大有效信息与减少无效计算同时存在
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 学习先验与几何估计结构继续结合
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 数据质量与评价协议本身成为研究贡献
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 生成、感知与行动需要各自的验证闭环
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-slam-4d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 面向 SLAM、三维与流式 4D 的选题建议
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 面向 SLAM、三维与流式 4D 的选题建议">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 对有限训练预算，先定位失败再决定是否训练
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 建议统一报告的实验口径
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 推荐阅读顺序与使用方式
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 推荐阅读顺序与使用方式">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 快速建立全局视野：四组对照阅读
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-slam-streaming-4d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 面向 SLAM / streaming 4D 的深入阅读
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 检索口径与后续维护
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Datasets
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Datasets
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/TUM_RGBD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TUM RGBD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/TartanAir/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TartanAir
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/proxy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proxy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Github
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Github
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../github/Deploy%20repo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Create a new github repository
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../github/verify%20domain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verify domain
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux and ubuntu
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Linux and ubuntu
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/chmod/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chmod
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/chown/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chown
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/cmatrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cmatrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/crontab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crontab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/dns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/softlink/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Softlink
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/ssh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ssh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/tmux/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/zsh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zsh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Math
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Math
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/great_links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Great links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/quaternion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quaternion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Papers
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Papers
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/3dgs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3dgs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/4d_tracking_submission_directions_18d_2mo_2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    单目流式 4D 重建与点追踪：18 天 / 两个月投稿决策与实验方案
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/4drecon_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4drecon tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/croco_and_crocov2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CroCo 与 CroCo v2：从跨视角补全到通用几何视觉骨干
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/discussions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Discussions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/feedforward_3dgs_survey_2024_2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3DGS / 4DGS 研究综述：前馈式重建与任意点跟踪
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/long_sequence_3d_foundation_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    三维视觉基础模型的长序列、低开销与新场景适配
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/pano_3drecon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pano 3drecon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/panoramic_vo_reconstruction_survey/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    全景相机 Visual Odometry 与场景重建：精选文献简报
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/paper_notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paper notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/point_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Point tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/research_diary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research diary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/streaming_4d_tracking_research_2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    动态长序列的 4D 重建与 Point Tracking：文献调研与选题判断
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../papers/vggt_mae/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VGGT 类几何基础模型 × MAE / Masked Modeling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Python
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/rosbag/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rosbag
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/send_email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Send email
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/torch_tips/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Torch tips
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/tqdm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tqdm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 先把握整体变化
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 会议与论文公开情况
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 按研究问题梳理代表论文
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 按研究问题梳理代表论文">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 多模态推理：决定看什么、保留什么、如何推理
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 理解与生成：表示统一、细节保留、运动控制与低延迟
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-cvpr-4d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 CVPR 的三维与 4D 样本：统一表示、动态重建与系统约束
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-eccv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 ECCV 的长序列几何样本：记忆、状态估计与全局校正
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 视觉到行动，以及长视频中的可检索记忆
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 基础表征、监督机制与资源效率
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#37" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.7 数据与评测：从总分转向可定位的失效机制
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#38" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.8 真实条件、垂直领域与计算成像
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 把不同方向串起来：哪些判断最值得保留
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 把不同方向串起来：哪些判断最值得保留">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 “统一”正在发生于表示、状态和任务接口
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 扩大有效信息与减少无效计算同时存在
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 学习先验与几何估计结构继续结合
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 数据质量与评价协议本身成为研究贡献
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 生成、感知与行动需要各自的验证闭环
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-slam-4d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 面向 SLAM、三维与流式 4D 的选题建议
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. 面向 SLAM、三维与流式 4D 的选题建议">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 对有限训练预算，先定位失败再决定是否训练
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 建议统一报告的实验口径
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 推荐阅读顺序与使用方式
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 推荐阅读顺序与使用方式">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 快速建立全局视野：四组对照阅读
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-slam-streaming-4d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 面向 SLAM / streaming 4D 的深入阅读
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 检索口径与后续维护
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="cvpr-2026-eccv-2026">CVPR 2026 与 ECCV 2026：代表论文梳理与科研趋势</h1>
+<blockquote>
+<p>检索截止：<strong>2026 年 9 月 28 日</strong>。本文面向科研选题，兼顾计算机视觉全局与三维视觉、SLAM、流式 4D 的具体问题。</p>
+<p>**范围与方法：**以两届主会的正式论文页面、官方录用记录和作者原文为依据，按研究问题选择代表论文。主要阅读摘要与方法说明，重点几何论文补查执行方式和局限；不是数千篇论文的逐篇全文综述，也不是完整主题计量分析。未运行模型或独立复现论文结果。表中的“阅读边界”主要是本文提出的核查问题，只有明确归于作者的内容才表示论文已报告的局限。</p>
+</blockquote>
+<h2 id="1">1. 先把握整体变化</h2>
+<p>**从本次核实的论文样本看，2026 年视觉研究的一条共同主线是：在基础模型已有较强能力的前提下，让它们更准确地使用视觉证据、更持久地维护世界状态，并在可承担的计算预算内完成任务。**这体现在推理、生成、三维、具身和评测等多个方向；不代表传统识别、分割或计算成像已经失去价值。</p>
+<p>可以用下面十个问题组织阅读。这里的“趋势”是跨论文的定性归纳，不是论文数量增长率或主题热度排名；具体证据见第 3 节。</p>
+<table>
+<thead>
+<tr>
+<th>研究主线</th>
+<th>论文集中解决的问题</th>
+<th>阅读时应追问</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>视觉参与推理</td>
+<td>中间视觉表示、主动查看局部区域、选择有效证据</td>
+<td>输出正确究竟来自图像，还是语言先验？</td>
+</tr>
+<tr>
+<td>理解与生成的统一</td>
+<td>共享语义表示，同时保留生成所需的细节</td>
+<td>任务之间是否互相伤害？统一带来什么可测收益？</td>
+</tr>
+<tr>
+<td>可控且高效的生成</td>
+<td>一步编辑、少步视频、轨迹控制、低成本训练</td>
+<td>画质、控制误差、延迟是否同时改善？</td>
+</tr>
+<tr>
+<td>几何基础模型扩展</td>
+<td>静态与动态场景、多任务几何、规模化数据</td>
+<td>几何精度、训练成本和域外泛化分别如何变化？</td>
+</tr>
+<tr>
+<td>4D 与长期状态</td>
+<td>相机、几何、物体运动、点身份与历史记忆</td>
+<td>长视频能力是否包含真正的长期一致性？</td>
+</tr>
+<tr>
+<td>SLAM 与学习模型结合</td>
+<td>地图维护、历史压缩、状态更新、全局校正</td>
+<td>是否因果？有没有回环？总记忆如何随时长增长？</td>
+</tr>
+<tr>
+<td>视觉到行动</td>
+<td>游戏、网页和机器人中的感知—决策—反馈</td>
+<td>离线预测准确率能否转化为闭环任务成功？</td>
+</tr>
+<tr>
+<td>数据与监督机制</td>
+<td>合成物理数据、真实对齐、软标签与奖励设计</td>
+<td>增益来自方法，还是额外数据、教师和计算量？</td>
+</tr>
+<tr>
+<td>诊断性评测</td>
+<td>数值物理、多图幻觉、真实恶劣条件、动态一致性</td>
+<td>基准能否定位失败原因，而非只给一个总分？</td>
+</tr>
+<tr>
+<td>领域与传感器约束</td>
+<td>医疗、遥感、事件相机、物理成像</td>
+<td>是否利用了该领域独有的信息与约束？</td>
+</tr>
+</tbody>
+</table>
+<p>对已有 SLAM / 三维背景的研究者，最值得优先跟进的是 <strong>几何基础模型 + 长期状态维护 + 可靠评测</strong> 的交叉区域。选题应进一步收窄成某个可测的失效机制，例如遮挡后的身份恢复、动态运动与相机漂移混淆、有限记忆下的历史证据丢失，而不是只组合“4D、streaming、world model”等名称。第 5 节给出可验证的研究假设。</p>
+<h2 id="2">2. 会议与论文公开情况</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>CVPR 2026</th>
+<th>ECCV 2026</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>举办时间与地点</td>
+<td>6 月 3–7 日，美国丹佛；主会 6 月 5–7 日</td>
+<td>9 月 8–12 日，瑞典 Malmö；主会 9 月 10–12 日</td>
+</tr>
+<tr>
+<td>可核实的规模</td>
+<td>官方新闻：16,092 篇投稿，4,089 篇录用</td>
+<td>Springer 论文集介绍：10,473 篇投稿，收入 2,834 篇论文</td>
+</tr>
+<tr>
+<td>根据上述数字计算</td>
+<td>约 25.41%</td>
+<td>约 27.06%</td>
+</tr>
+<tr>
+<td>主要论文入口</td>
+<td>CVF Open Access 主会论文库</td>
+<td>官方录用列表、主会视频列表、Springer LNCS 论文集</td>
+</tr>
+<tr>
+<td>本文处理口径</td>
+<td>使用 <code>CVPR2026</code> 主会记录；不混入 <code>CVPR2026W</code> 或 <code>CVPR2026F</code></td>
+<td>官方录用列表仍注明出版检查状态；能找到正式章节时优先引用正式章节</td>
+</tr>
+</tbody>
+</table>
+<p>来源：<a href="https://cvpr.thecvf.com/Conferences/2026/News/Best_Papers">CVPR 官方新闻</a>、<a href="https://cvpr.thecvf.com/Conferences/2026/TentativeSchedule">CVPR 日程</a>、<a href="https://openaccess.thecvf.com/CVPR2026">CVF 论文库</a>、<a href="https://eccv.ecva.net/Conferences/2026">ECCV 官网</a>、<a href="https://eccv.ecva.net/Conferences/2026/AcceptedPapers">ECCV 录用列表</a>、<a href="https://link.springer.com/book/10.1007/978-3-032-37314-4">Springer 论文集介绍</a>。两列分别采用官方录用与出版方统计口径，不能据此比较会议审稿难度。</p>
+<p>CVPR 的官方奖项为阅读提供了几个入口：<strong>D4RT</strong> 获最佳论文，<strong>Native and Compact Structured Latents for 3D Generation</strong> 获最佳学生论文，<strong>NitroGen、SAM 3D</strong> 获最佳论文荣誉提名，<strong>ChordEdit</strong> 获最佳学生论文荣誉提名。它们涉及动态几何、三维表示、行动模型和高效编辑，但奖项样本很小，不宜代替整体趋势分析。<a href="https://cvpr.thecvf.com/Conferences/2026/News/Best_Papers">官方奖项公告</a></p>
+<p>**如何解读两届会议的差异：**下文比较的是它们在共同问题上的不同方法，而不是断言研究领域在 6 月到 9 月之间发生了某种整体转向。论文的投稿、预印本、修订和正式出版日期也不同；“2026 年 arXiv 论文”不能自动归为这两届会议。</p>
+<h2 id="3">3. 按研究问题梳理代表论文</h2>
+<p>下文论文名保持英文，便于检索。CVPR 链接优先指向正式 CVF 记录；ECCV 同时保留正式章节或官方身份记录与原文入口。论文摘要中的性能改善均属于作者实验结果，本文不将不同数据、硬件或评价协议下的数字直接横向排序。</p>
+<h3 id="31">3.1 多模态推理：决定看什么、保留什么、如何推理</h3>
+<p>**观察：**这组工作把视觉证据的获取和编码放进推理过程，也开始联合分配视觉与语言计算预算。它们并不支持“思维链越长就越可靠”的简单结论。</p>
+<table>
+<thead>
+<tr>
+<th>编号与会议</th>
+<th>论文</th>
+<th>核心内容</th>
+<th>阅读边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P01 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Li_Latent_Implicit_Visual_Reasoning_CVPR_2026_paper.html">Latent Implicit Visual Reasoning</a></td>
+<td>学习潜在视觉推理 token，按任务重编码图像，避免预先规定中间表示必须是裁剪、深度图或辅助图。</td>
+<td>潜在 token 的有效性不自动证明推理可解释或忠实于视觉证据。</td>
+</tr>
+<tr>
+<td>P02 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Zhou_When_Visualizing_is_the_First_Step_to_Reasoning_MIRA_a_CVPR_2026_paper.html">When Visualizing is the First Step to Reasoning: MIRA, a Benchmark for Visual Chain-of-Thought</a></td>
+<td>用 546 道需要中间视觉线索的题目，比较直接回答、文字 CoT 和视觉辅助条件。</td>
+<td>提供正确中间图像后的收益，与模型自主产生正确中间图像的能力要分开。</td>
+</tr>
+<tr>
+<td>P03 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Wang_Rethinking_Token_Reduction_for_Large_Vision-Language_Models_CVPR_2026_paper.html">Rethinking Token Reduction for Large Vision-Language Models</a></td>
+<td>MetaCompress 以可学习映射统一剪枝与合并，并采用不依赖当前问题的压缩，关注多轮问答中的信息保留。</td>
+<td>首轮无用的视觉信息可能在后续轮次变得关键；不能只评首轮准确率。</td>
+</tr>
+<tr>
+<td>P04 · ECCV</td>
+<td><a href="https://link.springer.com/chapter/10.1007/978-3-032-36969-7_1">Foveated Reasoning: Stateful, Action-Based Visual Focusing for Vision-Language Models</a></td>
+<td>从低分辨率全图出发，在推理中主动选择何时、何处补充高分辨率观察，并通过监督学习与 RL 训练。</td>
+<td>应固定视觉预算，测量漏看关键证据的情况；主动观察也有额外成本。</td>
+</tr>
+<tr>
+<td>P05 · ECCV</td>
+<td><a href="https://link.springer.com/chapter/10.1007/978-3-032-37359-5_12">Look Less, Think Faster: Joint Token-Compute Adaptation for Multimodal LLMs</a></td>
+<td>SmartVL 用视觉和语言两个控制器，按输入复杂度与预算联合分配 token 和计算。</td>
+<td>计算量估计需要以实际硬件上的端到端延迟和显存检验。</td>
+</tr>
+<tr>
+<td>P06 · ECCV</td>
+<td><a href="https://arxiv.org/abs/2505.24718">Reinforcing Video Reasoning with Focused Thinking</a></td>
+<td>TW-GRPO 对信息量较高的推理 token 加权，结合多答案软奖励和问答反转数据增强。</td>
+<td>需分离奖励、数据增强与训练预算的贡献；多答案设置的收益不自动迁移到开放问答。</td>
+</tr>
+</tbody>
+</table>
+<p>P06 的主会身份见 <a href="https://eccv.ecva.net/Conferences/2026/Videos">ECCV 官方视频目录</a>。其预印本始于 2025 年，会议归属与首次公开年份应分别记录。</p>
+<h3 id="32">3.2 理解与生成：表示统一、细节保留、运动控制与低延迟</h3>
+<p><strong>观察：</strong>“生成得好看”之外，论文开始共同优化语义遵循、局部编辑、运动控制、物理一致性和计算成本。二维生成与三维资产生成仍有不同的输入、表示和评价目标。</p>
+<table>
+<thead>
+<tr>
+<th>编号与会议</th>
+<th>论文</th>
+<th>核心内容</th>
+<th>阅读边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P07 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Lu_ChordEdit_One-Step_Low-Energy_Transport_for_Image_Editing_CVPR_2026_paper.html">ChordEdit: One-Step Low-Energy Transport for Image Editing</a></td>
+<td>将编辑写成源、目标分布间的传输，构造适合一步推断的低能量编辑场，无需额外训练或反演。</td>
+<td>编辑遵循度与非编辑区域保持应分别评价；一步推断不等于任意设备实时。</td>
+</tr>
+<tr>
+<td>P08 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Li_FlashMotion_Few-Step_Controllable_Video_Generation_with_Trajectory_Guidance_CVPR_2026_paper.html">FlashMotion: Few-Step Controllable Video Generation with Trajectory Guidance</a></td>
+<td>结合轨迹适配、生成器蒸馏和再对齐，并以 FlashBench 同时测画质和轨迹准确性。</td>
+<td>二维轨迹控制准确，不足以证明三维物理一致或可用于闭环机器人控制。</td>
+</tr>
+<tr>
+<td>P09 · ECCV</td>
+<td><a href="https://arxiv.org/abs/2603.12793">Cheers: Decoupling Patch Details from Semantic Representations Enables Unified Multimodal Comprehension and Generation</a></td>
+<td>解耦语义与局部细节；共享主干承担理解与生成，级联 flow-matching 头逐步补充细节。</td>
+<td>统一表示的价值需用任务冲突、理解精度、生成质量与训练成本共同检验。</td>
+</tr>
+<tr>
+<td>P10 · ECCV</td>
+<td><a href="https://link.springer.com/chapter/10.1007/978-3-032-37314-4_17">EFlow: Fast Few-Step Video Generator Training from Scratch via Efficient Solution Flow</a></td>
+<td>结合 solution-flow 目标、局部—全局注意力、token 丢弃和低成本训练目标，同时降低单步成本与采样步数。</td>
+<td>这是从头训练少步生成器的方案，不应与无训练的推断加速混为一类。</td>
+</tr>
+<tr>
+<td>P11 · ECCV</td>
+<td><a href="https://arxiv.org/abs/2606.26916">PhysRAG: Enhancing Physics-Awareness in Video Generation via Retrieval-Augmented Generation</a></td>
+<td>构建物理参考视频库，以检索和可学习查询向扩散模型注入参考信息，测试物理相关与综合视频指标。</td>
+<td>参考库覆盖、检索匹配和域外外推需要单独验证；物理观感不能替代定量动力学。</td>
+</tr>
+<tr>
+<td>P12 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Xiang_Native_and_Compact_Structured_Latents_for_3D_Generation_CVPR_2026_paper.html">Native and Compact Structured Latents for 3D Generation</a></td>
+<td>O-Voxel 同时表示复杂拓扑、几何和材质，配合稀疏压缩 VAE 与 flow matching 学习三维生成。</td>
+<td>紧凑表示与高质量资产生成，不等于低成本从头训练，也不同于在线场景测量。</td>
+</tr>
+<tr>
+<td>P13 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Chen_SAM_3D_3Dfy_Anything_in_Images_CVPR_2026_paper.html">SAM 3D: 3Dfy Anything in Images</a></td>
+<td>从单图预测对象几何、纹理和布局；通过人机协同数据流程、合成预训练与真实对齐提升复杂自然图像中的重建。</td>
+<td>遮挡部分包含生成性补全；视觉偏好上的优势不能等同真实几何的度量精度。</td>
+</tr>
+</tbody>
+</table>
+<p>P09、P11 的主会身份见 <a href="https://eccv.ecva.net/Conferences/2026/Videos">ECCV 官方视频目录</a>；方法分别对照 <a href="https://github.com/AI9Stars/Cheers">Cheers 作者代码</a>、<a href="https://sediment1024.github.io/PhysRAG/">PhysRAG 作者项目</a>。</p>
+<h3 id="33-cvpr-4d">3.3 CVPR 的三维与 4D 样本：统一表示、动态重建与系统约束</h3>
+<p>**观察：**前馈几何正在同时扩展模型和数据规模、输出任务、输入模态与场景时长。但“前馈”“4D”“在线”“完整 SLAM”描述的是不同属性，不能互相替代。</p>
+<table>
+<thead>
+<tr>
+<th>编号与会议</th>
+<th>论文</th>
+<th>核心内容</th>
+<th>阅读边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P14 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Wang_VGGT-ohm_CVPR_2026_paper.html">VGGT-ohm</a></td>
+<td>VGGT-O 简化密集预测头，以 scene token 聚合特征，结合动态场景标注与自监督视频训练，扩展静态、动态几何能力。</td>
+<td>需分离架构、数据规模和监督协议的增益；计算更省不自动意味着已经解决无限长流式重建。</td>
+</tr>
+<tr>
+<td>P15 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Zhang_Efficiently_Reconstructing_Dynamic_Scenes_One_D4RT_at_a_Time_CVPR_2026_paper.html">Efficiently Reconstructing Dynamic Scenes One D4RT at a Time</a></td>
+<td>将视频编码为全局表征，再以轻量查询解码深度、时空对应、相机及不同时间的三维位置。</td>
+<td>**全局视频编码与按需查询，不等于因果 streaming。**其核心价值是统一、可查询的 4D 表示。</td>
+</tr>
+<tr>
+<td>P16 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Karhade_Any4D_Unified_Feed-Forward_Metric_4D_Reconstruction_CVPR_2026_paper.html">Any4D: Unified Feed-Forward Metric 4D Reconstruction</a></td>
+<td>联合预测几何与运动，分离相机局部和世界坐标因子，并支持 RGB、RGB-D 及可用的 IMU、Radar 信息。</td>
+<td>作者指出场景流以首帧为源，且附加传感器采用理想模拟；真实噪声、异步和新出现对象仍需核查。</td>
+</tr>
+<tr>
+<td>P17 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Liu_Point4Cast_Streaming_Dynamic_Scene_Reconstruction_and_Forecasting_CVPR_2026_paper.html">Point4Cast: Streaming Dynamic Scene Reconstruction and Forecasting</a></td>
+<td>新帧更新持续演化的潜在时空状态，再按时间查询过去、当前和未来的点图与相机参数。</td>
+<td>重建、跟踪与预测应分别评价；能预测未来点图尚不能证明一般物理规律外推。</td>
+</tr>
+<tr>
+<td>P18 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Qiu_SLARM_Streaming_and_Language-Aligned_Reconstruction_Model_for_Dynamic_Scenes_CVPR_2026_paper.html">SLARM: Streaming and Language-Aligned Reconstruction Model for Dynamic Scenes</a></td>
+<td>将高阶运动、可微渲染、语言对齐语义和窗口因果注意力结合，联合处理动态场景表示。</td>
+<td>几何、画质与语义指标改善，需要进一步检查长期物体身份和下游任务收益。</td>
+</tr>
+<tr>
+<td>P19 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Ding_LASER_Layer-wise_Scale_Alignment_for_Training-Free_Streaming_4D_Reconstruction_CVPR_2026_paper.html">LASER: Layer-wise Scale Alignment for Training-Free Streaming 4D Reconstruction</a></td>
+<td>冻结离线模型，通过重叠窗口与分层尺度对齐处理跨窗几何不一致；不同深度层不强制共用单一尺度。</td>
+<td>窗口流式仍需注明输出等待；层间关联、低视差条件和回环后的尺度修正值得检查。</td>
+</tr>
+<tr>
+<td>P20 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Cheng_MERG3R_A_Divide-and-Conquer_Approach_to_Large-Scale_Neural_Visual_Geometry_CVPR_2026_paper.html">MERG3R: A Divide-and-Conquer Approach to Large-Scale Neural Visual Geometry</a></td>
+<td>将无序图像分成有重叠且几何多样的子集，调用基础模型后做全局对齐和置信度加权 BA，无需额外训练。</td>
+<td>面向大规模无序图集；全局优化流程不应直接称为严格在线 SLAM。</td>
+</tr>
+<tr>
+<td>P21 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Zhang_Unblur-SLAM_Dense_Neural_SLAM_for_Blurry_Inputs_CVPR_2026_paper.html">Unblur-SLAM: Dense Neural SLAM for Blurry Inputs</a></td>
+<td>前馈去模糊与局部、全局多视图优化协同，对困难帧结合 3DGS 和模糊形成过程进行处理。</td>
+<td>需同时衡量退化强度、失败率和计算开销；清晰图像上的平均精度不足以评价鲁棒系统。</td>
+</tr>
+</tbody>
+</table>
+<p>其中 Any4D 的具体边界来自<a href="https://any-4d.github.io/assets/Any4D.pdf">作者原文</a>；D4RT 的编码—查询结构也可对照<a href="https://d4rt-paper.github.io/">作者项目</a>。</p>
+<h3 id="34-eccv">3.4 ECCV 的长序列几何样本：记忆、状态估计与全局校正</h3>
+<p>以下六篇均在 <a href="https://eccv.ecva.net/Conferences/2026/AcceptedPapers">ECCV 官方主会录用名单</a>核实；表内链接为作者论文或项目。其方法设置不同，不宜放在一张仅比较 FPS 的榜单中。</p>
+<table>
+<thead>
+<tr>
+<th>编号与会议</th>
+<th>论文</th>
+<th>核心内容</th>
+<th>阅读边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P22 · ECCV</td>
+<td><a href="https://arxiv.org/abs/2604.14141">Geometric Context Transformer for Streaming 3D Reconstruction</a></td>
+<td>GCT / LingBot-Map 以锚点、局部位姿参考窗口和轨迹记忆，分别维护坐标基准、局部几何和历史轨迹。</td>
+<td>作者说明没有显式回环，历史压缩可能损失细节；每历史帧保留 6 个 context token，不能称严格常数内存。</td>
+</tr>
+<tr>
+<td>P23 · ECCV</td>
+<td><a href="https://arxiv.org/abs/2603.18493">FILT3R: Latent State Adaptive Kalman Filter for Streaming 3D Reconstruction</a></td>
+<td>在潜在状态上加入无需训练的滤波层，以逐 token 方差和自适应增益平衡旧状态与新证据。</td>
+<td>作者指出测量噪声固定，难以适应模糊和遮挡；大漂移可能导致过度相信不可靠新状态。</td>
+</tr>
+<tr>
+<td>P24 · ECCV</td>
+<td><a href="https://linjohnss.github.io/scal3r/">Scal3R: Learning Efficient Multi-Relative Pose Query for Scalable Online 3D Reconstruction</a></td>
+<td>冻结主干，以少量相对位姿查询参数连接历史关键帧，并结合在线位姿图与回环保持全局一致性。</td>
+<td>作者指出仍受主干、外观回环与阈值限制；这里是 Lin 等的相对位姿查询论文，勿与另一篇同名 Scal3R 混引。</td>
+</tr>
+<tr>
+<td>P25 · ECCV</td>
+<td><a href="https://arxiv.org/abs/2609.23286">RegVGGT: Sustainable Visual Geometry Grounding for Streaming via Regulated Memory</a></td>
+<td>利用 token 初始显著性预测长期重要性，限制每帧进入记忆的 token，以较小的增长速度延长推断序列。</td>
+<td>保留每帧约 1% token 仍然可能随帧数增长；初始显著性是否等于未来重访价值值得验证。</td>
+</tr>
+<tr>
+<td>P26 · ECCV</td>
+<td><a href="https://github.com/Brack-Wang/raymap3r">RayMap3R: Inference-Time RayMap for Dynamic 3D Reconstruction</a></td>
+<td>比较图像与 RayMap 分支的深度，用静态偏置构造权重并门控记忆更新，同时处理重置后的尺度和轨迹。</td>
+<td>减少动态物体污染静态地图，不等于完整维护动态物体的几何和长期身份。</td>
+</tr>
+<tr>
+<td>P27 · ECCV</td>
+<td><a href="https://tsinghua-mars-lab.github.io/SLAM-Former/">SLAM-Former: Putting SLAM into One Transformer</a></td>
+<td>将逐帧跟踪、增量建图与后端全局修正组织进统一 Transformer，并使前后端交替协作。</td>
+<td>需检查全局校正时机、历史地图更新和整体计算量；与 SLAMFormer-Infinity 是不同论文。</td>
+</tr>
+</tbody>
+</table>
+<p>影响选题的三个细节可直接回到原文核查：<a href="https://arxiv.org/html/2604.14141v2">GCT 方法与局限</a>、<a href="https://arxiv.org/html/2603.18493v2">FILT3R 第 5 节</a>、<a href="https://arxiv.org/html/2609.04201v1">Scal3R 方法与局限</a>。这些细节比“支持上千帧”更能说明还有什么问题未解决。</p>
+<h3 id="35">3.5 视觉到行动，以及长视频中的可检索记忆</h3>
+<p>**观察：**任务单元从单次预测扩展为连续执行与证据检索。游戏、网页和视频问答提供了不同环境，不能直接用一个任务的成功率代表所有具身能力。</p>
+<table>
+<thead>
+<tr>
+<th>编号与会议</th>
+<th>论文</th>
+<th>核心内容</th>
+<th>阅读边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P28 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Magne_NitroGen_An_Open_Foundation_Model_for_Generalist_Gaming_Agents_CVPR_2026_paper.html">NitroGen: An Open Foundation Model for Generalist Gaming Agents</a></td>
+<td>从游戏视频提取动作，结合大规模行为克隆、多游戏评测及开放数据、权重，学习视觉—行动模型。</td>
+<td>跨游戏迁移是其证据范围；游戏控制与真实机器人接触、动力学和安全约束仍不同。</td>
+</tr>
+<tr>
+<td>P29 · ECCV</td>
+<td><a href="https://link.springer.com/chapter/10.1007/978-3-032-37393-9_17">MolmoWeb: Open Visual Web Agent and Open Data for the Open Web</a></td>
+<td>提供合成与人类示范轨迹及 GUI 感知数据，让策略依据截图和任务产生网页动作。</td>
+<td>单次成功率与多次尝试成功率须分开；重试会改变使用成本与错误暴露。</td>
+</tr>
+<tr>
+<td>P30 · ECCV</td>
+<td><a href="https://arxiv.org/abs/2608.07663">Keep It Simple: Multi-Key Episodic Memory Retrieval for Ultra-Long Video Understanding</a></td>
+<td>MERIT 建立问题无关的片段记忆，以事件、对话、对象等多键检索，再围绕候选片段补充时序上下文。</td>
+<td>前端记忆遗漏的证据很难靠后续推理补回；应分开评检索召回和最终回答。</td>
+</tr>
+</tbody>
+</table>
+<p>P30 的主会身份见 <a href="https://eccv.ecva.net/Conferences/2026/Videos">ECCV 官方视频目录</a>，方法说明见 <a href="https://choi-yeeun.github.io/MERIT/">MERIT 作者项目</a>。</p>
+<h3 id="36">3.6 基础表征、监督机制与资源效率</h3>
+<p>**观察：**基础模型并没有使表征研究终结。监督如何分配、性能由什么产生、能否在设备上持续适应，仍是具体且可检验的问题。</p>
+<table>
+<thead>
+<tr>
+<th>编号与会议</th>
+<th>论文</th>
+<th>核心内容</th>
+<th>阅读边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P31 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Shi_Vision_Transformers_Need_More_Than_Registers_CVPR_2026_paper.html">Vision Transformers Need More Than Registers</a></td>
+<td>分析 ViT 利用背景 patch 聚合全局语义的捷径，并选择性地将 patch 特征汇入 CLS token。</td>
+<td>机制解释来自论文分析；应核查不同训练目标和模型规模是否一致成立。</td>
+</tr>
+<tr>
+<td>P32 · ECCV</td>
+<td><a href="https://link.springer.com/chapter/10.1007/978-3-032-37314-4_16">ExPLoRe: Expert Patch-Level Loss Routing for Multi-objective Masked Image Modeling</a></td>
+<td>将 Soft MoE 路由权重作为逐 patch 损失系数，按内容分配 token 蒸馏、CLS 对齐与像素重建监督。</td>
+<td>对 SLAM 的启发是监督可信度可随区域变化，但分类与分割实验不能直接证明几何收益。</td>
+</tr>
+<tr>
+<td>P33 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Dey_Rethinking_Dataset_Distillation_Hard_Truths_about_Soft_Labels_CVPR_2026_paper.html">Rethinking Dataset Distillation: Hard Truths about Soft Labels</a></td>
+<td>区分硬标签、固定软标签和大量软标签，指出某些评测下教师信息与计算预算掩盖了数据子集质量的差别，并提出计算适配方案。</td>
+<td>不能据此断言所有数据蒸馏无效；关键是监督信息与计算量受控的比较。</td>
+</tr>
+<tr>
+<td>P34 · ECCV</td>
+<td><a href="https://arxiv.org/abs/2509.21617">LANCE: Low Rank Activation Compression for Efficient On-Device Continual Learning</a></td>
+<td>复用一次性标定的低秩激活子空间，并为连续任务分配正交子空间，以降低端侧学习的存储负担。</td>
+<td>激活存储压缩率不是总内存压缩率，也不等于同幅加速；实验主要是分类设置。</td>
+</tr>
+</tbody>
+</table>
+<p>P34 的录用记录见 <a href="https://eccv.ecva.net/Conferences/2026/Videos">ECCV 官方视频目录</a>，实现见 <a href="https://github.com/mapolinario94/LANCE">LANCE 作者仓库</a>。</p>
+<h3 id="37">3.7 数据与评测：从总分转向可定位的失效机制</h3>
+<p>**观察：**这些论文给出的共同提醒是：语言合理、视觉漂亮、平均分高，分别都不足以证明物理正确、证据忠实或开放环境可靠。</p>
+<table>
+<thead>
+<tr>
+<th>编号与会议</th>
+<th>论文</th>
+<th>核心内容</th>
+<th>阅读边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P35 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Zhou_PhysInOne_Visual_Physics_Learning_and_Reasoning_in_One_Suite_CVPR_2026_paper.html">PhysInOne: Visual Physics Learning and Reasoning in One Suite</a></td>
+<td>提供覆盖多类物理现象的合成动态场景和视频，同时标注几何、运动、物理属性与文本，支持生成、预测和属性估计。</td>
+<td>合成数据提供密集真值，但迁移到真实传感器与复杂物理交互仍需验证。</td>
+</tr>
+<tr>
+<td>P36 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Puyin_QUANTIPHY_A_Quantitative_Benchmark_Evaluating_Physical_Reasoning_Abilities_of_Vision-Language_CVPR_2026_paper.html">QUANTIPHY: A Quantitative Benchmark Evaluating Physical Reasoning Abilities of Vision-Language Models</a></td>
+<td>用带数值真值的视频任务评估尺寸、速度与加速度；发现受测 VLM 的合理叙述与数值正确性存在差距。</td>
+<td>任务提供某项物理量作为先验，不能视为任意单目视频中的无条件米制恢复。</td>
+</tr>
+<tr>
+<td>P37 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Wu_From_Indoor_to_Open_World_Revealing_the_Spatial_Reasoning_Gap_CVPR_2026_paper.html">From Indoor to Open World: Revealing the Spatial Reasoning Gap in MLLMs</a></td>
+<td>OSI-Bench 利用双目、LiDAR、IMU/GPS 产生室外度量真值，检查空间关系、尺度与运动推理，并分析语言先验依赖。</td>
+<td>真值采集使用传感器，不应误写为所有传感器都作为被测模型的推断输入。</td>
+</tr>
+<tr>
+<td>P38 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Min_Fine-Grained_Multi_Image_Object_Hallucination_Benchmark_CVPR_2026_paper.html">Fine-Grained Multi Image Object Hallucination Benchmark</a></td>
+<td>MIOH 将对象存在、数量、属性、位置与不同多图推理模式交叉组合，控制上下文规模、感知难度和偏差。</td>
+<td>应定位跨图整合与感知各自的失败；一个幻觉总分容易掩盖任务差异。</td>
+</tr>
+<tr>
+<td>P39 · ECCV</td>
+<td><a href="https://arxiv.org/abs/2607.11199">DynEval: Holistic Evaluations of T2I Generative Models in the Wild</a></td>
+<td>以结构化语义与图像质量推理构建数据并蒸馏评价器，分析多个生成模型和细分能力。</td>
+<td>教师模型、提示分布和人工标注仍影响评价；总体相关性不能保证每个子项准确。</td>
+</tr>
+<tr>
+<td>P40 · ECCV</td>
+<td><a href="https://link.springer.com/chapter/10.1007/978-3-032-37029-7_5">SpecV: Specification Verification for Robust Unified Multimodal Evaluation</a></td>
+<td>将任务要求分成可核验的原子、二元规格，结合去重与可验证性筛选，降低整体打分的不稳定。</td>
+<td>规格覆盖不全、生成错误或裁判失误仍可能影响结论。</td>
+</tr>
+<tr>
+<td>P41 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Ma_Your_One-Stop_Solution_for_AI-Generated_Video_Detection_CVPR_2026_paper.html">Your One-Stop Solution for AI-Generated Video Detection</a></td>
+<td>AIGVDBench 扩大视频生成器覆盖，并系统比较检测器，研究生成内容鉴别。</td>
+<td>需要区分已知生成器、未知生成器与压缩后泛化；有限数据上的高分不是永久通用鉴伪能力。</td>
+</tr>
+</tbody>
+</table>
+<p>P39 的主会身份见 <a href="https://eccv.ecva.net/Conferences/2026/Videos">ECCV 官方视频目录</a>，补充说明见 <a href="https://vcl-iisc.github.io/dyneval/">DynEval 作者项目</a>。</p>
+<h3 id="38">3.8 真实条件、垂直领域与计算成像</h3>
+<p>**观察：**应用方向的有价值变化，常来自任务特有的观测、监督或物理约束，而不只是替换成更大的通用模型。</p>
+<table>
+<thead>
+<tr>
+<th>编号与会议</th>
+<th>论文</th>
+<th>核心内容</th>
+<th>阅读边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P42 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Lee_Robust_Promptable_Video_Object_Segmentation_CVPR_2026_paper.html">Robust Promptable Video Object Segmentation</a></td>
+<td>MoGA 利用跨帧对象记忆对适配做条件化，并引入真实恶劣条件下的可提示视频分割评测。</td>
+<td>对象级适配是否保持长期一致性值得分析；有限恶劣条件数据不代表所有真实退化。</td>
+</tr>
+<tr>
+<td>P43 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Su_MedGRPO_Multi-Task_Reinforcement_Learning_for_Heterogeneous_Medical_Video_Understanding_CVPR_2026_paper.html">MedGRPO: Multi-Task Reinforcement Learning for Heterogeneous Medical Video Understanding</a></td>
+<td>汇集多源医学视频指令，通过奖励归一化和医学模型评分改善异构任务上的强化学习。</td>
+<td>应核查评分模型偏差与跨数据源泛化；基准收益不等同临床获益。</td>
+</tr>
+<tr>
+<td>P44 · ECCV</td>
+<td><a href="https://link.springer.com/chapter/10.1007/978-3-032-37550-6_32">MedSynapse-V: Bridging Visual Perception and Clinical Intuition via Latent Memory Evolution</a></td>
+<td>用解剖先验生成潜在记忆，以区域遮蔽奖励筛选记忆，再通过教师—学生对齐内化知识。</td>
+<td>遮蔽奖励不等于临床因果证据；实际适用性仍需跨中心、跨设备验证。</td>
+</tr>
+<tr>
+<td>P45 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Zhang_GeoViS_Geospatially_Rewarded_Visual_Search_for_Remote_Sensing_Visual_Grounding_CVPR_2026_paper.html">GeoViS: Geospatially Rewarded Visual Search for Remote Sensing Visual Grounding</a></td>
+<td>将遥感定位组织成树状搜索和推理，利用局部视觉证据逐步修正地理空间假设。</td>
+<td>在相同总计算预算下比较，并分析小目标漏检和错误搜索路径。</td>
+</tr>
+<tr>
+<td>P46 · CVPR</td>
+<td><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Tsuchida_Coded-E2LF_Coded_Aperture_Light_Field_Imaging_from_Events_CVPR_2026_paper.html">Coded-E2LF: Coded Aperture Light Field Imaging from Events</a></td>
+<td>通过编码孔径与静止事件相机，从事件信息恢复光场，并以真实硬件验证成像设计。</td>
+<td>此处“4D 光场”表示光线的空间—角度参数，不是三维场景随时间变化的 4D 重建。</td>
+</tr>
+<tr>
+<td>P47 · ECCV</td>
+<td><a href="https://link.springer.com/chapter/10.1007/978-3-032-37314-4_14">Event-Driven Motion Deblurring via Trajectory-Based Kernel Reconstruction</a></td>
+<td>从事件估计像素运动轨迹，构造空间变化的模糊核，再结合物理数据一致性和展开网络恢复图像。</td>
+<td>显式成像模型使约束更清楚，但事件噪声、轨迹精度与跨设备适应仍需检验。</td>
+</tr>
+</tbody>
+</table>
+<p>以上共 <strong>47 篇代表论文：CVPR 27 篇、ECCV 20 篇</strong>。这一配比由本次选题与证据可得性决定，不代表两届会议在各方向上的实际份额。</p>
+<h2 id="4">4. 把不同方向串起来：哪些判断最值得保留</h2>
+<h3 id="41">4.1 “统一”正在发生于表示、状态和任务接口</h3>
+<p>Cheers 将理解与生成放进共享系统，D4RT 用查询接口关联不同几何任务，Point4Cast 通过一个演化状态连接重建与预测，SLARM 将几何、运动和语言语义相连。这些工作共同支持一个判断：**共享的中间表示能否保留各任务需要的证据，是比简单共用网络更具体的研究问题。**语义需要抽象不变性，几何需要精确位置，生成需要保留细节，长期跟踪需要身份连续；这些要求可能冲突。<a href="https://arxiv.org/abs/2603.12793">Cheers</a>、<a href="https://d4rt-paper.github.io/">D4RT</a>、<a href="https://openaccess.thecvf.com/content/CVPR2026/html/Liu_Point4Cast_Streaming_Dynamic_Scene_Reconstruction_and_Forecasting_CVPR_2026_paper.html">Point4Cast</a></p>
+<p>对新工作的启示是：应明确什么被共享、什么被分离，以及这种选择解决了哪种任务冲突。只展示一个模型输出了更多结果，尚不足以说明统一表示本身有价值。</p>
+<h3 id="42">4.2 扩大有效信息与减少无效计算同时存在</h3>
+<p>VGGT-ohm、SAM 3D 强调数据规模、标注流程与训练配方；SmartVL、EFlow、RegVGGT 研究怎样把算力集中到有用信息上。两类路线可以互相补充。应把效率至少拆成 <strong>训练成本、推断延迟、工作记忆、历史存储和适应成本</strong>，并比较质量—成本曲线，不能用一个 FLOPs 或单个压缩率概括。<a href="https://openaccess.thecvf.com/content/CVPR2026/html/Wang_VGGT-ohm_CVPR_2026_paper.html">VGGT-ohm</a>、<a href="https://link.springer.com/chapter/10.1007/978-3-032-37359-5_12">SmartVL</a>、<a href="https://link.springer.com/chapter/10.1007/978-3-032-37314-4_17">EFlow</a></p>
+<p>CVPR 2026 还引入了实验性的作者计算量报告机制，反映计算透明度受到关注；官方明确这些报告不向审稿人展示，也不影响录用，不能把它说成“低算力论文更容易中”。<a href="https://cvpr.thecvf.com/Conferences/2026/AuthorGuidelines">官方作者指南</a></p>
+<h3 id="43">4.3 学习先验与几何估计结构继续结合</h3>
+<p>MERG3R 使用基础模型与 BA，Scal3R 使用相对位姿查询与位姿图，FILT3R 将滤波结构放进潜在状态更新，SLAM-Former 将跟踪、建图与全局修正共同建模。它们说明，坐标、尺度、回环和不确定性仍需要明确处理。现有样本支持“几何约束与学习方法继续融合”，不足以支持“传统 SLAM 已被替代”。<a href="https://openaccess.thecvf.com/content/CVPR2026/html/Cheng_MERG3R_A_Divide-and-Conquer_Approach_to_Large-Scale_Neural_Visual_Geometry_CVPR_2026_paper.html">MERG3R</a>、<a href="https://arxiv.org/html/2609.04201v1">Scal3R</a>、<a href="https://arxiv.org/html/2603.18493v2">FILT3R</a></p>
+<p>特别要避免以下概念混淆：</p>
+<table>
+<thead>
+<tr>
+<th>论文中的表述</th>
+<th>不能自动推出</th>
+<th>需要另外提供的证据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>前馈、快速、可查询</td>
+<td>严格因果、低首帧等待</td>
+<td>编码阶段是否使用未来帧，何时能产生输出</td>
+</tr>
+<tr>
+<td>能处理长视频</td>
+<td>长时间无漂移、身份不丢失</td>
+<td>连续跟踪时长、重访恢复、误差随时长曲线</td>
+</tr>
+<tr>
+<td>历史 token 大幅压缩</td>
+<td>总内存恒定</td>
+<td>GPU 工作状态、CPU 地图、历史缓存各自的增长</td>
+</tr>
+<tr>
+<td>新视角渲染质量高</td>
+<td>相机准确、物质点对应正确</td>
+<td>位姿、几何与轨迹分别评价</td>
+</tr>
+<tr>
+<td>生成结果物理合理</td>
+<td>学到了可用于外推的动力学</td>
+<td>数值物理量、干预与未见条件预测</td>
+</tr>
+<tr>
+<td>无需额外训练</td>
+<td>无优化开销、无底座训练成本</td>
+<td>底座来源、推断优化次数和总体延迟</td>
+</tr>
+</tbody>
+</table>
+<p>上表是阅读与实验设计准则；P15、P19、P22、P25、P36 分别提供了对应的具体案例。</p>
+<h3 id="44">4.4 数据质量与评价协议本身成为研究贡献</h3>
+<p>SAM 3D 的数据流程、PhysInOne 的物理真值、MolmoWeb 的开放轨迹，以及 MIRA、OSI-Bench、MIOH、SpecV 的诊断设计，说明“训练和测试究竟提供了什么信息”需要被显式描述。数据蒸馏分析尤其提醒我们：当教师软标签和训练计算未被控制时，看起来属于数据构造的收益可能来自其他因素。<a href="https://openaccess.thecvf.com/content/CVPR2026/html/Chen_SAM_3D_3Dfy_Anything_in_Images_CVPR_2026_paper.html">SAM 3D</a>、<a href="https://openaccess.thecvf.com/content/CVPR2026/html/Dey_Rethinking_Dataset_Distillation_Hard_Truths_about_Soft_Labels_CVPR_2026_paper.html">数据蒸馏分析</a>、<a href="https://link.springer.com/chapter/10.1007/978-3-032-37029-7_5">SpecV</a></p>
+<p>因此，小团队也可以从严谨的诊断、监督质量控制、数据机制和推断策略切入。这里是研究路径建议，不是录用成功的保证；仍需证明问题具有普遍性，且强基线不能以更简单的方法解决。</p>
+<h3 id="45">4.5 生成、感知与行动需要各自的验证闭环</h3>
+<p>可以将相关研究理解为：观测提供证据，状态表示组织证据，推理或预测利用状态，行动产生新的观测。不同论文通常只覆盖其中一部分。PhysRAG 的物理视频生成、Point4Cast 的几何预测、NitroGen 的游戏动作、MolmoWeb 的网页执行，都有明确任务范围，不能合并成“通用世界模型已经成熟”的结论。<a href="https://arxiv.org/abs/2606.26916">PhysRAG</a>、<a href="https://openaccess.thecvf.com/content/CVPR2026/html/Magne_NitroGen_An_Open_Foundation_Model_for_Generalist_Gaming_Agents_CVPR_2026_paper.html">NitroGen</a>、<a href="https://link.springer.com/chapter/10.1007/978-3-032-37393-9_17">MolmoWeb</a></p>
+<p>更扎实的研究命题应明确：状态表示的哪项改善，通过哪个机制，提升哪种下游任务；同时保留对应的感知误差和行动失败分析。</p>
+<h2 id="5-slam-4d">5. 面向 SLAM、三维与流式 4D 的选题建议</h2>
+<p>以下是<strong>基于本次文献的研究假设</strong>，并未完成全面新颖性检索或实验验证。若沿用本笔记本已有的“单目 RGB、未知相机位姿、动态场景、长序列或流式输入”方向，建议优先考虑前两项；多传感器方向需要额外数据条件。</p>
+<table>
+<thead>
+<tr>
+<th>优先级</th>
+<th>具体问题</th>
+<th>为什么值得验证、直接相关论文</th>
+<th>最小可检验方案与停止条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>高</td>
+<td><strong>区分真实状态变化与观测退化，可靠地更新记忆</strong></td>
+<td>FILT3R 明确存在固定测量噪声和不可靠候选状态的问题；RayMap3R、Unblur-SLAM 分别处理动态污染与模糊。</td>
+<td>先划分清晰/模糊、静态/动态、可见/遮挡组合，分析状态增益与实际误差的关系；与固定阈值、简单置信门控和不更新基线比较。如果复杂估计不能稳定优于简单门控，应停止增加模块。</td>
+</tr>
+<tr>
+<td>高</td>
+<td><strong>在明确的记忆预算下保留有助于重访和跟踪的证据</strong></td>
+<td>GCT、RegVGGT 已压缩历史，MERIT 则展示按需检索路径；机会在记忆选择的任务价值，而非泛泛“加入 memory”。</td>
+<td>固定 GPU 工作记忆和历史存储预算，比较滑窗、均匀保留、显著性和基于重访价值的选择；测长遮挡重现、回环和最差序列。若收益只来自存储更多帧，不成立。</td>
+</tr>
+<tr>
+<td>中高</td>
+<td><strong>全局校正后，位姿、尺度与动态身份如何保持一致</strong></td>
+<td>Scal3R、LASER、SLAM-Former 分别覆盖位姿图、跨窗尺度与前后端校正，但组合后仍需定义动态状态如何同步变化。</td>
+<td>构造同一场景重访和移动对象干扰实验，分别报告校正前后静态地图误差、轨迹连续性和身份交换。如果只降低 ATE 却破坏动态轨迹，需重新定义目标。</td>
+</tr>
+<tr>
+<td>中</td>
+<td><strong>把可查询 4D 状态用于遮挡恢复或主动观测</strong></td>
+<td>D4RT 提供统一查询接口，Point4Cast 提供演化状态与未来预测。</td>
+<td>固定底座，检验预测是否确实改善重现定位或观测选择；与不预测、匀速预测比较。若只改善演示效果而无可重复任务收益，应收窄问题。</td>
+</tr>
+<tr>
+<td>条件性</td>
+<td><strong>含噪、异步与缺失传感器条件下的米制 4D</strong></td>
+<td>Any4D 的理想传感器设定给出明确迁移问题。</td>
+<td>分离时间偏移、标定误差、漂移和缺失；比较纯 RGB、理想融合与受扰融合。如果只有理想条件有收益，尚不能支持真实系统价值。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="51">5.1 对有限训练预算，先定位失败再决定是否训练</h3>
+<p>一条可执行的研究顺序是：</p>
+<ol>
+<li>**选一个可获得且版本明确的底座。**记录论文、代码、权重和数据版本；原文链接并不等于所有资源都已可用。</li>
+<li>**先复现一个稳定失效现象。**例如长遮挡后的身份漂移、模糊帧导致状态污染、回环后动态轨迹跳变。要在多条序列上复现，避免围绕单个演示设计方法。</li>
+<li>**建立能解释现象的简单基线。**滑窗、固定门控、位姿图校正、均匀记忆选择等往往比额外网络更适合检验机制。</li>
+<li>**再选择推断干预、小规模微调或训练新模块。**LASER、FILT3R、RayMap3R 提供推断期改进路径；Scal3R 提供少量参数训练的例子。无需额外训练本身不是创新，关键是修复什么失效。<a href="https://openaccess.thecvf.com/content/CVPR2026/html/Ding_LASER_Layer-wise_Scale_Alignment_for_Training-Free_Streaming_4D_Reconstruction_CVPR_2026_paper.html">LASER</a>、<a href="https://arxiv.org/html/2609.04201v1">Scal3R</a></li>
+<li>**最后才扩大数据与实验规模。**如果核心机制未成立，扩展实验只会增加成本。</li>
+</ol>
+<h3 id="52">5.2 建议统一报告的实验口径</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>最低应说明的内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>输入信息</td>
+<td>单目/多目、已知或预测内参、是否有深度/IMU、绝对尺度来自何处</td>
+</tr>
+<tr>
+<td>时间条件</td>
+<td>严格因果、固定延迟还是离线；是否预先运行全片位姿、深度或跟踪模型</td>
+</tr>
+<tr>
+<td>位姿与尺度</td>
+<td>ATE/RPE 的具体定义、SE(3) 或 Sim(3) 对齐、全局一次对齐还是分段对齐；不能用频繁重对齐掩盖漂移</td>
+</tr>
+<tr>
+<td>动态对应</td>
+<td>跟踪的是同一物理点还是对象中心；轨迹时长、遮挡跨度、重识别与可见性指标</td>
+</tr>
+<tr>
+<td>几何与渲染</td>
+<td>分开报告几何误差和渲染质量，避免用画质替代真实对应精度</td>
+</tr>
+<tr>
+<td>资源</td>
+<td>设备、输入分辨率、帧数、工作显存、历史存储、首帧等待、平均与高分位延迟</td>
+</tr>
+<tr>
+<td>鲁棒性</td>
+<td>不同动态比例、低纹理、快速运动、模糊、光照变化下的分组结果和失败序列</td>
+</tr>
+<tr>
+<td>监督公平性</td>
+<td>是否使用额外教师、伪标签、未来帧或测试视频适配；把这些信息与计算成本计入比较</td>
+</tr>
+</tbody>
+</table>
+<p><strong>新颖性风险较高的宽泛表述：</strong>“给基础模型加记忆”“把离线模型变流式”“引入 Kalman 更新”“只保留少量 token”“把重建和跟踪结合”。P15–P27 已覆盖其中多个基本命题。更有辨识度的贡献应说明某种现有方案无法处理的条件、失败机制与可证伪假设，而不是仅改模块名称。</p>
+<h2 id="6">6. 推荐阅读顺序与使用方式</h2>
+<h3 id="61">6.1 快速建立全局视野：四组对照阅读</h3>
+<table>
+<thead>
+<tr>
+<th>顺序</th>
+<th>论文组合</th>
+<th>阅读目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>P04 Foveated Reasoning → P05 SmartVL → P02 MIRA</td>
+<td>区分主动获取证据、分配计算和利用视觉中间步骤</td>
+</tr>
+<tr>
+<td>2</td>
+<td>P09 Cheers → P07 ChordEdit → P10 EFlow</td>
+<td>区分统一模型、推断期编辑和从头训练少步生成器</td>
+</tr>
+<tr>
+<td>3</td>
+<td>P14 VGGT-ohm → P15 D4RT → P17 Point4Cast</td>
+<td>从几何底座到可查询 4D，再到随时间更新的状态</td>
+</tr>
+<tr>
+<td>4</td>
+<td>P37 OSI-Bench → P33 数据蒸馏分析 → P40 SpecV</td>
+<td>检查视觉依赖、监督公平性和评价可验证性</td>
+</tr>
+</tbody>
+</table>
+<p>这些是推荐顺序，不是会议重要性排名。若只想先读一篇与现有研究最接近的工作，可从 <strong>D4RT</strong> 开始，再立即对照其是否需要完整视频，避免把离线接口直接迁移成流式假设。</p>
+<h3 id="62-slam-streaming-4d">6.2 面向 SLAM / streaming 4D 的深入阅读</h3>
+<p>建议主线为 <strong>D4RT → Point4Cast → GCT → FILT3R → Scal3R → LASER → SLARM</strong>；研究多传感器时加入 Any4D，研究真实退化时加入 Unblur-SLAM。</p>
+<p>每篇统一记录六件事：<strong>输入及时间条件、状态具体存什么、状态如何更新、世界坐标如何保持、失败机制、总计算与存储成本</strong>。这样比按“模型名字—SOTA 数字”记笔记更容易找到可验证的问题。</p>
+<p>可以先用一页对照表回答三件事，再决定复现顺序：</p>
+<ul>
+<li>哪篇与目标设置真正一致，哪篇需要整段视频、已知位姿或额外传感器？</li>
+<li>哪个失败现象有明确证据，哪些只是根据摘要提出的猜想？</li>
+<li>改进能否在相同底座、数据与预算下成立；是否已有更简单的修复？</li>
+</ul>
+<h2 id="7">7. 检索口径与后续维护</h2>
+<ul>
+<li>**收录依据：**先检查会议身份，再用摘要或方法说明归纳贡献；仅有标题的条目不用于推断方法细节。官方名录能确认录用，但不自动证明代码、权重和训练数据都已公开。</li>
+<li><strong>主要入口：</strong><a href="https://openaccess.thecvf.com/CVPR2026">CVPR 主会论文库</a>、<a href="https://eccv.ecva.net/Conferences/2026/AcceptedPapers">ECCV 录用列表</a>、<a href="https://eccv.ecva.net/Conferences/2026">ECCV 官网及 Springer 分卷入口</a>。部分页面可能因网站访问策略无法直接读取；本文也使用这些一手页面的检索索引及作者公开版本交叉核对。</li>
+<li>**样本偏差：**为了贴近本笔记本，三维、动态场景和效率方向有所侧重。未系统覆盖全部人体、自动驾驶、检测、分割、遥感或医学子领域；没有给出全会主题百分比、机构排名或“增长最快”榜单。</li>
+<li>**证据强度：**官方会议信息、论文方法与本文研究判断分开处理；未将作者宣传中的“首次”“通用”“最优”直接作为独立确认的结论。摘要级阅读不足以支持完整的新颖性审查。</li>
+<li>**更新时优先核查：**正式出版标题是否变化；预印本修订是否引入额外训练数据；代码与权重是否对应论文版本；评测是否使用未来帧或整段视频预处理；数据和计算预算是否公平。</li>
+</ul>
+<p>本笔记本中的进一步阅读：<a href="../../papers/streaming_4d_tracking_research_2026/">动态长序列 4D 与 Point Tracking</a>、<a href="../../papers/long_sequence_3d_foundation_models/">长序列三维基础模型</a>、<a href="../../papers/feedforward_3dgs_survey_2024_2026/">前馈 3DGS 综述</a>。这些旧笔记具有各自的检索截止时间，引用其中论文时仍需核实其会议归属。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "header.autohide", "search.suggest", "search.highlight", "search.share"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../_js/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
