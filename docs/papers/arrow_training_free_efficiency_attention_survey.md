@@ -1,6 +1,8 @@
 # 面向 ARROW 长序列与稠密查询的免训练加速：注意力、可解释性与推理机制综述
 
-更新日期：2026-10-29。检索截至该日；重点核对论文正文中的分析、消融和方法，而非只引用摘要的加速倍数。本文以已有 `4drecon_tracking.md` 为线索，补充了 HeSS、HTTM、Co-Me、RetrieveVGGT、GPA-VGGT、VGGT-Prime 等工作。
+首版检索日期：2026-10-29；**DA3 专项更新：2026-11-13，见第 13 节**。前 12 节保留首版的检索范围，本次没有重新核查其中所有工作的后续版本。本文重点核对论文正文中的分析、消融和方法，而非只引用摘要的加速倍数；以已有 `4drecon_tracking.md` 为线索，补充相关研究。
+
+**DA3 专项结论：已有直接证据。** Spark3R、SAF3R 在 DA3 上验证了免训练注意力加速；官方 DA3-Streaming、DASH-SLAM 用分块/关键帧扩展长序列；Sim(3)-TurboReg 进一步加速 DA3-Streaming 的对齐后端。第 13 节分别说明它们的校准需求、实际 DA3 结果、开源情况，以及向 ARROW 迁移时的边界。
 
 **核心判断：ARROW 值得同时研究编码器的跨帧交互和解码器的 query-to-context 访问。最优先的组合是“保持 query 独立与完整、按层/头压缩 K/V、保护查询相关帧与身份信息”，再用窗口和历史检索扩展序列长度。** 这些是基于文献提出的研究建议，尚未在 ARROW 上验证。
 
@@ -582,5 +584,162 @@ $$
 - 解释性论文新版不只分析 VGGT，也直接分析 DA3；这比只凭 VGGT 类比 ARROW 更有参考价值，但仍未直接覆盖 ARROW 微调后的网络。
 
 **当前最值得检验的研究假设：ARROW 的独立 query 解码是否具有随 source/target/reference 角色变化的稀疏 context 需求；若成立，能否以全 query、共享候选 K/V、逐头预算和困难点回退实现加速，同时保留动态点身份和长遮挡重现能力。** 这一假设比单纯套用 VGGT 的统一 token merging 更贴近 ARROW 的接口和实际瓶颈。
+
+## 13. DA3 专项补充：免训练长序列扩展与推理加速
+
+本节检索截至 **2026-11-13**，核对论文正文及作者代码；未在本地运行这些模型。下述数值均为作者报告，重新计算的比值会注明。“免训练”指复用既有预训练模型而不再训练网络；允许离线统计校准、几何配准和位姿图优化，但会明确列出这些成本。
+
+### 13.1 直接回答与证据分类
+
+**有，而且已经包含直接分析 DA3 内部机制的工作，并非仅有从 VGGT 类推的方案。** 对当前 ARROW 目标，优先阅读 Spark3R 和 SAF3R；要先把长视频跑通，则优先官方 DA3-Streaming。
+
+| 工作 | 时间/核对版本 | DA3 的直接证据 | 加速位置 | 训练与校准边界 |
+|---|---|---|---|---|
+| [Spark3R](https://arxiv.org/html/2605.06270v1) | 2026-05-07 v1 | DA3 层敏感性分析及约千帧实验 | Q/KV 非对称压缩 | 无微调；每个 backbone 离线探测敏感层 |
+| [SAF3R](https://arxiv.org/html/2607.03612v2) | 2026-08-13 v2 | DA3-Giant 分头分析、实验和推理补丁 | 每个 head 使用不同稀疏算子 | 无微调；小数据集离线 profiling |
+| [DA3-Streaming](https://github.com/ByteDance-Seed/Depth-Anything-3/blob/main/da3_streaming/README.md) | 官方工程，README 标注 2025-11 发布 | 官方 DA3 长视频实现 | 重叠窗口、配准、回环、GPU 后端 | 直接复用权重；含几何优化 |
+| [Sim(3)-TurboReg](https://arxiv.org/html/2611.14135v1) | 2026-11-10 v1 | 直接替换 DA3-Streaming 对齐后端 | 跨块 Sim(3) 求解 | 几何算法，无网络训练 |
+| [DASH-SLAM](https://arxiv.org/html/2611.10239v1) | 2026-11-06 v1 | DA3 Nested 1.1 的长序列 SLAM 系统 | 关键帧、少重叠子图、并行流水线 | 无任务微调；含位姿图优化 |
+| FastDA3 / ADA3 | SAF3R v2 的比较基线 | FastVGGT / AVGGT 的 DA3 适配结果 | token 合并 / attention 简化 | 是迁移基线名称，不是两篇独立论文 |
+| [Co-Me](https://github.com/co-me-tokens/CoMe/blob/main/README.md) | 2026-05 增加 DA3 支持 | 作者代码明确支持 DA3 | 置信度引导合并及专用 CUDA 算子 | 主干冻结，但置信度预测器要预先训练 |
+| [QMapAnything / Rotation Is Token-Blind](https://arxiv.org/html/2611.07955v1) | 2026-11-05 v1 | DA3 量化迁移与 token 作用分析 | PTQ；未给出 DA3 长序列加速证据 | DA3 使用闭式校正，无梯度微调；需校准 |
+
+这些方案的“长序列”含义不同：Spark3R/SAF3R 加速一次联合推理；DA3-Streaming/DASH-SLAM 用有界规模的局部推理构造长序列结果；Sim(3)-TurboReg 加速局部结果之间的对齐。不能把这三类结果视为相同的全序列 attention 计算。
+
+### 13.2 Spark3R：Q 敏感、KV 冗余，按角色和层分配压缩预算
+
+来源：[Spark3R 正文 §IV、图 1/3/6、表 I–III](https://arxiv.org/html/2605.06270v1)。论文直接包含 DA3；本次未核实到作者公开代码仓库。
+
+**机制与设计。** 分别压缩 Q、KV 的实验表明，Q 更敏感；Q 负责各视图输出，KV 承载可重复的场景信息。方法用较轻的组内合并处理 Q，较强的抽样处理 KV，再还原输出长度。合并配对主要集中在邻近帧，因此 Q 的匹配限制在连续 20 帧组内；KV 则按时间步长保留完整帧的 token，省掉相似度匹配和平均更新。离线逐层加重 KV 压缩，测输出退化，再给低敏感层更高压缩率；图 6 直接报告 DA3 的层敏感性。
+
+**DA3 实测。** 单卡 H20、主干 BF16，涉及 SVD 的预测头用 FP32；长序列评估保留最多 1,000 帧。表 I 的 DA3 点云推理时间如下，加速比由原始时间相除：
+
+| 数据集 | DA3 | Spark3R + DA3 | 计算所得加速比 |
+|---|---:|---:|---:|
+| 7-Scenes | 976.4 s | 58.0 s | 16.83× |
+| NRGBD | 983.3 s | 56.9 s | 17.28× |
+
+相应点云指标接近原模型；**摘要的最高 28× 不能写成 DA3 的加速倍数**。本次核对的实验说明没有充分列明统一输入分辨率及全部计时边界，因此不与 SAF3R 的倍数作横向排名。
+
+**对 ARROW 的推论。** 这是“全 Q 或轻 Q 压缩、强 KV 压缩”的直接相关证据，但论文中的 Q 是几何主干 token，并非 ARROW 的轨迹查询。ARROW decoder 应先保持所有 query 独立，仅压缩 KV；合并两个轨迹 query 后再复制输出，可能混淆身份与运动。另须注意，保留所有帧的输出不等于每层仍把所有帧作为 KV。对无序图片集，连续 20 帧分组的依据也不成立，需要另测基于共视或检索的分组。
+
+### 13.3 SAF3R：最贴近“先理解 DA3 attention，再设计加速算子”的工作
+
+来源：[论文 §3–5](https://arxiv.org/html/2607.03612v2)、[作者仓库](https://github.com/jndeng/SAF3R)。仓库直接提供 [DA3 分析 notebook](https://github.com/jndeng/SAF3R/blob/main/tools/analyze_da3.ipynb) 和 [DA3 推理补丁](https://github.com/jndeng/SAF3R/blob/main/saf3r/patch/patch_da3.py)，是当前很合适的分析工具起点。
+
+**直接观察。** 同一层不同 head 的模式并不相同，部分模式随输入改变；DA3 没有完全复现 VGGT 早晚层的位置编码局部模式。因此不能只给所有 head 套一个统一稀疏率。作者在 10 个 ETH3D 训练序列上，用完整/稀疏 attention 输出的 NMSE 选择每个 head 的算子与预算，不更新网络权重。
+
+下面是论文提出、且能在 [稀疏算子实现](https://github.com/jndeng/SAF3R/blob/main/saf3r/patch/sparse_attention.py) 中对应到的四类处理。它们是跨模型的候选类别，不表示每种模型都同样依赖每一类。
+
+| head 行为 | 针对性算子 | 避免的开销及代价 |
+|---|---|---|
+| 固定位置/锚帧模式 | 固定访问锚帧，或广播锚帧的局部 attention | 用结构先验减少交互；必须验证该 head 确实符合先验 |
+| 许多 Q 访问少量共同 K，形成竖线 | Query-Probe Top-K | 用平均 Q 给 K 打分，再让全部 Q 访问选中 KV |
+| 按 query 选择跨视图对应位置 | DINO Top-K | 计算特征近邻索引，在多个 head/层间复用 |
+| 广泛扫描不同位置 | 均匀步长采样 KV | 保持覆盖，避免把分散信息硬裁成少数显著点 |
+
+Query-Probe 有一个可直接复用的计算性质：
+
+$$
+\frac{1}{N_q}\sum_i q_i k_j^\top=\bar q k_j^\top.
+$$
+
+它精确复现的是 **softmax 前 logits 的列均值排序**，不是 attention 概率的列和。代码的 DINO 分支还分开处理特殊 token 与图像 token；默认特殊 Q 可访问全 token。因此，迁移时要检查具体分支，不能笼统理解成“所有 token 同样剪枝”。
+
+**DA3 结果与精度代价。** 论文表 4，H100 80 GiB、ScanNet-50：
+
+| 方法 | 300 帧：加速 / ATE / ARE | 500 帧：加速 / ATE / ARE | 700 帧 |
+|---|---|---|---|
+| DA3 | 1.0× / 0.13 / 3.68 | 1.0× / 0.13 / 3.73 | OOM |
+| FastDA3 | 2.7× / 0.13 / 3.77 | 3.1× / 0.13 / 3.94 | OOM |
+| ADA3 | 3.2× / 0.35 / 12.43 | 3.8× / 0.43 / 13.42 | OOM |
+| SAF3R + DA3 | 3.3× / 0.15 / 5.19 | 3.8× / 0.16 / 5.71 | OOM |
+
+**不能写成无损加速，也不能写成已解决 DA3 的 700 帧显存问题。** FastDA3/ADA3 在这里分别是 FastVGGT/AVGGT 的迁移基线；ADA3 的退化尤其说明原模型的简化策略不宜直接照搬。
+
+**复杂度审查（本文推导）。** DINO 全局近邻预计算仍可能是二次成本；若每帧保留 k 个 KV，共 F 帧，每个 Q 的候选数就随 F 增长。固定 stride 也只降低二次项系数。因此，稀疏化及索引复用不自动等价于“对帧数严格线性”。要用于超长 ARROW，需另外限制总候选预算，并计入索引构建、索引存储和实际 kernel 时间。
+
+### 13.4 官方 DA3-Streaming：最直接的长视频工程基线
+
+来源：[官方说明与实验](https://github.com/ByteDance-Seed/Depth-Anything-3/blob/main/da3_streaming/README.md)、[主程序](https://github.com/ByteDance-Seed/Depth-Anything-3/blob/main/da3_streaming/da3_streaming.py)、[默认配置](https://github.com/ByteDance-Seed/Depth-Anything-3/blob/main/da3_streaming/configs/base_config.yaml)。这是基于 VGGT-Long 思路的官方工程扩展。
+
+**实际做法。** 主程序对每个重叠窗口重新调用 `model.inference`，从深度和相机恢复点云，用共同帧对齐局部坐标，再由回环约束修正轨迹。默认窗口/重叠为 120/60，置信度加权配准支持 Triton/Torch GPU 实现；中间结果写盘。这里跨块保存的是预测结果与几何关系，**不是 Transformer 历史 KV cache**，重叠帧会重复编码。
+
+**成本推导。** 设窗口 W、重叠 O、每帧 T 个 token，忽略回环和后处理，前端 attention 总计算近似为：
+
+$$
+O\!\left(\frac{F}{W-O}(WT)^2\right).
+$$
+
+固定 W、O 后随总帧数 F 线性增长，但跨窗口全局交互被几何对齐取代；输出地图、磁盘结果和回环检索仍可能随 F 增长。
+
+**官方报告及适用条件。** KITTI 00/05/08 共 11,373 帧、A100：22 分 17 秒，8.51 FPS；排除了预热、模型加载、PLY 保存。此结果比较 VGGT-Long/Pi-Long，不能解释为“比完整 DA3 快多少倍”。
+
+| 官方显存测试 | 窗口/重叠 | 峰值 VRAM |
+|---|---|---:|
+| KITTI，504×154 | 30/15 | 11.5 GB |
+| KITTI，504×154 | 120/60 | 15.9 GB |
+| TUM RGB-D，504×378 | 30/15 | 18.7 GB |
+| TUM RGB-D，504×378 | 120/60 | 28.3 GB |
+
+所以，“少于 12 GB 跑长视频”有明确设置条件。窗口缩小也可能牺牲轨迹精度。它适合有相邻共视关系的视频；无序海量照片还需要先建立重叠关系。官方脚本包含全序列回环处理，不能仅凭名字将其当作逐帧、零前视延迟的在线网络。
+
+### 13.5 Sim(3)-TurboReg：2026 年 11 月新增，直接加速 DA3-Streaming 后端
+
+来源：[论文 §III、§IV-B](https://arxiv.org/html/2611.14135v1)、[官方代码与集成入口](https://github.com/ivan-zzj/Sim3-TurboReg)。不改 DA3 前端和回环模块。
+
+**发现与设计。** 相邻窗口共享同一像素，配对身份正确，3D 坐标却可能因动态物体或深度误差而失真。普通置信度加权不能充分排除这类异常。方法用一条边的尺度和两个端点的局部尺度构造三尺度一致性图，再用 TurboClique 找一致对应集合，闭式估计 Sim(3)。这是几何输出误差分析，没有分析或稀疏化 DA3 attention。
+
+| DA3-Streaming 的替换实验 | 原后端 | Sim(3)-TurboReg |
+|---|---:|---:|
+| KITTI 平均处理时间 | 634 s | 529 s |
+| KITTI 平均 ATE | 24.477 m | 19.046 m |
+| TUM 平均处理时间 | 633 s | 641 s |
+| TUM 平均 ATE | 0.0492 m | 0.0437 m |
+
+KITTI 时间减少约 16.6%，ATE 改善约 22.2%；TUM 有精度收益但略慢。论文将系统计时注明为随负载变化的粗略测量，不能宣称所有场景都提速，也不能把独立配准实验中相对 RANSAC 的收益写成 DA3 网络收益。
+
+**对 ARROW 的推论。** 若采用窗口，优先用可靠静态背景建立坐标对齐；动态轨迹和跨窗口点身份需另行处理。该后端不能解决 query decoder 的计算瓶颈。
+
+### 13.6 DASH-SLAM：减少重叠重算，用 DA3 度量深度连接子图
+
+来源：[论文 §III–IV](https://arxiv.org/html/2611.10239v1)，2026-11-06。使用 DA3NESTED-GIANT-LARGE-1.1，无任务微调；本次未核实到作者公开代码仓库。
+
+**推理特点与设计。** 关键帧的视差与重叠影响 DA3 的跨视图推理；不同 batch 的度量深度仍会有尺度偏差。系统按 128 帧片段的累计光流，以步长 8 或 16 取关键帧；室内子图最多 32 个关键帧，只共享两个锚帧。用共享锚帧的深度比中位数传播尺度，优化关键帧位姿图，并按需重新推理验证边界与回环。四线程流水线与 BF16 进一步降低开销。
+
+**直接结果。** RTX 4000 Ada 20 GB、504 px、三次运行平均：TUM 中 DASH-SLAM 为 25.3 FPS、Sim(3) ATE 0.028 m；其 DA3-Streaming 基线为 1.64 FPS、0.103 m。两者的原始输入利用方式不同，因此这是系统比较，不能当作相同帧数、相同稠密输出的 attention 加速倍数。主干有界 batch 也不意味着全局位姿图有界。
+
+**对 ARROW 的推论。** 它支持“减少重叠帧重算”的系统思路，但不能直接丢掉 ARROW 所要求的目标帧。若关键帧构建 context、全部目标帧仍需跟踪输出，还要验证目标帧表征和 ID 如何得到；这些成本必须计入。128 帧分段策略也有缓冲延迟，吞吐 FPS 与实时响应延迟应分别报告。
+
+### 13.7 相关但不能混入“已验证 DA3 长序列免训练加速”的结果
+
+**Co-Me：有 DA3 支持，但额外模块经过训练。** [作者 README](https://github.com/co-me-tokens/CoMe/blob/main/README.md) 明确写明 2026 年 5 月增加 DA3，并随仓库提供 confidence predictor checkpoint。其置信度引导合并和专用 CUDA/FlashAttention 值得复现；“用户直接用现成权重”不等于“整套方法无需辅助训练”。已有 §3.2 应结合这一 DA3 工程更新阅读，不能把展示的 VGGT/MapAnything 倍数当成 DA3 数字。
+
+**QMapAnything：DA3 的量化与解释性证据，尚非 DA3 长序列加速结果。** [论文 §4.6、附录 D](https://arxiv.org/html/2611.07955v1) 对 DA3 做旋转、闭式 bias 校正，不做梯度微调；在两视图 ETH3D 的 W4A4 测试中，AUC@30 从朴素量化的 71.1 提高到约 81.2，仍低于浮点 90.33。其关键解释是特殊 token 的低幅值与输出重要性必须同时考虑。DA3 的“camera token 无有效输出影响”只针对文中选用的 **dense-ray 位姿路径**，不能推广到 camera head，更不能推广到 ARROW 的 ID token。主表约 3.1× 的硬件收益属于 MapAnything，且 W4 精度实验使用 fake quantization；本节不将其写为 DA3 已实现的长序列硬件加速。
+
+**Dyna3：直接使用冻结 DA3 做动态重建，但不是 DA3 attention 加速器。** [论文 §3–4](https://arxiv.org/html/2610.01286v1) 从 patch 特征的跨帧最佳匹配构造运动线索，结合 VLM 与 SAM3 分割，再分开重建静态背景和动态前景。它的速度优势主要相对其他 4D 系统，不是相对原版 DA3 的等任务加速。作者发现其测试的 DA3 attention 动态判别不可靠；这与“某些 head 编码几何对应”是不同命题，不能据此断言 DA3 完全没有对应信息。
+
+**SDrAwberry：长序列领域应用。** [作者实现](https://github.com/Sycamorers/SDrAwberry) 把同步多相机草莓田图像分批送入外部 DA3，用跨批轨迹对应、受限旋转配准、去重与 voxel hash 融合全局点云。它提供分块与流式融合的工程例子，但依赖特定运动和外部尺度参考；本次没有核实到等任务 DA3 attention 加速实验。
+
+**需要训练或主要提高质量的工作。** [GRF-Recon](https://arxiv.org/abs/2609.20012) 包含向主干蒸馏几何先验的 LoRA 适配；[PURE](https://funnyguy525.github.io/PURE-Page/) 明确进行无标注后训练，其长视频展示也注明是离线累积。二者不能归为原 DA3 权重的完整免训练改造。Self-Geometry 已见 §6.3，属于场景适配，应另计优化成本。
+
+### 13.8 面向当前 ARROW 的选择与复现顺序
+
+下面是基于以上文献的**研究建议，不是已在 ARROW 上验证的结论**：
+
+1. **先从 SAF3R 的 DA3 notebook 入手。** 分别记录原 DA3 和 ARROW 编码器每层、每头的模式；选择静态、动态、遮挡、低纹理和大视差序列。ARROW 已微调，不能直接沿用 DA3 的 head 类型配置。
+2. **以 Spark3R 思路做角色分离的最小消融。** 编码器比较全 Q + KV 抽样、轻 Q 合并 + 强 KV 抽样；decoder 先固定全部独立 query，只研究 KV。用少量序列逐层探测，再在未参与校准的序列上检验。
+3. **需要更长序列时加窗口。** 官方 DA3-Streaming 是工程参考；先分测网络、重叠重算、几何对齐和写盘，再决定是否引入 Sim(3)-TurboReg 或减少重叠。DASH-SLAM 提供少锚帧方案，但其关键帧取样不能直接替代全部帧的跟踪需求。
+4. **稀疏化与窗口可以组合，但收益不能相乘预估。** 小窗口里 attention 可能已不占主要时间；路由、检索和配准反而成为主项。分别报告窗口内加速与全流程加速，检查窗口接缝、动态点身份和长遮挡重现。
+
+| 输入/目标 | 优先方案 | 必须另外验证 |
+|---|---|---|
+| 数百至约千帧的有序视频，尽量保留全部帧输出 | Spark3R；SAF3R 的分头稀疏化 | 相同模型/分辨率/kernel 下的精度—速度曲线，实际显存上限 |
+| 更长视频或公里级场景，有界 GPU 前端 | DA3-Streaming；后端对比 Sim(3)-TurboReg | 漂移、回环、重叠重算、CPU/磁盘增长 |
+| 只需关键帧地图和轨迹的在线系统 | DASH-SLAM | 缓冲延迟、关键帧比例、输出范围与全局图开销 |
+| 大量无序照片 | 先试不依赖时间邻近的 SAF3R 分头策略 | 共视覆盖、低重叠和重复结构；分块前需构建共视分组 |
+| ARROW 长序列加稠密 query | 编码器压缩 + decoder 按查询角色选择 KV | 固定全部输出 query，保护 source/target/reference ID，分别计时两部分 |
+
+本次补充把第 12 节的阅读优先级进一步收敛为：**Spark3R → SAF3R（含 DA3 分析代码）→ DA3-Streaming → Sim(3)-TurboReg / DASH-SLAM**。其中前两者最直接回答注意力与网络推理机制的问题，后三者回答如何把局部推理组织成更长的重建过程。
 
 
