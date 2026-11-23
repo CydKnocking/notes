@@ -1737,3 +1737,18 @@ ct压缩时，对decoder不同层处理有不同的效果：
 - 对所有层进行压缩。tracking精度下降明显；深度精度几乎不变；位姿精度有所改善，压得越多，改善越多（卧槽？）。decoder速度提升明显，显存无提升。
 - 对2 6 7层进行压缩。tracking精度几乎不变/几乎保持原样；深度精度几乎保持原样；位姿精度几乎保持不变。decoder速度有提升，显存有少量增加。
 
+
+### 1114
+
+TTT挺好。仿照zipmap，用swiglu层替换了 query decoder 中的attention层。
+
+CVPR投稿的两个工作：
+
+- FARROW：
+  - 定终版方法
+  - 确定长序列的benchmark，测试定量结果
+
+- StreamDPM：
+  - 找demo
+  - 确定长序列的benchmark，测试定量结果
+  - 改论文，增加新的流式系统
