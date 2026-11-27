@@ -1,0 +1,3236 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../research_diary/">
+      
+      
+        <link rel="next" href="../streaming_4d_tracking_research_2026/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../_assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>机器人场景（机械臂与人形机器人）下的 4D 重建与点跟踪研究综述 - Knocking's notebook</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="brown" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#4d" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Knocking&#39;s notebook" class="md-header__button md-logo" aria-label="Knocking's notebook" data-md-component="logo">
+      
+  <img src="../../_assets/icon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Knocking's notebook
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              机器人场景（机械臂与人形机器人）下的 4D 重建与点跟踪研究综述
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/CydKnocking/notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Knocking&#39;s notebook" class="md-nav__button md-logo" aria-label="Knocking's notebook" data-md-component="logo">
+      
+  <img src="../../_assets/icon.png" alt="logo">
+
+    </a>
+    Knocking's notebook
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/CydKnocking/notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Knocking's personal notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about_this_notebook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About this notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Vis Info Processing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    3D Vis Info Processing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/00_Introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    00 Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/01_Part%20One%20Acquisition%20of%203D%20Data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 Part One Acquisition of 3D Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/02_Part%20Two%20Integration%20of%203D%20data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 Part Two Integration of 3D data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/03_Part%20Three%20Descriptions%20of%203D%20Objects%20and%20Scenes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 Part Three Descriptions of 3D Objects and Scenes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/Full%20notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ML
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ML
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ML/great_links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Great links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ML/reinforcement_learning_for_streaming_vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    从零理解强化学习：面向流式重建、SLAM 与在线感知
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Web
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Web/clash/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clash
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Web/domains/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Domains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Conference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../conference/china3dv_2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    China3dv 2026
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../conference/cvpr_eccv_2026_research_trends/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CVPR 2026 与 ECCV 2026：代表论文梳理与科研趋势
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Datasets
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Datasets
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/TUM_RGBD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TUM RGBD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/TartanAir/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TartanAir
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/proxy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proxy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Github
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Github
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../github/Deploy%20repo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Create a new github repository
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../github/verify%20domain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verify domain
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux and ubuntu
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Linux and ubuntu
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/chmod/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chmod
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/chown/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chown
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/cmatrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cmatrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/crontab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crontab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/dns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/softlink/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Softlink
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/ssh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ssh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/tmux/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/zsh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zsh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Math
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Math
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/great_links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Great links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/quaternion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quaternion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Papers
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Papers
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3dgs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3dgs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4d_tracking_submission_directions_18d_2mo_2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    单目流式 4D 重建与点追踪：18 天 / 两个月投稿决策与实验方案
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4drecon_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4drecon tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arrow_training_free_efficiency_attention_survey/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    面向 ARROW 长序列与稠密查询的免训练加速：注意力、可解释性与推理机制综述
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../croco_and_crocov2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CroCo 与 CroCo v2：从跨视角补全到通用几何视觉骨干
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../discussions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Discussions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feedforward_3dgs_survey_2024_2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3DGS / 4DGS 研究综述：前馈式重建与任意点跟踪
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../long_sequence_3d_foundation_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    三维视觉基础模型的长序列、低开销与新场景适配
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pano_3drecon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pano 3drecon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../panoramic_vo_reconstruction_survey/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    全景相机 Visual Odometry 与场景重建：精选文献简报
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paper_notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paper notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../point_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Point tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../point_tracking_world_models_embodied_ai/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    从点轨迹到世界模型与具身控制
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reconstruction_tracking_2026_2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2026 年 3D / 4D 重建与点跟踪研究更新
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research_diary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    [Protected] Research diary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    机器人场景（机械臂与人形机器人）下的 4D 重建与点跟踪研究综述
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    机器人场景（机械臂与人形机器人）下的 4D 重建与点跟踪研究综述
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、研究现状总览：机器人场景带来了哪些特殊问题？
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="一、研究现状总览：机器人场景带来了哪些特殊问题？">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#20242026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024–2026 年的演进趋势
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2d-3d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、方向一：2D / 3D 点跟踪作为机械臂与灵巧手的操作接口
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="二、方向一：2D / 3D 点跟踪作为机械臂与灵巧手的操作接口">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 代表性工作对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-6d-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 核心机制观察：刚体 6D 跟踪 vs. 任意物质点跟踪
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3d-4d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、方向二：前馈 3D / 4D 几何基础模型在机器人控制中的适配
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、方向二：前馈 3D / 4D 几何基础模型在机器人控制中的适配">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        代表性适配工作
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4d-4dgs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、方向三：4D 高斯（4DGS）、物理数字孪生与动作条件世界模型
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、方向三：4D 高斯（4DGS）、物理数字孪生与动作条件世界模型">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-4d-real-to-sim" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 铰接物体与柔性物体的 4D 可交互重建（Real-to-Sim）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-4d-4dgs-vs-3d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 动作条件的 4D 世界模型（4DGS 路线 vs. 3D 点流路线）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#humanoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、方向四：人形机器人（Humanoid）与第一视角场景下的进展
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、方向四：人形机器人（Humanoid）与第一视角场景下的进展">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-4d-real-to-sim-to-real" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 单目视频 4D 人–景 / 人–物联合重建（Real-to-Sim-to-Real）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-egocentric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 第一视角（Egocentric）手–物跟踪与跨本体迁移
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、相关数据集与评测基准速览
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、当前核心技术瓶颈与潜在切入点（2026 视角）
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../streaming_4d_tracking_research_2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    动态长序列的 4D 重建与 Point Tracking：文献调研与选题判断
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vggt_mae/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VGGT 类几何基础模型 × MAE / Masked Modeling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Python
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/rosbag/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rosbag
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/send_email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Send email
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/torch_tips/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Torch tips
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/tqdm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tqdm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、研究现状总览：机器人场景带来了哪些特殊问题？
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="一、研究现状总览：机器人场景带来了哪些特殊问题？">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#20242026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2024–2026 年的演进趋势
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2d-3d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、方向一：2D / 3D 点跟踪作为机械臂与灵巧手的操作接口
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="二、方向一：2D / 3D 点跟踪作为机械臂与灵巧手的操作接口">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 代表性工作对比
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-6d-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 核心机制观察：刚体 6D 跟踪 vs. 任意物质点跟踪
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3d-4d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、方向二：前馈 3D / 4D 几何基础模型在机器人控制中的适配
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、方向二：前馈 3D / 4D 几何基础模型在机器人控制中的适配">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        代表性适配工作
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4d-4dgs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、方向三：4D 高斯（4DGS）、物理数字孪生与动作条件世界模型
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、方向三：4D 高斯（4DGS）、物理数字孪生与动作条件世界模型">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-4d-real-to-sim" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 铰接物体与柔性物体的 4D 可交互重建（Real-to-Sim）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-4d-4dgs-vs-3d" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 动作条件的 4D 世界模型（4DGS 路线 vs. 3D 点流路线）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#humanoid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、方向四：人形机器人（Humanoid）与第一视角场景下的进展
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、方向四：人形机器人（Humanoid）与第一视角场景下的进展">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-4d-real-to-sim-to-real" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 单目视频 4D 人–景 / 人–物联合重建（Real-to-Sim-to-Real）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-egocentric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 第一视角（Egocentric）手–物跟踪与跨本体迁移
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、相关数据集与评测基准速览
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、当前核心技术瓶颈与潜在切入点（2026 视角）
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="4d">机器人场景（机械臂与人形机器人）下的 4D 重建与点跟踪研究综述</h1>
+<blockquote>
+<p><strong>检索截止：2026-11-27</strong><br />
+本文聚焦 <strong>2024–2026 年</strong>在<strong>机械臂（单臂/双臂/多指灵巧手）<strong>与</strong>人形机器人（全身移动操作 Loco-manipulation / 第一视角 Egocentric）<strong>场景下的 4D 重建与 2D/3D 点跟踪相关工作。<br />
+</strong>与仓库内其他笔记的关系：</strong> 通用视觉领域的流式长序列 4D 重建与教师模型见 <a href="../streaming_4d_tracking_research_2026/">streaming_4d_tracking_research_2026.md</a> 与 <a href="../reconstruction_tracking_2026_2026-11-23/">reconstruction_tracking_2026_2026-11-23.md</a>；从通用点轨迹到视频生成/世界模型的脉络见 <a href="../point_tracking_world_models_embodied_ai/">point_tracking_world_models_embodied_ai.md</a>。本文专门从<strong>机器人本体约束、感知视角、物理交互与闭环控制</strong>出发，梳理这一交叉方向的研究现状、技术路线与开放问题。</p>
+</blockquote>
+<hr />
+<h2 id="_1">一、研究现状总览：机器人场景带来了哪些特殊问题？</h2>
+<p>在通用计算机视觉中，4D 重建与点跟踪通常处理互联网单目视频或多视角采集，目标是恢复相机位姿、时变几何或评估重投影/轨迹指标。然而一旦进入<strong>机械臂与人形机器人</strong>场景，问题设定发生本质变化：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>通用视觉视频（In-the-wild）</th>
+<th>机械臂操作（桌面 / 双臂 / 灵巧手）</th>
+<th>人形机器人（移动操作 / 全身控制）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>典型相机配置</strong></td>
+<td>手持或未知平滑轨迹单目相机</td>
+<td>固定第三视角相机 + <strong>腕部相机（Wrist/Eye-in-Hand）</strong></td>
+<td><strong>头部第一视角相机（Egocentric）</strong> + 腕部相机，随步态高频晃动</td>
+</tr>
+<tr>
+<td><strong>空间尺度要求</strong></td>
+<td>多允许相对尺度或事后 <code>Sim(3)</code> 对齐</td>
+<td><strong>绝对米制尺度（Metric Scale）</strong>，厘米级偏差即导致抓取碰撞或落空</td>
+<td>米制场景地形尺度（防踩空/绊倒）+ 手部操作区毫米/厘米级精度</td>
+</tr>
+<tr>
+<td><strong>主要遮挡形态</strong></td>
+<td>物体互遮挡、行人走过、出视野</td>
+<td><strong>高频接触遮挡</strong>：夹爪闭合、双臂交接、五指包络被操作物体</td>
+<td>手臂进入头部视野遮挡、弯腰/转身导致的<strong>长时视野切出与重入</strong></td>
+</tr>
+<tr>
+<td><strong>可利用的额外先验</strong></td>
+<td>几乎仅靠视觉外观与通用几何先验</td>
+<td><strong>已知 URDF 网格、关节角 <span class="arithmatex">\(q_t\)</span>、正向运动学（FK）</strong>、手眼标定或力觉/触觉</td>
+<td>全身本体状态（Proprioception）、<strong>IMU</strong>、足端接触状态、人体运动先验</td>
+</tr>
+<tr>
+<td><strong>时序与延迟要求</strong></td>
+<td>可离线整段双向优化或秒级滑窗</td>
+<td>视觉伺服与闭环策略要求 <strong>严格因果（Causal）</strong>、10–50 Hz 低延迟</td>
+<td>底层全身控制 50–500 Hz，高层视觉感知需实时异步对齐、无累积漂移</td>
+</tr>
+</tbody>
+</table>
+<h3 id="20242026">2024–2026 年的演进趋势</h3>
+<p>近三年该领域经历了三次明显的范式跃迁：</p>
+<ol>
+<li><strong>从“2D 像素点引导”走向“3D 跨本体点流与闭环反馈”</strong>：2024 年以 <code>RoboTAP</code>、<code>ATM</code>、<code>Track2Act</code> 为代表的工作证明“点轨迹”可以绕开昂贵的机器人遥操作，直接从人类视频提取操作意图；2025–2026 年全面转向 <strong>3D 米制点轨迹与点流</strong>（<code>Point Policy</code>、<code>3PoinTr</code>、<code>Dex4D</code>、<code>PointPilot</code>），不仅用于规划，还进入多指灵巧手的实时在线纠偏与奖励计算。</li>
+<li><strong>前馈几何基础模型（DUSt3R / MonST3R / VGGT）的“机器人化改造”</strong>：研究者不再无条件依赖高噪声深度相机（在透明、反光、细杆物体上易失效），而是将预训练 3D/4D 基础模型引入策略网络，并通过<strong>融合机器人关节运动学恢复真实尺度</strong>与<strong>Token 缓存剪枝降延迟</strong>实现真机闭环（<code>RoST3R</code>、<code>Robo3R</code>、<code>VGGT-DP</code>、<code>GAM</code>、<code>Act4R</code>）。</li>
+<li><strong>4D 表示分化为“可交互物理孪生（Real-to-Sim）”与“动作条件世界模型（4D-WAM）”两条主线</strong>：<ul>
+<li>在<strong>机械臂</strong>上，4D Gaussian Splatting（4DGS）与弹簧质点/位置动力学结合，重建铰接件与绳索布料的可交互数字孪生（<code>RSRD</code>、<code>PhysTwin</code>、<code>GaussTwin</code>、<code>ArtiTwinSplat</code>），或直接构建动作条件的高斯/点流世界模型（<code>ManiGaussian++</code>、<code>GAF</code>、<code>4DGS-WAM</code>、<code>PointWorld</code>、<code>PointWAM</code>）。</li>
+<li>在<strong>人形机器人</strong>上，核心痛点是缺乏海量全身遥操作数据，因此 <strong>“单目视频 4D 人–景/人–物联合重建 → 物理重定向 → RL/模仿策略部署真机（如 Unitree G1/H1）”</strong> 成为 2025–2026 年最具代表性的路线（<code>VideoMimic</code>、<code>MeshMimic</code>、<code>GRAIL</code>、<code>VLK</code>、<code>SPIDER</code>）。</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2 id="2d-3d">二、方向一：2D / 3D 点跟踪作为机械臂与灵巧手的操作接口</h2>
+<p>机器人与人手形态差异巨大（Embodiment Gap），但**“被操作物体表面点在三维空间中如何运动”是与本体形态无关的（Embodiment-Agnostic）**。围绕这一核心思想，点跟踪在机器人操作中承担了三种角色：<strong>跨本体技能提取、策略中间表征、在线闭环纠偏/奖励计算</strong>。</p>
+<h3 id="21">2.1 代表性工作对比</h3>
+<table>
+<thead>
+<tr>
+<th>年份 / 出处</th>
+<th>工作</th>
+<th>点轨迹表示与维度</th>
+<th>核心机制：如何连接感知与控制</th>
+<th>适用本体与关键边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ICRA 2024</td>
+<td><strong><a href="https://arxiv.org/abs/2308.15975">RoboTAP</a></strong></td>
+<td>稀疏任务相关 2D 物体点</td>
+<td>用 TAPIR 在线跟踪，自动分割子阶段活性点，通过视觉伺服（Visual Servoing）对齐示范轨迹</td>
+<td>单臂夹爪；4–6 次示范即可泛化，但受限于 2D 平面无显式深度</td>
+</tr>
+<tr>
+<td>RSS 2024</td>
+<td><strong><a href="https://roboticsproceedings.org/rss20/p092.html">ATM</a></strong></td>
+<td>任意查询点的未来 2D 轨迹</td>
+<td>在无动作标签视频上预训练未来点轨迹预测器，再条件化少量带动作示范的策略网络</td>
+<td>单臂桌面（LIBERO / UR5）；开环预测未来点提案引导策略</td>
+</tr>
+<tr>
+<td>ECCV 2024</td>
+<td><strong><a href="https://arxiv.org/abs/2405.01527">Track2Act</a></strong></td>
+<td>目标条件预测的 2D 点轨迹</td>
+<td>从互联网视频学习预测 2D 轨迹 → 结合深度反推刚体变换计划 → 少量真机残差策略修正</td>
+<td>单臂操作；依赖“刚体变换”假设将点轨迹转为末端位姿</td>
+</tr>
+<tr>
+<td>CoRL 2024</td>
+<td><strong><a href="https://proceedings.mlr.press/v270/yuan25a.html">General Flow</a></strong></td>
+<td>语言条件下的物体表面 3D 点流</td>
+<td>从人类 RGB-D 操作视频学习物体表面 3D 运动先验，零样本迁移至闭环机器人控制</td>
+<td>单臂刚体/铰接体；依赖深度输入提供米制三维坐标</td>
+</tr>
+<tr>
+<td>CoRL 2024</td>
+<td><strong><a href="https://im-flow-act.github.io/">Im2Flow2Act</a></strong></td>
+<td>物体区域的密集/多点 2D 运动流</td>
+<td>人类视频训练“图像 → 物体流”，仿真随机交互训练“物体流 → 动作”，以流解耦跨域差异</td>
+<td>单臂刚体/可变形体；仿真到真实的视觉流外观一致性是关键</td>
+</tr>
+<tr>
+<td>ICRA 2025</td>
+<td><strong><a href="https://georgysavva.github.io/assets/pdf/HuDOR_ICRA_2025.pdf">HuDOR</a></strong></td>
+<td>示范与执行中的物体表面点轨迹</td>
+<td><strong>点跟踪作在线 RL 奖励</strong>：匹配人手示范与机械手执行时的物体点运动相似度，真机在线微调</td>
+<td><strong>多指灵巧手（Allegro）</strong>；1 段人类视频 + 约 1 小时真机交互学会精细操作</td>
+</tr>
+<tr>
+<td>CoRL 2025</td>
+<td><strong><a href="https://proceedings.mlr.press/v305/haldar25a.html">Point Policy</a></strong></td>
+<td>手部与物体的稀疏语义 3D 关键点</td>
+<td>统一在 3D 关键点空间表示观测与动作，从离线人类视频预测未来 3D 点并经几何约束解算动作</td>
+<td>单臂与手–物交互；稀疏语义点轻量化，但对复杂柔性表面覆盖有限</td>
+</tr>
+<tr>
+<td>arXiv 2026-03</td>
+<td><strong><a href="https://arxiv.org/abs/2603.08485">3PoinTr</a></strong></td>
+<td>初始点云预测的全程稠密 3D 轨迹</td>
+<td>将完整任务的 3D 点轨迹压缩为固定计划 Token，闭环策略每步结合实时观测读取该几何计划</td>
+<td>单臂操作；融合人类视频与少量真机数据，成功率显著优于纯点云策略 DP3</td>
+</tr>
+<tr>
+<td>CoRL 2026</td>
+<td><strong><a href="https://arxiv.org/abs/2602.15828">Dex4D</a></strong></td>
+<td>物体中心的 3D 当前点与目标点对应</td>
+<td>仿真大规模训练点轨迹条件化的灵巧手策略；部署时由生成视频给目标轨迹，<strong>真机在线 3D 跟踪实时纠偏</strong></td>
+<td><strong>多指灵巧手零样本泛化</strong>；直接考验在线点跟踪的抗手指遮挡与延迟表现</td>
+</tr>
+<tr>
+<td>arXiv 2026-11</td>
+<td><strong><a href="https://arxiv.org/abs/2611.02930">PointPilot</a></strong></td>
+<td>任务聚焦的物体 + 夹爪 3D 点流</td>
+<td>摒弃冗余全局背景，将夹爪也视作交互对象，在统一 3D 坐标系端到端联合学习子任务规划、定位与点流</td>
+<td><strong>跨本体零样本泛化</strong>；突出“物体中心 + 执行器点流统一对齐”的趋势</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22-6d-vs">2.2 核心机制观察：刚体 6D 跟踪 vs. 任意物质点跟踪</h3>
+<p>在实际机械臂系统中，必须区分两条并行路线：
+- <strong>刚体 6D 位姿跟踪路线</strong>：以 <strong><a href="https://arxiv.org/abs/2312.11662">FoundationPose</a></strong>（CVPR 2024）等为代表，在给定 RGB-D 和参考网格（或少量参考图）时能极稳健地跟踪未知刚体的 <span class="arithmatex">\(SE(3)\)</span> 位姿，至今仍是工业抓放与灵巧手操作（如部分重定向管线）最常用的工程基线；近期 <strong><a href="https://arxiv.org/abs/2610.03716">MoSE3</a></strong>（2026-10）进一步在冻结几何骨干上估计逐像素世界系局部 <span class="arithmatex">\(SE(3)\)</span> 运动。
+- <strong>任意 3D 物质点跟踪路线</strong>：当操作对象扩展到<strong>绳索、衣物、面团、多部件铰接物体</strong>，或者无法预先扫描完整物体资产时，单一刚体 <span class="arithmatex">\(SE(3)\)</span> 失效，3D 点跟踪/场景流（如 <code>3PoinTr</code>、<code>PointWorld</code>、<code>PointPilot</code>）成为唯一能统一描述刚体、铰接与非刚体形变的几何接口。</p>
+<hr />
+<h2 id="3d-4d">三、方向二：前馈 3D / 4D 几何基础模型在机器人控制中的适配</h2>
+<p>随着 <code>DUSt3R</code>、<code>MonST3R</code>、<code>CUT3R</code>、<code>VGGT</code> 等前馈几何基础模型（Geometric Foundation Models, GFMs）爆发，2025–2026 年机器人社区开始尝试<strong>仅用普通 RGB 相机（摆脱硬件 RGB-D 对反光/透明表面的缺陷）构建三维/四维空间感知策略</strong>。但直接迁移面临三大障碍：<strong>无真实物理尺度、非流式批处理、大模型高推理延迟</strong>。</p>
+<h3 id="_2">代表性适配工作</h3>
+<table>
+<thead>
+<tr>
+<th>时间 / 会议</th>
+<th>工作</th>
+<th>基础骨干</th>
+<th>针对机器人场景的关键改造</th>
+<th>解决的核心痛点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2025–2026</td>
+<td><strong><a href="https://rost3r.github.io/">RoST3R</a></strong></td>
+<td>MonST3R</td>
+<td>改为流式增量优化；在重建同时估计机械臂姿态，<strong>利用已知机器人运动学结构注册进场景恢复绝对米制尺度</strong>，解耦相机与物体动态</td>
+<td>纯 RGB 输入下的米制尺度缺失与动态前景/腕部相机运动混淆</td>
+</tr>
+<tr>
+<td>RSS 2026</td>
+<td><strong><a href="https://arxiv.org/abs/2602.10101">Robo3R</a></strong></td>
+<td>3R 系列前馈点图</td>
+<td>融合 RGB 图像与机器人本体状态，设计 Masked Point Head 与基于关键点的 PnP 在线精化相机外参</td>
+<td>免硬件深度传感器、免繁琐外参重标定，实时输出高精度操作级点云</td>
+</tr>
+<tr>
+<td>arXiv 2025-09 / 2026</td>
+<td><strong><a href="https://arxiv.org/abs/2509.18778">VGGT-DP</a></strong></td>
+<td>VGGT + Diffusion Policy</td>
+<td>引入本体感知引导的视觉特征学习，并提出<strong>逐帧 Token 复用（FTR）与随机剪枝</strong>减少相邻帧冗余计算</td>
+<td>大型 3D 基础模型接入高频闭环扩散策略时的推理延迟瓶颈</td>
+</tr>
+<tr>
+<td>2025–2026</td>
+<td><strong>RoboVGGT / GP3</strong></td>
+<td>VGGT</td>
+<td>将多视角 RGB 映射为稠密空间几何 Token，替代传统 2D ResNet/ViT 视觉编码器或物理深度相机</td>
+<td>提升多视角空间对齐精度与跨相机机位扰动的策略泛化能力</td>
+</tr>
+<tr>
+<td>ECCVW 2026</td>
+<td><strong><a href="https://cvlab-kaist.github.io/Geometric-Action-Model/">GAM</a></strong></td>
+<td>预训练几何基础模型</td>
+<td>拆开预训练几何模型中间层插入因果预测器，根据历史观测、指令与本体状态联合解码<strong>未来 3D 几何与机器人动作</strong></td>
+<td>验证几何预训练表征本身作为 VLA/世界动作模型共享底座的视角鲁棒性</td>
+</tr>
+<tr>
+<td>arXiv 2026-10</td>
+<td><strong><a href="https://arxiv.org/abs/2610.17462">Act4R</a></strong></td>
+<td>3D 基础模型 + 4D 场景流</td>
+<td><strong>动作条件化的 4D 重建</strong>：直接从控制动作信号预测机器人在三维空间中的稠密场景流，无需显式运动学标定（Kinematics-free）即可做逆向控制优化</td>
+<td>软体机器人、未精确标定机械臂或跨构型本体的无模型空间控制</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>关键趋势总结：</strong> 机器人场景并非盲目追求“纯无先验 RGB 重建”，最有效的设计往往是<strong>把机器人自带的“免费真值”（关节编码器 <span class="arithmatex">\(q_t\)</span>、夹爪开合度、URDF 几何尺寸）作为几何基础模型的尺度锚点与动态掩码约束</strong>（如 <code>RoST3R</code>、<code>Robo3R</code>），同时采用<strong>快慢双系统异步推理</strong>（如 <strong><a href="https://arxiv.org/abs/2603.05089">R3DP</a></strong> 在关键帧跑重型 3D 先验、中间帧轻量时序传播）满足闭环控制频率。</p>
+</blockquote>
+<hr />
+<h2 id="4d-4dgs">四、方向三：4D 高斯（4DGS）、物理数字孪生与动作条件世界模型</h2>
+<p>除了隐式特征和离散点轨迹，显式重建完整动态场景在机器人中有两大直接落地场景：<strong>① Real-to-Sim 构建可交互数字孪生（用于规划、强化学习与零样本 Sim-to-Real）；② 构建动作条件的 4D 世界模型（预测候选动作造成的未来三维后果）</strong>。</p>
+<h3 id="41-4d-real-to-sim">4.1 铰接物体与柔性物体的 4D 可交互重建（Real-to-Sim）</h3>
+<p>传统三维重建只恢复静态外观网格，机器人一碰就会穿模或无法推动抽屉/绳索。近年的机器人 4D 重建强调**“几何 + 运动学/物理属性联合恢复”**：</p>
+<ul>
+<li><strong><a href="https://arxiv.org/abs/2409.18121">Robot See Robot Do（RSRD）</a></strong>（Kerr 等，CoRL 2024）：提出 <strong>4D 可微部件模型（4D-DPM）</strong>。先对物体做静态 3DGS 扫描并聚类 DINO 特征部件，再仅凭<strong>单目 RGB 人类交互视频</strong>通过可微渲染跟踪恢复各刚性部件的 4D 运动轨迹，最终驱动双臂机器人（YuMi）复现相同的部件状态变化。</li>
+<li><strong><a href="https://arxiv.org/abs/2503.17973">PhysTwin</a></strong>（Jiang 等，2025）：面向<strong>绳索、布料、毛绒玩具等可变形物体</strong>，从稀疏交互视频联合优化弹簧–质点物理模型（Spring-Mass）参数、碰撞几何与 3DGS 外观，生成可实时交互仿真的物理数字孪生，直接支持机械臂基于模型的路径规划与遥操作。</li>
+<li><strong><a href="https://arxiv.org/abs/2603.05108">GaussTwin</a></strong>（2026）：将基于位置的动力学（PBD）节点与高斯原语绑定，在真实机械臂交互过程中利用实时分割掩码和光度残差对仿真状态做在线 <span class="arithmatex">\(SE(3)\)</span>/形变校正，保持物理数字孪生与真实桌面同步。</li>
+<li><strong><a href="https://arxiv.org/abs/2606.24628">ArtiTwinSplat</a></strong>（2026-06）：从日常手持 RGB-D 视频自动发现未知物体的多关节运动学（旋转轴/平移轴）并分割高斯部件，直接导出仿真器可用的交互式 <strong>URDF + 3DGS</strong> 资产。</li>
+<li><strong><a href="https://arxiv.org/abs/2409.10161">SplatSim</a></strong>（Qureshi 等，2024/2025）：用真实扫描重建的机械臂与物体 Gaussian Splats 替换物理仿真器中的传统网格渲染，大幅消除视觉外观域差，实现纯仿真训练 RGB 策略的零样本真机迁移。</li>
+</ul>
+<h3 id="42-4d-4dgs-vs-3d">4.2 动作条件的 4D 世界模型（4DGS 路线 vs. 3D 点流路线）</h3>
+<p>当机器人需要评估“如果我向左推 vs. 向右拉，场景会怎样变化”时，需要<strong>动作条件（Action-Conditioned）的 4D 预测模型</strong>。当前形成了两条鲜明的技术路线：</p>
+<table>
+<thead>
+<tr>
+<th>路线</th>
+<th>代表工作</th>
+<th>核心设计</th>
+<th>优势与局限</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>动态高斯世界模型（4DGS-based）</strong></td>
+<td><strong><a href="https://arxiv.org/abs/2403.08321">ManiGaussian</a></strong>（ECCV 2024）<br><strong><a href="https://arxiv.org/abs/2506.19842">ManiGaussian++</a></strong>（2025，双臂）<br><strong><a href="https://arxiv.org/abs/2506.14135">GAF</a></strong>（2025）<br><strong><a href="https://arxiv.org/abs/2608.25956">4DGS-WAM</a></strong>（2026-08）</td>
+<td>在 3DGS 上附加可学习的运动属性/变形场；<code>ManiGaussian++</code> 引入主从双臂层级动力学建模；<code>4DGS-WAM</code> 显式分离持久化静态背景与动作驱动的动态物体高斯</td>
+<td><strong>优势</strong>：支持新视角光度一致渲染与稠密语义场传播，适合与 VLM 视觉评估结合。<br><strong>局限</strong>：高斯分裂/合并容易破坏长程单点物理身份，多步推演计算开销较高。</td>
+</tr>
+<tr>
+<td><strong>3D 点轨迹/点流世界模型（Point-Flow-based）</strong></td>
+<td><strong><a href="https://point-world.github.io/">PointWorld</a></strong>（CVPR 2026）<br><strong><a href="https://arxiv.org/abs/2610.02840">PointWAM</a></strong>（2026-10）<br><strong><a href="https://arxiv.org/abs/2610.28594">VPM</a></strong>（2026-10）<br><strong><a href="https://lishanyqy.github.io/4DWAM/">4D-WAM</a></strong>（2026-08）</td>
+<td><code>PointWorld</code> 用正向运动学将候选动作转为机器人表面 3D 点位移，直接预测环境点 3D 响应并接入 MPC；<code>PointWAM</code> 将场景拆为“环境点 + 手部点”在共享时空坐标系联合预测轨迹；<code>4D-WAM</code> 仅在训练期蒸馏 4D 轨迹场特征提升策略视角泛化</td>
+<td><strong>优势</strong>：跳过复杂光度纹理渲染，直接聚焦物理表面位移，极易扩展到百万级跨数据集预训练（如 PointWorld 200 万轨迹）。<br><strong>局限</strong>：稀疏/半稠密点云对新出现表面（如拉开抽屉露出的内部）缺乏显式补全机制。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="humanoid">五、方向四：人形机器人（Humanoid）与第一视角场景下的进展</h2>
+<p>相比固定在桌面上的机械臂，<strong>全尺寸/中小型人形机器人（如 Unitree G1 / H1、Fourier GR1、Figure 等）<strong>将问题从“局部桌面操作”推向了</strong>“全身移动操作（Whole-Body Loco-Manipulation）”</strong>。这给 4D 重建和跟踪带来了三个全新课题：
+1. <strong>不能只跟踪人或只重建场景</strong>：纯人体姿态估计（HMR）缺少地面高度、台阶与桌椅几何，直接迁移到物理引擎会导致双足悬空、穿模或摔倒。
+2. <strong>第一视角（Egocentric）相机随步态剧烈运动</strong>：头部相机不仅有大跨度位移，还有行走冲击带来的俯仰/横滚抖动，必须精确解耦自运动与手–物相对运动。
+3. <strong>全身遥操作极难扩展</strong>：通过 VR + 动捕服遥操作人形机器人采集数据的吞吐极低，因此<strong>从普通人类单目/智能眼镜视频中进行 4D 重建与物理重定向</strong>成为 2025–2026 年最热门的方向。</p>
+<h3 id="51-4d-real-to-sim-to-real">5.1 单目视频 4D 人–景 / 人–物联合重建（Real-to-Sim-to-Real）</h3>
+<table>
+<thead>
+<tr>
+<th>时间 / 出处</th>
+<th>工作</th>
+<th>4D 重建与跟踪的核心内容</th>
+<th>如何转化为人形机器人控制</th>
+<th>真机验证平台</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2025-05</td>
+<td><strong><a href="https://arxiv.org/abs/2505.03729">VideoMimic</a></strong></td>
+<td>从日常手机拍摄的单目 RGB 视频中，<strong>在一致的物理米制尺度下联合重建人体 4D 运动轨迹与周围 3D 场景几何网格</strong></td>
+<td>将重建地形与重定向动作导入物理仿真训练上下文感知 RL 策略，测试时根据机器人本体视觉感知环境执行动作</td>
+<td><strong>Unitree G1</strong>（上下楼梯、坐起长椅、跨越复杂地形）</td>
+</tr>
+<tr>
+<td>2026-02</td>
+<td><strong><a href="https://arxiv.org/abs/2602.15733">MeshMimic</a></strong></td>
+<td>消费级单目传感器同步分割并重建人体轨迹与底层 3D 地形几何，引入运动学一致性优化</td>
+<td>采用**接触不变重定向（Contact-Invariant Retargeting）**学习耦合的“动作–地形”交互，消除足底打滑与网格穿模</td>
+<td>人形全身地形交互控制</td>
+</tr>
+<tr>
+<td>CoRL 2026</td>
+<td><strong><a href="https://arxiv.org/abs/2606.05160">GRAIL</a></strong></td>
+<td>利用已知尺度的场景/物体几何资产结合视频世界模型生成交互视频，<strong>重建接触一致的 4D 人–物运动</strong></td>
+<td>将恢复的 4D 人体全身轨迹与物体位姿重定向为人形移动操作训练示范</td>
+<td><strong>Unitree G1</strong>（移动抓取、携物上楼）</td>
+</tr>
+<tr>
+<td>2026-06</td>
+<td><strong><a href="https://arxiv.org/abs/2606.30645">VLK</a></strong></td>
+<td>用 <strong>3DGS 重建真实室内米制场景</strong>，无需人类示范，利用场景特权几何程序化合成全身移动与操作轨迹，事后渲染配对的第一视角视觉流</td>
+<td>训练端到端视觉–语言–运动学（Vision-Language-Kinematics）全身策略并零样本部署真机</td>
+<td><strong>Unitree G1</strong>（室内导航与物体搬运）</td>
+</tr>
+<tr>
+<td>2025-11</td>
+<td><strong><a href="https://arxiv.org/abs/2511.09484">SPIDER</a></strong></td>
+<td>面向视觉/动捕提取的纯运动学手–物与全身 4D 轨迹，构建<strong>大规模物理约束引导的灵巧重定向优化框架</strong></td>
+<td>修正视觉 4D 跟踪中的接触缺失、穿模与动力学不可行问题，批量转化为多种人形与多指手可执行的物理轨迹</td>
+<td>多类人形机器人与多指灵巧手仿真/真机</td>
+</tr>
+</tbody>
+</table>
+<h3 id="52-egocentric">5.2 第一视角（Egocentric）手–物跟踪与跨本体迁移</h3>
+<p>针对头部第一视角采集（如 Meta Project Aria 智能眼镜、Apple Vision Pro 或便携穿戴设备），代表性路径包括：
+- <strong><a href="https://arxiv.org/abs/2410.24221">EgoMimic</a></strong>（ICRA 2025）与 <strong><a href="https://arxiv.org/abs/2505.20290">EgoZero</a></strong>（2025）：利用智能眼镜采集第一视角视频，结合 SLAM 定位头部运动并跟踪 3D 手部轨迹/形态无关的 3D 交互点集；<code>EgoMimic</code> 将人手与双臂机器人数据对齐混训，<code>EgoZero</code> 则进一步实现<strong>零机器人遥操作数据</strong>向真机闭环策略迁移。
+- <strong><a href="https://arxiv.org/abs/2602.06643">HuMI</a></strong>（2026-02）：针对人形全身操作设计便携式无本体采集接口，同步捕获第一视角视觉与全身末端/手部空间轨迹，通过层级策略迁移至人形机器人完成下蹲抓取、双臂抛接与移动操作，数据采集效率提升约 3 倍。
+- <strong>移动头部相机的在线米制建图参考</strong>：近期如 <strong><a href="https://arxiv.org/abs/2611.25279">Accord</a></strong>（2026-11）探索将<strong>单目相机 + IMU + 几何基础模型深度</strong>紧耦合，在线输出绝对米制尺度的位姿与稠密地图，这类 VIO + GFM 混合方案对解决人形机器人行走时头部相机的尺度漂移具有直接借鉴价值。</p>
+<hr />
+<h2 id="_3">六、相关数据集与评测基准速览</h2>
+<blockquote>
+<p>关于真实与仿真机械臂数据集的底层文件格式、标定坑点及重放细节，详见仓库内的专题核查：<a href="../streaming_4d_tracking_research_2026/">streaming_4d_tracking_research_2026.md §19（机械臂数据专题）</a>。下表整合<strong>机械臂操作</strong>与<strong>第一视角/灵巧手/人形移动操作</strong>中最核心的数据与评测基准：</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>数据集 / 基准</th>
+<th>视角与核心模态</th>
+<th>提供的几何 / 跟踪监督</th>
+<th>适用评估任务与注意事项</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>真实机械臂 + 衍生 3D 轨迹</strong></td>
+<td><strong><a href="https://droid-dataset.github.io/">DROID</a></strong> + <strong><a href="https://huggingface.co/datasets/nvidia/PointWorld-DROID">PointWorld-DROID</a></strong> / <strong><a href="https://tapvidmv.github.io/">TAPVid-MV</a></strong></td>
+<td>双外部双目 + 腕部双目相机，7.6 万条真实 Franka 演示</td>
+<td>原始含关节/末端与标定；<code>PointWorld-DROID</code> 增补约 40 万个 1s 片段的 3D 点流伪标签；<code>TAPVid-MV</code> 构建背景与连杆多视角 3D 点基准</td>
+<td>真实桌面泛化、腕部与外部视角融合；<strong>注意区分模型伪标签与真实传感器真值</strong></td>
+</tr>
+<tr>
+<td><strong>真实多视角接触操作</strong></td>
+<td><strong><a href="https://rh20t.github.io/">RH20T</a></strong> / <strong><a href="https://robotap.github.io/">RoboTAP</a></strong></td>
+<td><code>RH20T</code> 含腕部 + 8–10 路标定 RGB-D 及力/关节；<code>RoboTAP</code> 含真实操作视频</td>
+<td><code>RH20T</code> 提供高精度时间对齐 RGB-D 与运动学；<code>RoboTAP</code> 提供<strong>人工标注的 2D 物体点轨迹与可见性</strong></td>
+<td>接触遮挡下的几何误差分析（RH20T）与操作视频 2D 持久点跟踪评测（RoboTAP）</td>
+</tr>
+<tr>
+<td><strong>真实双臂工业/家用规模</strong></td>
+<td><strong><a href="https://huggingface.co/datasets/agibot-world/AgiBotWorld2026">AgiBot World 2026</a></strong></td>
+<td>轮式双臂人形（G2）头部 + 左右腕部相机</td>
+<td>关节/末端状态、部分任务含头部深度、原子技能与 2D 检测框</td>
+<td>大规模双臂协同与长程失败恢复；原始不包含稠密 3D 物体点身份真值</td>
+</tr>
+<tr>
+<td><strong>第一视角精确手–物 3D 跟踪</strong></td>
+<td><strong><a href="https://arxiv.org/abs/2411.19167">HOT3D</a></strong>（CVPR 2025）</td>
+<td>Aria 智能眼镜 + Quest 3 多视角第一人称序列（833 分钟）</td>
+<td><strong>光学动捕级 3D 手部姿态 + 33 种刚体精确 6D 位姿真值</strong> + 眼动与点云</td>
+<td>评测第一视角手–物交互遮挡下的 3D 跟踪精度（可由刚体位姿精确导出表面任意点 3D 轨迹真值）</td>
+</tr>
+<tr>
+<td><strong>大规模第一视角灵巧操作</strong></td>
+<td><strong><a href="https://arxiv.org/abs/2505.11709">EgoDex</a></strong>（2025）</td>
+<td>Apple Vision Pro 第一视角 30 FPS 视频（<strong>829 小时</strong>，194 项日常精细任务）</td>
+<td>原生同步的头部、上肢及双手的 <strong>68 关节稠密 3D 骨骼轨迹</strong>（含系鞋带、叠衣服等柔性交互）</td>
+<td>灵巧手/人形上肢第一视角轨迹预测预训练；提供手部精确 3D 真值，但被操作物体需结合视觉跟踪提取</td>
+</tr>
+<tr>
+<td><strong>仿真双臂与分钟级移动操作</strong></td>
+<td><strong><a href="https://behavior.stanford.edu/challenge/dataset.html">BEHAVIOR 2026</a></strong> / <strong><a href="https://arxiv.org/abs/2506.18088">RoboTwin 2.0</a></strong></td>
+<td>头部 + 双腕部 RGB-D；<code>BEHAVIOR</code> 平均时长约 <strong>5.9 分钟</strong>（2 万条移动双臂演示）</td>
+<td>仿真状态重放可导出<strong>绝对无漂移的相机、连杆及刚体/铰接物体完整三维真值</strong></td>
+<td>检验双臂频繁互遮挡（RoboTwin 2.0）以及分钟级大范围移动操作下的累积尺度/点身份漂移（BEHAVIOR）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2026">七、当前核心技术瓶颈与潜在切入点（2026 视角）</h2>
+<p>综合现有文献，在机器人（尤其是双臂、灵巧手与人形机器人）场景下做 4D 重建与点跟踪，单纯“把通用视觉模型搬到机器人视频上跑”已难以构成高区分度贡献，真正尚未解决的硬骨头集中在以下四点：</p>
+<ol>
+<li>
+<p><strong>接触与包络遮挡下的“点身份粘连与跳变”</strong></p>
+<ul>
+<li><strong>现象</strong>：当夹爪闭合或五指抓握物体时，被操作区域恰恰被手指严密遮挡；通用 2D/3D 点跟踪器极易把原本属于物体表面的查询点“吸附”到机械手表面跟随手指离开，或在松手重现后丢失点身份。</li>
+<li><strong>机会</strong>：利用机器人<strong>已知正向运动学（FK）实时渲染机械臂/灵巧手在图像或三维空间中的精确占用掩码（ Kinematic Mask ）</strong>，显式区分“本体表面点”与“环境/物体表面点”，并结合物体局部几何刚性或触觉接触约束维护被遮挡期间的物质点状态。</li>
+</ul>
+</li>
+<li>
+<p><strong>移动基座 / 人形头部晃动下的“相机误差—物体运动”相互补偿</strong></p>
+<ul>
+<li><strong>现象</strong>：在人形机器人行走操作或腕部相机快速逼近物体时，背景纹理往往模糊或占比极小（桌面/物体占满近景）。此时纯视觉单目 4D 模型（如 St4RTrack、V-DPM 等滑窗方案）容易将厘米级的相机外参/尺度估计误差吸收为物体的虚假三维位移，直接破坏下游抓取点定位。</li>
+<li><strong>机会</strong>：研究<strong>多源运动学耦合的流式 4D 状态估计</strong>——将头部/腕部之间通过全身关节链（Kinematic Chain）和 IMU 构成的刚体/弹性几何约束嵌入前馈 4D 重建或在线测试时适配（TTA），用本体可观测自由度锁死尺度和相对基线。</li>
+</ul>
+</li>
+<li>
+<p><strong>闭环控制频率（10–50 Hz）与长上下文 4D 推理延迟的矛盾</strong></p>
+<ul>
+<li><strong>现象</strong>：优化式动态高斯（秒/分钟级）无法在线跟踪未知扰动；前馈多帧 Transformer 或扩散点流模型若采用滑窗双向注意力，则存在窗口帧延迟（Lookahead Latency）和显存随历史线性膨胀的问题。</li>
+<li><strong>机会</strong>：探索面向机器人任务聚焦（Task-Centric / Object-Centric，如 <code>PointPilot</code> 思路）的<strong>稀疏活性查询点流式维护</strong>，或构建<strong>快慢异步架构</strong>（低频关键帧运行全局 4D 几何校准与语义重关联，高频控制环基于轻量递归状态/3D 场景流逐帧因果外推）。</li>
+</ul>
+</li>
+<li>
+<p><strong>从“视觉运动轨迹”到“接触力学可行性”的鸿沟（Kinematic-to-Dynamic Gap）</strong></p>
+<ul>
+<li><strong>现象</strong>：即便从人类视频中完美重建了 4D 手–物轨迹，由于机器人与人手在摩擦系数、指端柔顺性、最大力矩和动力学响应上的差异，直接跟踪几何轨迹仍会出现打滑、推倒物体或关节超限。</li>
+<li><strong>机会</strong>：一方面在离线数据管线中结合物理仿真做接触感知重定向（如 <code>SPIDER</code>、<code>MeshMimic</code>）；另一方面在在线执行中将 <strong>3D 点轨迹偏差作为物理交互的闭环反馈信号</strong>（如发现施力后目标点实际位移小于预期点流，则推断卡阻或滑移并自适应调整动作，延续 <code>HuDOR</code> 与 <code>Dex4D</code> 的路线）。</li>
+</ul>
+</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "header.autohide", "search.suggest", "search.highlight", "search.share"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="../../_js/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

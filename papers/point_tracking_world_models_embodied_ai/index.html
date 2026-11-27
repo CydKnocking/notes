@@ -1,0 +1,3083 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../point_tracking/">
+      
+      
+        <link rel="next" href="../reconstruction_tracking_2026_2026-11-23/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../_assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>从点轨迹到世界模型与具身控制 - Knocking's notebook</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="brown" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Knocking&#39;s notebook" class="md-header__button md-logo" aria-label="Knocking's notebook" data-md-component="logo">
+      
+  <img src="../../_assets/icon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Knocking's notebook
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              从点轨迹到世界模型与具身控制
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/CydKnocking/notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Knocking&#39;s notebook" class="md-nav__button md-logo" aria-label="Knocking's notebook" data-md-component="logo">
+      
+  <img src="../../_assets/icon.png" alt="logo">
+
+    </a>
+    Knocking's notebook
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/CydKnocking/notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Knocking's personal notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about_this_notebook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About this notebook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Vis Info Processing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    3D Vis Info Processing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/00_Introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    00 Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/01_Part%20One%20Acquisition%20of%203D%20Data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 Part One Acquisition of 3D Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/02_Part%20Two%20Integration%20of%203D%20data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 Part Two Integration of 3D data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/03_Part%20Three%20Descriptions%20of%203D%20Objects%20and%20Scenes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 Part Three Descriptions of 3D Objects and Scenes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3D%20Vis%20Info%20Processing/Full%20notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ML
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ML
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ML/great_links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Great links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ML/reinforcement_learning_for_streaming_vision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    从零理解强化学习：面向流式重建、SLAM 与在线感知
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Web
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Web/clash/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clash
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Web/domains/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Domains
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Conference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../conference/china3dv_2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    China3dv 2026
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../conference/cvpr_eccv_2026_research_trends/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CVPR 2026 与 ECCV 2026：代表论文梳理与科研趋势
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Datasets
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Datasets
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/TUM_RGBD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TUM RGBD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/TartanAir/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TartanAir
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docker
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docker
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docker/proxy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proxy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Github
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Github
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../github/Deploy%20repo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Create a new github repository
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../github/verify%20domain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verify domain
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux and ubuntu
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Linux and ubuntu
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/chmod/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chmod
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/chown/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chown
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/cmatrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cmatrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/crontab/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crontab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/dns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/softlink/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Softlink
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/ssh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ssh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/tmux/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tmux
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linux_and_ubuntu/zsh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zsh
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Math
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Math
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/great_links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Great links
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../math/quaternion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quaternion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Papers
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Papers
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3dgs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3dgs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4d_tracking_submission_directions_18d_2mo_2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    单目流式 4D 重建与点追踪：18 天 / 两个月投稿决策与实验方案
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4drecon_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4drecon tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arrow_training_free_efficiency_attention_survey/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    面向 ARROW 长序列与稠密查询的免训练加速：注意力、可解释性与推理机制综述
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../croco_and_crocov2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CroCo 与 CroCo v2：从跨视角补全到通用几何视觉骨干
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../discussions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Discussions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feedforward_3dgs_survey_2024_2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3DGS / 4DGS 研究综述：前馈式重建与任意点跟踪
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../long_sequence_3d_foundation_models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    三维视觉基础模型的长序列、低开销与新场景适配
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pano_3drecon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pano 3drecon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../panoramic_vo_reconstruction_survey/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    全景相机 Visual Odometry 与场景重建：精选文献简报
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paper_notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paper notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../point_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Point tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    从点轨迹到世界模型与具身控制
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    从点轨迹到世界模型与具身控制
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、先看三个问题
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、生成任务：轨迹可以是用户输入、训练监督或跨视角对应
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、世界模型：要预测谁的未来，以及未来由什么决定
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、世界模型：要预测谁的未来，以及未来由什么决定">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三篇值得对照着精读
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、具身智能：同一条轨迹怎样变成动作、奖励和反馈
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、具身智能：同一条轨迹怎样变成动作、奖励和反馈">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 从示范视频提取可执行的信息
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 全局计划、训练教师、在线反馈的三个近期实例
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 重建怎样进一步用于策略、示范生成和闭环仿真
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、怎样验证“点轨迹有用”
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dynamic-point-maps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、对流式 Dynamic Point Maps 最值得检验的三个问题
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        附录 · 英文题名索引
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reconstruction_tracking_2026_2026-11-23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2026 年 3D / 4D 重建与点跟踪研究更新
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../research_diary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Research diary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robotic_4d_reconstruction_and_tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    机器人场景（机械臂与人形机器人）下的 4D 重建与点跟踪研究综述
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../streaming_4d_tracking_research_2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    动态长序列的 4D 重建与 Point Tracking：文献调研与选题判断
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vggt_mae/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VGGT 类几何基础模型 × MAE / Masked Modeling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Python
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/rosbag/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rosbag
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/send_email/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Send email
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/torch_tips/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Torch tips
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/tqdm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tqdm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、先看三个问题
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、生成任务：轨迹可以是用户输入、训练监督或跨视角对应
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、世界模型：要预测谁的未来，以及未来由什么决定
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、世界模型：要预测谁的未来，以及未来由什么决定">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三篇值得对照着精读
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、具身智能：同一条轨迹怎样变成动作、奖励和反馈
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、具身智能：同一条轨迹怎样变成动作、奖励和反馈">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 从示范视频提取可执行的信息
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 全局计划、训练教师、在线反馈的三个近期实例
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 重建怎样进一步用于策略、示范生成和闭环仿真
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、怎样验证“点轨迹有用”
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dynamic-point-maps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、对流式 Dynamic Point Maps 最值得检验的三个问题
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        附录 · 英文题名索引
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="_1">从点轨迹到世界模型与具身控制</h1>
+<p><strong>文献笔记 · 截至 2026 年 11 月 23 日</strong><br />
+精选 26 篇应用论文，重点是 2025–2026 年的工作，保留 2024 年几篇奠定问题设定的论文。选文围绕一个问题：<strong>知道同一个物理点去了哪里，究竟能让生成模型或机器人多做什么？</strong> 正文按论文在系统中实际使用的信号组织，每篇给出论文或作者项目链接。标为 arXiv 的条目按所引预印本的首发年月标注，涉及多版时采用截至检索日的版本。下文数字均来自各论文自己的实验。</p>
+<h2 id="_2">一、先看三个问题</h2>
+<p>以“拉开抽屉”为例。给视频模型画一条把手向外移动的轨迹，是在<strong>指定想看到的运动</strong>。给机器人一个向外移动 5 cm 的动作，让模型预测抽屉和柜体各自会怎样动，是在<strong>预测动作的后果</strong>。在机器人已经伸手后发现把手几乎没动，再调整抓取或拉动方向，是在<strong>用轨迹做反馈</strong>。三者都画得出彩色轨迹，却需要不同的训练数据，也要用不同的实验来验证。</p>
+<table>
+<thead>
+<tr>
+<th>想回答的问题</th>
+<th>点或重建在系统中的作用</th>
+<th>优先阅读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>怎样让生成的视频既按要求运动，又能从另一个相机看？</td>
+<td>将同一批点投影到源、目标视角，作为视频扩散模型的条件</td>
+<td><a href="https://edit-by-track.github.io/">Edit-by-Track</a>、<a href="https://arxiv.org/abs/2606.15534">Track2View</a></td>
+</tr>
+<tr>
+<td>能否先观察一段视频，再预判某个点未来会去哪里？</td>
+<td>用整段视频恢复的轨迹作训练标签，测试时只给过去的观测；也可用语言指定目标</td>
+<td><a href="https://motionforesight.github.io/">MotionForesight</a>、<a href="https://arxiv.org/abs/2606.18558">MolmoMotion</a></td>
+</tr>
+<tr>
+<td>同一场景中，换一个机器人动作会有什么不同？</td>
+<td>把候选动作编码为夹爪或机器人表面的 3D 运动，预测环境点的响应，供规划器打分</td>
+<td><a href="https://point-world.github.io/">PointWorld</a></td>
+</tr>
+<tr>
+<td>让模型学未来轨迹，对生成视频和输出动作是否都有收益？</td>
+<td>在同一骨干上同时学习多视角视频和持久 3D 点轨迹，再对照有无轨迹监督的动作模型</td>
+<td><a href="https://arxiv.org/abs/2610.28594">Video-Point Model（VPM）</a></td>
+</tr>
+<tr>
+<td>跟踪器必须在机器人上运行吗？</td>
+<td>可仅在训练期间教策略理解运动，也可在部署期间实时测量物体偏差</td>
+<td><a href="https://lishanyqy.github.io/4DWAM/">4D-WAM</a>、<a href="https://arxiv.org/abs/2602.15828">Dex4D</a></td>
+</tr>
+<tr>
+<td>只有人类示范，没有逐步动作奖励，怎样知道机器人有没有做好？</td>
+<td>跟踪示范与执行视频中的物体点，按两段物体运动的相似度构造奖励</td>
+<td><a href="https://georgysavva.github.io/assets/pdf/HuDOR_ICRA_2025.pdf">HuDOR</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>读论文时保留三个区别。</strong> ① 跟踪用已观测视频估计历史轨迹，预测只能用过去信息推断未来。② 逐帧点图记录各帧像素对应的 3D 位置，跨时间的点身份还要靠对应关系确定。③ 语言目标限定“想完成什么”，低层动作指定“实际怎么做”。只有模型接收候选动作，才可以直接比较两个动作在其预测中造成的不同后果。<a href="https://www.robots.ox.ac.uk/~vgg/research/vdpm/">V-DPM</a> · <a href="https://arxiv.org/abs/2606.18558">MolmoMotion</a> · <a href="https://point-world.github.io/">PointWorld</a></p>
+<h2 id="_3">二、生成任务：轨迹可以是用户输入、训练监督或跨视角对应</h2>
+<table>
+<thead>
+<tr>
+<th>论文</th>
+<th>重建 / 跟踪怎样进入模型</th>
+<th>作者展示的应用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Motion Prompting</strong>，Geng 等，CVPR 2025</td>
+<td>用 BootsTAP 为训练视频提取带可见性的 2D 点轨迹，训练一个接收稀疏到稠密轨迹的扩散控制分支。推理时轨迹也可来自鼠标拖动或参考运动。</td>
+<td>一套模型控制局部物体、全局相机运动及运动迁移。控制量在图像平面，适合指定“画面里的点怎么走”。<a href="https://arxiv.org/abs/2412.02700">论文</a></td>
+</tr>
+<tr>
+<td><strong>Track4Gen</strong>，Jeong 等，CVPR 2025</td>
+<td>在视频扩散训练中增加跨帧点对应损失，让中间特征能在不同帧认出同一位置对应的内容。</td>
+<td>改善图生视频的外观一致性，减少物体随时间变形或更换外观。轨迹在这里承担辅助监督，生成时用户无需画轨迹。<a href="https://arxiv.org/abs/2412.06016">论文</a></td>
+</tr>
+<tr>
+<td><strong>GEN3C</strong>，Ren 等，CVPR 2025</td>
+<td>将初始图像或已生成帧的深度反投影成可复用的 3D 点云；沿目标相机轨迹渲染点云，再以渲染结果引导生成。</td>
+<td>精确相机控制、稀疏视图新视角合成。这里复用的是场景表面的位置与外观，并未为每个运动物体建立跨帧点身份。<a href="https://research.nvidia.com/labs/toronto-ai/GEN3C/">项目与代码</a></td>
+</tr>
+<tr>
+<td><strong>Edit-by-Track</strong>，Lee 等，CVPR 2026</td>
+<td>从源视频估计相机位姿和 3D 点轨迹。用户可以编辑相机和物体运动，模型把原轨迹、编辑轨迹分别投影成两组 2D 对应。</td>
+<td>对已有视频同时改机位、改物体运动，还可控制形变。保留源轨迹可以告诉生成器，被移动位置的外观应该从哪里取。<a href="https://edit-by-track.github.io/">论文与演示</a></td>
+</tr>
+<tr>
+<td><strong>Track2View</strong>，Qiao 等，arXiv 2026-06</td>
+<td>同一组稀疏 3D 轨迹同时投影到源视角和指定的新视角，让视频 Transformer 沿对应关系传递信息。</td>
+<td>保留已经发生的场景运动，只改变观察路径。在作者的 400 段视频评测上，相对所比较的领先基线，相机旋转、平移误差分别降低 30–65% 和 61–72%。这里评的是机位控制。<a href="https://arxiv.org/abs/2606.15534">论文</a></td>
+</tr>
+<tr>
+<td><strong>4DStreamCtrl</strong>，Li 等，arXiv 2026-08</td>
+<td>从自然视频提取 3D 轨迹和相机信息，统一表达前景运动、深度和视角控制，再将生成器蒸馏为因果流式模型。</td>
+<td>允许视频边生成边接收新的相机或物体控制。作者报告单张 H100 上 480p 生成达到 20 FPS；该数字度量生成器，在线使用时还需计入上游跟踪和控制延迟。<a href="https://4dstreamctrl.github.io/">项目</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>和动态重建最贴近的一组对照是 GEN3C、Track2View 和 Edit-by-Track。</strong> 假设相机绕到抽屉侧面：场景点云能说明柜体从新机位看应该出现在哪；持久点轨迹进一步说明拉出的把手在每一帧出现在哪；编辑把手轨迹则允许改变原视频里的事件。追踪持续点身份有什么额外价值，可以在同一个生成任务里逐级检验。<a href="https://research.nvidia.com/labs/toronto-ai/GEN3C/">GEN3C</a> · <a href="https://arxiv.org/abs/2606.15534">Track2View</a> · <a href="https://edit-by-track.github.io/">Edit-by-Track</a></p>
+<h2 id="_4">三、世界模型：要预测谁的未来，以及未来由什么决定</h2>
+<table>
+<thead>
+<tr>
+<th>工作</th>
+<th>预测时给什么</th>
+<th>模型输出什么</th>
+<th>论文验证到哪一步</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MotionForesight</strong>，Bharadhwaj、Jangir，arXiv 2026-07</td>
+<td>一小段已经发生的单目人–物交互视频</td>
+<td>被操作物体表面点未来的 3D 轨迹</td>
+<td>完整视频的离线跟踪结果提供伪标签，预测器只看前缀；在未见物体、视角和交互上评估。适合研究无动作标注的运动先验。<a href="https://motionforesight.github.io/">论文与方法</a></td>
+</tr>
+<tr>
+<td><strong>MolmoMotion</strong>，Zhang 等，arXiv 2026-06</td>
+<td>短 RGB 历史、物体上的 3D 查询点、语言目标</td>
+<td>米制世界系中的物体点轨迹</td>
+<td>作者从 116 万段视频构建训练集，在人工核验的 PointMotionBench 上评估，还将运动先验用于视频生成和机器人抓放。项目列出的限制是每个物体使用 8 个查询点，复杂局部形变的覆盖有限。<a href="https://arxiv.org/abs/2606.18558">论文</a> · <a href="https://molmomotion.github.io/">资源与局限</a></td>
+</tr>
+<tr>
+<td><strong>VPM</strong>，Jeon 等，arXiv 2026-10</td>
+<td>有相机参数的多视角视频历史、语言指令，以及所需输出视角</td>
+<td>各视角未来 RGB 与跨时间、跨视角保持身份的 3D 点轨迹；扩展版联合生成动作</td>
+<td>用相同训练预算比较有无轨迹监督，既测视频质量，也测 3D 运动与真机抓放。所监督的点集中在机器人和有标注的对象，且推理使用已知相机参数。<a href="https://arxiv.org/abs/2610.28594">论文</a> · <a href="https://arxiv.org/html/2610.28594v1">实验与限制</a></td>
+</tr>
+<tr>
+<td><strong>PointWorld</strong>，Huang 等，CVPR 2026</td>
+<td>一张或少量 RGB-D 观测，加上候选低层机器人动作；利用机器人运动学把动作转换为 3D 表面点运动</td>
+<td>动作作用下，场景观测点未来的 3D 位移</td>
+<td>将模型放入模型预测控制（MPC），按点的预测位置筛选动作；在真实 Franka 上展示推物、形变物体、铰接物体和工具操作。训练数据约 200 万条轨迹、500 小时。<a href="https://openaccess.thecvf.com/content/CVPR2026/papers/Huang_PointWorld_Scaling_3D_World_Models_for_In-The-Wild_Robotic_Manipulation_CVPR_2026_paper.pdf">论文</a> · <a href="https://github.com/NVlabs/PointWorld">代码</a></td>
+</tr>
+<tr>
+<td><strong>TesserAct</strong>，Zhen 等，ICCV 2025</td>
+<td>初始图像和任务指令</td>
+<td>未来 RGB、深度、法线视频，继而重建动态 3D 场景</td>
+<td>展示新视角渲染，并从生成的 4D 场景学习逆动力学、恢复动作。核心监督是逐帧 RGB-DN，适合与显式预测同一点未来位置的方法作比较。<a href="https://arxiv.org/abs/2504.20995">论文</a> · <a href="https://tesseractworld.github.io/">项目</a></td>
+</tr>
+<tr>
+<td><strong>JEPA4R</strong>，Dong 等，arXiv 2026-11</td>
+<td>单深度相机点云，以及动力学预测时的动作</td>
+<td>未来的点云潜在表征；另训解码器把冻结表征还原成点云序列</td>
+<td>在仿真与真实机械臂上评估策略。事后解码器使用 Chamfer 等集合损失，因此论文中的点云重建误差不能读作“同一物理点”的轨迹误差。<a href="https://arxiv.org/abs/2611.19771">论文</a> · <a href="https://arxiv.org/html/2611.19771v1">方法 §4.4</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="_5">三篇值得对照着精读</h3>
+<p><strong>MotionForesight 和 PointWorld 分别回答“接下来大概会怎样”和“我这么做会怎样”。</strong> 前者用完整片段产生监督，再显式遮住未来的 RGB 和几何输入。它适合大量只有视频的人类操作数据。后者把待测试的机器人动作放在输入端，因此规划器可以在同一初始状态下分别尝试向左、向右推，比较预测的物体位移。即便两者都输出 <code>[点数, 未来时刻数, 3]</code>，所需数据和可支持的决策也不同。<a href="https://motionforesight.github.io/">MotionForesight</a> · <a href="https://point-world.github.io/">PointWorld</a></p>
+<p><strong>VPM 给出了点身份对生成和动作都有帮助的受控实验。</strong> 同一个场景点只有一条 3D 轨迹，不同摄像机应同时看到这条轨迹的不同投影。作者据此比较仅学视频与同时学轨迹的模型，并进一步比较“视频＋动作”和“视频＋轨迹＋动作”。真机部分为三种抓放任务，每种 24 次。论文还展示了直接把预测轨迹经逆运动学生成指令的定性例子，作者指出这种执行的稳定性尚不足以量化评估。写 related work 时，后者应与上面的策略成功率分开引用。<a href="https://arxiv.org/html/2610.28594v1">实验 §6.3–6.5</a></p>
+<h2 id="_6">四、具身智能：同一条轨迹怎样变成动作、奖励和反馈</h2>
+<h3 id="41">4.1 从示范视频提取可执行的信息</h3>
+<table>
+<thead>
+<tr>
+<th>论文</th>
+<th>点到底表示什么</th>
+<th>从视频到机器人执行的关键一步</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RoboTAP</strong>，Vecerik 等，ICRA 2024</td>
+<td>示范与执行过程中和当前任务有关的 2D 物体点</td>
+<td>用 TAPIR 跟踪，选出当前阶段应移动的点，根据点的当前位置和目标位置计算控制。每项任务 4–6 次示范，真机展示插入、堆叠、涂胶等。适合从视觉伺服角度入门。<a href="https://robotap.github.io/">项目</a></td>
+</tr>
+<tr>
+<td><strong>ATM</strong>，Wen 等，RSS 2024</td>
+<td>当前画面任意查询点的未来 2D 轨迹提案</td>
+<td>从无动作标签视频预训练轨迹预测器，再用少量带动作示范学习视觉运动策略。作者在 LIBERO 的 130 个任务及真实 UR5 厨房任务上评估。<a href="https://roboticsproceedings.org/rss20/p092.html">论文</a></td>
+</tr>
+<tr>
+<td><strong>Track2Act</strong>，Bharadhwaj 等，ECCV 2024</td>
+<td>以目标为条件预测的物体 2D 点轨迹</td>
+<td>从轨迹推断物体的刚体变换序列，得到末端执行器计划，再用少量机器人示范学到的残差策略闭环修正。互联网视频教“物体该怎么动”，机器人数据教“该怎样执行”。<a href="https://arxiv.org/abs/2405.01527">论文</a></td>
+</tr>
+<tr>
+<td><strong>General Flow</strong>，Yuan 等，CoRL 2024</td>
+<td>语言指令下，目标物体表面点的一段 3D 运动</td>
+<td>从人类 RGB-D 视频学习可供机器人执行的物体运动，将预测放进闭环控制。作者报告 6 个场景、18 项任务的人到机器人零样本迁移成功率为 81%。<a href="https://proceedings.mlr.press/v270/yuan25a.html">论文</a></td>
+</tr>
+<tr>
+<td><strong>Im2Flow2Act</strong>，Xu 等，CoRL 2024</td>
+<td>多个物体点的图像平面运动，共同描述任务效果</td>
+<td>用人类示范训练“图像与任务 → 物体运动”，用仿真机器人自由交互训练“物体运动 → 动作”。两个模块通过物体运动连接，作者展示真实机器人迁移。<a href="https://im-flow-act.github.io/">论文与项目</a></td>
+</tr>
+<tr>
+<td><strong>Point Policy</strong>，Haldar、Pinto，CoRL 2025</td>
+<td>具有语义的物体和手部关键点，以及由其得到的未来 3D 轨迹</td>
+<td>从离线人类视频估计手与物体状态，经 Transformer 预测点轨迹，通过刚体几何恢复机器人动作；在 8 项真机任务上评估。这是稀疏语义点的路线。<a href="https://proceedings.mlr.press/v305/haldar25a.html">论文</a></td>
+</tr>
+<tr>
+<td><strong>HuDOR</strong>，Guzey 等，ICRA 2025</td>
+<td>人类示范与机器人尝试中，被操作物体表面点的运动</td>
+<td>比较两段物体运动来定义奖励，在线微调多指手策略。作者用单段人类示范，在约一小时真机交互后让 Allegro 手打开八音盒。点跟踪在这里解决了“操作是否取得进展”的问题。<a href="https://georgysavva.github.io/assets/pdf/HuDOR_ICRA_2025.pdf">论文</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="42">4.2 全局计划、训练教师、在线反馈的三个近期实例</h3>
+<p><strong>3PoinTr｜把一整段任务压成可复用的几何计划。</strong> 从初始点云预测完整任务中的稠密 3D 轨迹，再压缩成少量固定的计划 token。执行时每一步都重新读取当前观测和机器人状态，但计划 token 在这一回合内保持固定。这使策略可以吸收人类视频中有用的物体运动，即使人手动作无法被机器人原样执行。在四项真机任务中，每项使用 20 段机器人示范和 50 段人类视频，平均成功率比最强基线 DP3 高 <strong>25 个百分点</strong>。Hung 等，arXiv 2026-03，引用 9 月修订版。<a href="https://arxiv.org/abs/2603.08485">论文</a> · <a href="https://adamhung60.github.io/3PoinTr/">实验设置</a></p>
+<p><strong>4D-WAM｜几何教师只在训练期间提供轨迹场特征。</strong> 冻结的 Trace Anything 为视频与动作模型提供两种对齐信号：相邻帧特征变化约束局部运动，起点与终点的相似度分布约束长程去向。动作模型因此能在自身特征中保留运动信息，部署时可直接输出动作。与同一 FastWAM-Joint 基线相比，在仅用 LIBERO 训练、用 LIBERO-Plus 的七种未见扰动测试时，平均成功率从 <strong>62.21% 到 71.01%</strong>；其中相机扰动一项从 <strong>27.89% 到 45.15%</strong>。这是检验“几何监督能否改善视角泛化”的直接参照。Yang 等，arXiv 2026-08。<a href="https://lishanyqy.github.io/4DWAM/">论文与实验表</a> · <a href="https://github.com/lishanyqy/4DWAM">代码仓库</a></p>
+<p><strong>Dex4D｜先从生成视频给出目标，再用真机跟踪纠偏。</strong> 仿真策略学习根据当前与目标物体点的对应关系，将刚体从当前位姿移到目标位姿。部署时，从生成示范视频提取物体中心的目标点轨迹；执行时继续在线跟踪真实物体，根据观测更新控制。生成轨迹表达意图，真实轨迹提供反馈。这篇尤其适合判断在线跟踪的遮挡恢复、延迟和点身份切换是否会影响任务成功率。Kuang 等，CoRL 2026。<a href="https://arxiv.org/abs/2602.15828">论文</a> · <a href="https://dex4d.github.io/">项目与仿真、视觉、硬件代码</a></p>
+<h3 id="43">4.3 重建怎样进一步用于策略、示范生成和闭环仿真</h3>
+<table>
+<thead>
+<tr>
+<th>论文</th>
+<th>重建的具体用途</th>
+<th>几何与跟踪的边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Geometric Action Model（GAM）</strong>，Han 等，ECCV 2026 的 3D World Models Workshop</td>
+<td>拆开预训练几何骨干，在中间插入因果预测器；根据观测、指令、本体状态和动作历史预测潜在表征，再解码未来几何与动作。在仿真和真机摄像机扰动下评估。</td>
+<td>重建骨干直接成为策略骨干；它回答了“几何预训练本身能贡献多少”，适合作为显式点轨迹监督的对照。<a href="https://cvlab-kaist.github.io/Geometric-Action-Model/">项目与代码</a></td>
+</tr>
+<tr>
+<td><strong>GRAIL</strong>，Xie 等，CoRL 2026</td>
+<td>从具有已知尺度、相机与物体资产的场景出发生成交互视频，重建 4D 人–物运动，再重定向到人形机器人，形成训练示范；在 Unitree G1 上验证抓取和上楼。</td>
+<td>核心是人体运动、物体位姿与接触的一致恢复。资产和场景提供额外几何信息，区别于无约束单目视频中的任意点跟踪。<a href="https://arxiv.org/abs/2606.05160">论文</a></td>
+</tr>
+<tr>
+<td><strong>HUGSIM</strong>，Zhou 等，IEEE TPAMI 2026</td>
+<td>把带位姿的道路图像重建为静态与动态 3D Gaussians。驾驶策略给出控制后，仿真器更新自车、其他交通参与者与相机观测，让策略体验自己偏离原采集路线的后果。</td>
+<td>重建产生可交互环境。车辆运动模型和渲染器承担闭环状态更新，评测对象是驾驶策略。<a href="https://xdimlab.github.io/HUGSIM/">项目与代码</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="_7">五、怎样验证“点轨迹有用”</h2>
+<p><strong>PDI-Bench 把跟踪器当成视频生成的评测工具。<strong>它在</strong>已经生成的视频</strong>上分割对象、跟踪点并做单目 3D 重建，再根据尺度与深度的关系、3D 运动一致性和结构刚性计算几何残差。由此可以区分画面看似平滑的两种失败：物体只是随透视变小，还是其恢复出的 3D 尺寸也在变化。评测器本身依赖深度、位姿与跟踪质量，遮挡或非刚体形变应单独分析。Wu 等，arXiv 2026-05。<a href="https://arxiv.org/abs/2605.15185">论文</a></p>
+<table>
+<thead>
+<tr>
+<th>要支持的研究结论</th>
+<th>合适的指标或实验</th>
+<th>可用起点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>在观测过的视频中，持续认对同一物理点</td>
+<td>按可见性与遮挡分别报告轨迹误差、阈值内准确率、可见性判断；移动相机下明确使用相机系还是世界系</td>
+<td><a href="https://arxiv.org/abs/2407.05921">TAPVid-3D</a> 可检验跟踪；未来预测另设截断时刻</td>
+</tr>
+<tr>
+<td>只看视频前缀，也能预判未来物体运动</td>
+<td>固定输入前缀长度，按预测时距报告米制 3D ADE（平均轨迹误差）与 FDE（终点误差）；对照静止、恒速度，并分开动点和背景</td>
+<td><a href="https://huggingface.co/datasets/allenai/PointMotionBench">PointMotionBench</a> 含人工核验的物体运动；<a href="https://huggingface.co/datasets/rooty2020/VP-WorldBench/blob/main/README.md">VP-WorldBench</a> 可同时检查视频和点</td>
+</tr>
+<tr>
+<td>点的监督确实改善生成</td>
+<td>固定视频骨干、训练预算和输入视角，对照有无轨迹监督；分开报告视觉质量、跨视角一致性和几何运动误差</td>
+<td><a href="https://arxiv.org/html/2610.28594v1">VPM §6 与附录</a> 同时区分从生成视频重新跟踪得到的轨迹与模型轨迹头直接输出的轨迹</td>
+</tr>
+<tr>
+<td>几何改善最终有利于机器人</td>
+<td>固定动作头与机器人数据量，对照任务成功率；加入相机移动、短时遮挡、初始物体偏移，并记录执行时延</td>
+<td><a href="https://lishanyqy.github.io/4DWAM/">4D-WAM</a> 适合训练监督对照；<a href="https://dex4d.github.io/">Dex4D</a> 适合闭环观测对照；<a href="https://point-world.github.io/">PointWorld</a> 适合候选动作规划</td>
+</tr>
+</tbody>
+</table>
+<h2 id="dynamic-point-maps">六、对流式 Dynamic Point Maps 最值得检验的三个问题</h2>
+<p>下面是基于文献提出的实验设想。SDPM 的切入点是从单目视频在线获得相机运动与场景点运动。若源帧像素为 <span class="arithmatex">\(u\)</span>，其对应物理点在目标时刻的世界坐标可写为 <span class="arithmatex">\(X_{s\rightarrow t}(u)\)</span>。固定 <span class="arithmatex">\(s,u\)</span>，改变 <span class="arithmatex">\(t\)</span>，得到同一点的一条轨迹。沿用这一表示，最值得区分的是<strong>哪些时刻已被观测、未来由谁指定、对应身份是否跨窗口保留</strong>。<a href="https://www.robots.ox.ac.uk/~vgg/research/vdpm/">V-DPM</a></p>
+<ol>
+<li><strong>成本最低的切入点是未来 3D 点轨迹预测。</strong> 让离线教师读取完整训练片段产生未来标签，流式编码器只读取前缀；先固定未来预测头，比较单目深度＋2D 跟踪反投影、逐帧点图、带跨帧身份的动态点图三种输入。用独立标注或合成真值评估动态点 ADE/FDE，并画误差随预测时距的曲线。若单目输出需要 Sim(3) 对齐，只用历史或已知标定估计变换，再冻结到未来，避免把未来的尺度和位姿泄漏给模型。<a href="https://motionforesight.github.io/">MotionForesight</a> · <a href="https://arxiv.org/abs/2606.18558">MolmoMotion</a> · <a href="https://huggingface.co/datasets/allenai/PointMotionBench">PointMotionBench</a></li>
+<li><strong>最能体现流式特性的切入点是遮挡后的闭环纠偏。</strong> 固定策略和目标轨迹，分别提供真实标注轨迹、离线跟踪结果（事后参考）、实时 SDPM 结果。让相机平移，或让夹爪短时挡住把手，记录重现后点身份恢复率、恢复耗时、重投影误差和任务成功率。若局部窗口各自做 Sim(3) 对齐，应在机器人坐标系里额外记录重叠段跳变；同一把手相对夹爪跳动几厘米，可能比整段平均误差更影响控制。<a href="https://robotap.github.io/">RoboTAP</a> · <a href="https://dex4d.github.io/">Dex4D</a> · <a href="https://point-world.github.io/">PointWorld</a></li>
+<li><strong>对世界模型最有辨识度的问题是持久点身份有没有独立收益。</strong> 固定相机条件、视频骨干与训练预算，比较仅 RGB、RGB＋逐帧点云、RGB＋带身份的 3D 轨迹。再做一次身份消融：保留每一帧完全相同的 3D 点集，只打乱跨帧对应；为三组提供相同的数据可见性与监督时距。如果逐帧几何指标相近，而正确对应改善了跨视角未来预测或摄像机扰动后的机器人成功率，才有直接证据支持“持续追踪同一物理点”这项设计。<a href="https://arxiv.org/abs/2412.06016">Track4Gen</a> · <a href="https://arxiv.org/html/2610.28594v1">VPM</a> · <a href="https://lishanyqy.github.io/4DWAM/">4D-WAM</a></li>
+</ol>
+<p><strong>按研究目标选阅读顺序。</strong> 想最快把现有 SDPM 接到一个离线实验，先读 <strong>MotionForesight → MolmoMotion</strong>。想在论文中论证点身份对生成有独立价值，读 <strong>Track4Gen → Track2View → VPM</strong>。想证明在线几何能改善真实动作，读 <strong>RoboTAP → Dex4D → PointWorld</strong>。三条路线分别需要未来轨迹标签、可对照的生成实验和可接入的控制环，实验代价差别很大。</p>
+<h2 id="_8">附录 · 英文题名索引</h2>
+<table>
+<thead>
+<tr>
+<th>方向</th>
+<th>英文题名与一手来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>生成</td>
+<td><a href="https://arxiv.org/abs/2412.02700">Motion Prompting: Controlling Video Generation with Motion Trajectories</a></td>
+</tr>
+<tr>
+<td>生成</td>
+<td><a href="https://arxiv.org/abs/2412.06016">Track4Gen: Teaching Video Diffusion Models to Track Points Improves Video Generation</a></td>
+</tr>
+<tr>
+<td>生成</td>
+<td><a href="https://research.nvidia.com/labs/toronto-ai/GEN3C/">GEN3C: 3D-Informed World-Consistent Video Generation with Precise Camera Control</a></td>
+</tr>
+<tr>
+<td>生成</td>
+<td><a href="https://edit-by-track.github.io/">Generative Video Motion Editing with 3D Point Tracks</a></td>
+</tr>
+<tr>
+<td>生成</td>
+<td><a href="https://arxiv.org/abs/2606.15534">Track2View: 4D-Consistent Camera-Controlled Video Generation via Paired 3D Point Tracks</a></td>
+</tr>
+<tr>
+<td>生成</td>
+<td><a href="https://4dstreamctrl.github.io/">4DStreamCtrl: Interactive Video Generation with Online 4D Control</a></td>
+</tr>
+<tr>
+<td>预测</td>
+<td><a href="https://motionforesight.github.io/">MotionForesight: Re-purposing Video Models for Future 3D Scene-Flow Prediction</a></td>
+</tr>
+<tr>
+<td>预测</td>
+<td><a href="https://arxiv.org/abs/2606.18558">MolmoMotion: Forecasting Point Trajectories in 3D with Language Instruction</a></td>
+</tr>
+<tr>
+<td>世界模型</td>
+<td><a href="https://arxiv.org/abs/2610.28594">Learning the 4D World through Point Trajectory Forecasting</a></td>
+</tr>
+<tr>
+<td>世界模型</td>
+<td><a href="https://point-world.github.io/">PointWorld: Scaling 3D World Models for In-The-Wild Robotic Manipulation</a></td>
+</tr>
+<tr>
+<td>世界模型</td>
+<td><a href="https://arxiv.org/abs/2504.20995">TesserAct: Learning 4D Embodied World Models</a></td>
+</tr>
+<tr>
+<td>世界模型</td>
+<td><a href="https://arxiv.org/abs/2611.19771">JEPA4R: Embodied JEPA World Models with 4D Point Planning</a></td>
+</tr>
+<tr>
+<td>具身</td>
+<td><a href="https://robotap.github.io/">RoboTAP: Tracking Arbitrary Points for Few-Shot Visual Imitation</a></td>
+</tr>
+<tr>
+<td>具身</td>
+<td><a href="https://roboticsproceedings.org/rss20/p092.html">Any-point Trajectory Modeling for Policy Learning</a></td>
+</tr>
+<tr>
+<td>具身</td>
+<td><a href="https://arxiv.org/abs/2405.01527">Track2Act: Predicting Point Tracks from Internet Videos enables Generalizable Robot Manipulation</a></td>
+</tr>
+<tr>
+<td>具身</td>
+<td><a href="https://proceedings.mlr.press/v270/yuan25a.html">General Flow as Foundation Affordance for Scalable Robot Learning</a></td>
+</tr>
+<tr>
+<td>具身</td>
+<td><a href="https://im-flow-act.github.io/">Flow as the Cross-Domain Manipulation Interface</a></td>
+</tr>
+<tr>
+<td>具身</td>
+<td><a href="https://proceedings.mlr.press/v305/haldar25a.html">Point Policy: Unifying Observations and Actions with Key Points for Robot Manipulation</a></td>
+</tr>
+<tr>
+<td>具身</td>
+<td><a href="https://georgysavva.github.io/assets/pdf/HuDOR_ICRA_2025.pdf">Bridging the Human to Robot Dexterity Gap through Object-Oriented Rewards</a></td>
+</tr>
+<tr>
+<td>具身</td>
+<td><a href="https://arxiv.org/abs/2603.08485">3PoinTr: From Human Videos to Robot Policies with 3D Point-Track Plans</a></td>
+</tr>
+<tr>
+<td>具身</td>
+<td><a href="https://lishanyqy.github.io/4DWAM/">4D-WAM: Infusing Spatiotemporal Awareness into World Action Models through Trajectory Fields</a></td>
+</tr>
+<tr>
+<td>具身</td>
+<td><a href="https://arxiv.org/abs/2602.15828">Dex4D: Task-Agnostic Point Track Policy for Zero-Shot Dexterous Manipulation</a></td>
+</tr>
+<tr>
+<td>具身</td>
+<td><a href="https://cvlab-kaist.github.io/Geometric-Action-Model/">Geometric Action Model for Robot Policy Learning</a></td>
+</tr>
+<tr>
+<td>具身</td>
+<td><a href="https://arxiv.org/abs/2606.05160">GRAIL: Generating Humanoid Loco-Manipulation from World Models</a></td>
+</tr>
+<tr>
+<td>闭环仿真</td>
+<td><a href="https://xdimlab.github.io/HUGSIM/">HUGSIM: A Real-Time, Photo-Realistic and Closed-Loop Simulator for Autonomous Driving</a></td>
+</tr>
+<tr>
+<td>生成评测</td>
+<td><a href="https://arxiv.org/abs/2605.15185">Quantitative Video World Model Evaluation for Geometric-Consistency</a></td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "header.autohide", "search.suggest", "search.highlight", "search.share"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="../../_js/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
